@@ -1,6 +1,4 @@
 ﻿using Autofac;
-using LMS.Business;
-using LMS.Interfaces;
 
 namespace LMS.Bootstrap
 {
