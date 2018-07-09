@@ -8,7 +8,6 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<TestRepositry>().As<IRepository<object>>();
         }
     }
 }
