@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using LMS.Data;
+using LMS.Interfaces;
 
 namespace LMS.Bootstrap
 {
@@ -6,6 +8,8 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<LMSDbContext>().SingleInstance();
+            builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>();
         }
     }
 }
