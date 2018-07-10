@@ -8,8 +8,10 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<LMSDbContext>().SingleInstance();
-            builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>();
+            builder.RegisterType<LMSDbContext>()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
         }
     }
 }
