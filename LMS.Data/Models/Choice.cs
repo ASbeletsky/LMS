@@ -4,15 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LMS.Client.Web.Models
+namespace LMS.Data.Models
 {
     public class Choice
     {
-        [Key]
-        public int ID { get; set; }
-        [MaxLength(200)]
-        public string Ansver { get; set; }
+        public int Id { get; set; }
+        public string Answer { get; set; }
         public bool IsRight { get; set; }
-        public List<ChoicesList> ChoicesList { get; set; }
+
+        public TestProblem Problem { get; set; }
     }
 }
