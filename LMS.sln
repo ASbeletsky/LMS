@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Test", "LMS.Test\LMS.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Admin.Web", "LMS.Admin.Web\LMS.Admin.Web.csproj", "{DF676A42-15E4-4DA4-A19B-C5A81C92254E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Client.Web", "LMS.Client.Web\LMS.Client.Web.csproj", "{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Client.Web", "LMS.Client.Web\LMS.Client.Web.csproj", "{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Entities", "LMS.Entities\LMS.Entities.csproj", "{C5E20D79-E31D-4CE4-9444-3970665DDB1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5E20D79-E31D-4CE4-9444-3970665DDB1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5E20D79-E31D-4CE4-9444-3970665DDB1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5E20D79-E31D-4CE4-9444-3970665DDB1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5E20D79-E31D-4CE4-9444-3970665DDB1A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

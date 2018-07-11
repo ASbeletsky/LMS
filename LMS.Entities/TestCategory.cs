@@ -1,4 +1,4 @@
-﻿namespace LMS.Data.Models
+﻿namespace LMS.Entities
 {
     public class TestCategory
     {

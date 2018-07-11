@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using LMS.Interfaces;
-using LMS.Data.Models;
+using LMS.Entities;
 
 namespace LMS.Data
 {

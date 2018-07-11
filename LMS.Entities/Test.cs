@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LMS.Data.Models
+namespace LMS.Entities
 {
     public class Test
     {
