@@ -1,0 +1,29 @@
+﻿@using LMS.Data.Models;
+@model Test
+@{
+    ViewData["Title"] = "Greetings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="well" style="text-align-last:center">
+    <h3>
+        <strong>Добрый день!</strong>
+    </h3>
+    <h4>
+        <strong>@Model.Title</strong>
+        <br><br>
+        <strong>Тема теста: @Model.Category.Title</strong>
+        <br><br>
+        <strong>Время на тест: @Model.Duration</strong>
+        <br><br>
+        <strong>Количество вопросов: @Model.Problems.Capacity</strong>
+    </h4>
+    <span>
+        При нажатии на кнопку "Старт" запуститься таймер, по истечению которого тест завершится. <br>
+        За этого время постарайтесь дать максимум правильных ответов.
+    </span>
+    @using (Html.BeginForm("Start", "Home"))
+    {
+        @Html.HiddenFor(x => x.Problems)
+        <input type="submit" class="btn btn-success" value="Старт" />
+    }
+</div>

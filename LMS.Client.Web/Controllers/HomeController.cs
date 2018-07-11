@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Client.Web.Models;
-
+using LMS.Data.Models;
 namespace LMS.Client.Web.Controllers
 {
     public class HomeController : Controller
@@ -32,6 +32,18 @@ namespace LMS.Client.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult Greetings()
+        {
+            Test helptest = new Test
+            {
+                Id = 1,
+                Title = "Тест для принятия на работу",
+                Category = new TestCategory { Id = 1, Title = ".Net" },
+                Duration = new System.TimeSpan(1, 0, 0),
+                Problems = new List<TestProblem>(20)
+            };
+            return View(helptest);
         }
     }
 }
