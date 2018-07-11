@@ -10,8 +10,11 @@ namespace LMS.Bootstrap
         {
             builder.RegisterType<AspNetConfigReader>().As<IConfigReader>()
                 .InstancePerLifetimeScope();
-            builder.RegisterType<LMSDbContext>()
+
+            builder.Register(services => 
+                new LMSDbContext(services.Resolve<IConfigReader>().GetConnectionString("DefaultConnection")))
                 .InstancePerLifetimeScope();
+
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
         }
