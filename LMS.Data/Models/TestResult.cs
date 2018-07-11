@@ -10,5 +10,6 @@ namespace LMS.Data.Models
         public Test Test { get; set; }
         //USER
         public List<Answer> Answers { get; set; }
+        public DateTime TestingDate { get; set; }
     }
 }
