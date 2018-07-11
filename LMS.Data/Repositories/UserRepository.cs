@@ -29,9 +29,14 @@ namespace LMS.Data.Repositories
                 dbContext.Users.Remove(usr);
         }
 
-        public IEnumerable<User> Find(Func<User, bool> predicate)
+        public IEnumerable<User> Filter(Func<User, bool> predicate)
         {
             return dbContext.Users.Where(predicate);
+        }
+
+        public User Find(Func<User, bool> predicate)
+        {
+            return dbContext.Users.FirstOrDefault(predicate);
         }
 
         public User Get(int id)

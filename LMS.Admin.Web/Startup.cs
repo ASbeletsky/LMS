@@ -4,8 +4,11 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LMS.Data;
+using LMS.Data.Models;
 
 namespace LMS.Admin.Web
 {
@@ -22,11 +25,14 @@ namespace LMS.Admin.Web
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
+            services.AddIdentity<User, IdentityRole>()
+           .AddEntityFrameworkStores<LMSDbContext>();
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
             var container = builder.Build();
+          
             return new AutofacServiceProvider(container);
         }
         

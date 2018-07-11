@@ -4,6 +4,6 @@ namespace LMS.Data.Models
 {
     public class User : IdentityUser
     {
-       public string Year { get; set; }
+       public int Year { get; set; }
     }
 }
