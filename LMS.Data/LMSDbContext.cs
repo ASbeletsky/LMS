@@ -32,6 +32,11 @@ namespace LMS.Data
             modelBuilder.Entity<TestProblem>().HasOne(x => x.Type);
             modelBuilder.Entity<TestProblem>().HasMany(x => x.Choices);
             modelBuilder.Entity<ProblemType>().HasKey(x=>x.Id);
+            modelBuilder.Entity<TestResult>().HasKey(x => x.Id);
+            modelBuilder.Entity<TestResult>().HasMany(x => x.Answers);
+            modelBuilder.Entity<Answer>().HasKey(x => x.Id);
+            modelBuilder.Entity<Answer>().HasOne(x => x.TestProblem);
+            modelBuilder.Entity<Answer>().HasMany(x => x.Choices);
         }
     }
 }
