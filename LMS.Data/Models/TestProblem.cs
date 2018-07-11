@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace LMS.Data.Models
 {
@@ -13,7 +9,6 @@ namespace LMS.Data.Models
         public string Content { get; set; }
 
         public ProblemType Type { get; set; }
-        public Test Test { get; set; }
         public List<Choice> Choices { get; set; }        
     }
 }
