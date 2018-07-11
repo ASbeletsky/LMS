@@ -1,19 +1,22 @@
-﻿using LMS.Data.Models;
+﻿
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using LMS.Data.Models;
+using LMS.Interfaces;
 namespace LMS.Data
 {
     public class LMSDbContext : IdentityUserContext<User>
     {
-        public LMSDbContext(DbContextOptions<LMSDbContext> options)
-           : base(options)
+        private readonly string connectionString;
+
+        public LMSDbContext(IConfigReader reader)
         {
+            connectionString = reader.GetConnectionString("DefaultConnection");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=localhost;UserId=root;Password=pass;database=lms;");
+            optionsBuilder.UseMySQL(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Data", "LMS.Data\LMS.Data.csproj", "{6918C9A5-F91B-4406-A0A7-D3AA1E8468E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Data", "LMS.Data\LMS.Data.csproj", "{6918C9A5-F91B-4406-A0A7-D3AA1E8468E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Business", "LMS.Business\LMS.Business.csproj", "{6820325C-04A8-4296-BC24-8CBC4769C73C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Business", "LMS.Business\LMS.Business.csproj", "{6820325C-04A8-4296-BC24-8CBC4769C73C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Interfaces", "LMS.Interfaces\LMS.Interfaces.csproj", "{505B34B5-0AFD-4F5B-923D-93CAB4345049}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Interfaces", "LMS.Interfaces\LMS.Interfaces.csproj", "{505B34B5-0AFD-4F5B-923D-93CAB4345049}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Bootstrap", "LMS.Bootstrap\LMS.Bootstrap.csproj", "{6DBF915A-BBF5-4845-B370-DECD006D8384}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Bootstrap", "LMS.Bootstrap\LMS.Bootstrap.csproj", "{6DBF915A-BBF5-4845-B370-DECD006D8384}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Test", "LMS.Test\LMS.Test.csproj", "{1775013C-C51C-4834-B342-D851CEC3B497}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Test", "LMS.Test\LMS.Test.csproj", "{1775013C-C51C-4834-B342-D851CEC3B497}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Admin.Web", "LMS.Admin.Web\LMS.Admin.Web.csproj", "{DF676A42-15E4-4DA4-A19B-C5A81C92254E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Admin.Web", "LMS.Admin.Web\LMS.Admin.Web.csproj", "{DF676A42-15E4-4DA4-A19B-C5A81C92254E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Client.Web", "LMS.Client.Web\LMS.Client.Web.csproj", "{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{DF676A42-15E4-4DA4-A19B-C5A81C92254E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF676A42-15E4-4DA4-A19B-C5A81C92254E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF676A42-15E4-4DA4-A19B-C5A81C92254E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{788D4B12-F7F6-41B4-91FC-1B78CE0ECCAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
