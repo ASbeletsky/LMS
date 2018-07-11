@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using LMS.Entities;
 using LMS.Interfaces;
-using LMS.Data.Models;
 
 namespace LMS.Data.Repositories
 {

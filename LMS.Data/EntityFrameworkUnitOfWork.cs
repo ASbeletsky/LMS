@@ -1,5 +1,5 @@
-﻿using LMS.Interfaces;
-using LMS.Data.Models;
+﻿using LMS.Entities;
+using LMS.Interfaces;
 using LMS.Data.Repositories;
 using System.Threading.Tasks;
 
