@@ -21,7 +21,8 @@ namespace LMS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<QuestionCategory>().HasKey(x => x.Id);
+            modelBuilder.Entity<QuestionCategory>().HasKey(c => c.Id);
+            modelBuilder.Entity<QuestionCategory>().Property(c => c.Title).IsRequired();
         }
     }
 }
