@@ -1,8 +1,8 @@
-﻿
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LMS.Data.Models;
+using LMS.Entries.Models;
 using LMS.Interfaces;
+
 namespace LMS.Data
 {
     public class LMSDbContext : IdentityUserContext<User>

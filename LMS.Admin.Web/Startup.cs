@@ -4,11 +4,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using LMS.Data;
-using LMS.Data.Models;
+using LMS.Identity;
 
 namespace LMS.Admin.Web
 {
@@ -25,8 +23,7 @@ namespace LMS.Admin.Web
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddIdentity<User, IdentityRole>()
-           .AddEntityFrameworkStores<LMSDbContext>();
+            services.AddIdentity();
 
             var builder = new ContainerBuilder();
             builder.Populate(services);

@@ -1,14 +1,13 @@
-﻿using LMS.Data.Models;
+﻿using LMS.Entries.Models;
 using LMS.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace LMS.Data.Repositories
 {
-    class UserRepository : IRepository<User>
+    public class UserRepository : IRepository<User>
     {
         private readonly LMSDbContext dbContext;
 
