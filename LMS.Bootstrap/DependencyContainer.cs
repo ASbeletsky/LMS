@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using LMS.Data;
+using LMS.Data.Migrations;
 using LMS.Interfaces;
 
 namespace LMS.Bootstrap
@@ -21,6 +22,9 @@ namespace LMS.Bootstrap
 
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterBuildCallback(container =>
+                DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));
         }
     }
 }
