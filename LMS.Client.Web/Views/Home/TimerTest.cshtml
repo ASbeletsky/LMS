@@ -4,11 +4,22 @@
 }
 <h2>TimerTest</h2>
 <div>
-    @using (Ajax.BeginForm("BookSearch", new AjaxOptions { UpdateTargetId = "results" }))
-    {
-        <input type="text" name="name" />
-        <input type="submit" value="Поиск" />
-    }
+    <input type="button" value="Start" onclick="AjaxTest()">
     <div id="results"></div>
 </div>
+<script type="text/javascript">
+    function AjaxTest() {
+        $.ajax({
+            url: "http://localhost:49241/Home/TestAjax",
+            success: function (html) {
+                $("#results").append(html);
+            }
+        }); 
+
+
+     }
+
+
+
+</script>
 

@@ -51,9 +51,9 @@ namespace LMS.Client.Web.Controllers
             return View();
         }
 
-        public IActionResult AjaxRequst()
+        public IActionResult TestAjax()
         {
-            return View();
+            return PartialView();
         }
 
     }
