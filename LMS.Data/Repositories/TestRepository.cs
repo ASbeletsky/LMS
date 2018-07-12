@@ -33,32 +33,32 @@ namespace LMS.Data.Repositories
         public IEnumerable<Test> Filter(Func<Test, bool> predicate)
         {
             return set
-                .Include(p => p.Questions)
-                .Include(p => p.Category)
+                .Include(t => t.Questions)
+                .Include(t => t.Category)
                 .Where(predicate);
         }
 
         public Test Find(Func<Test, bool> predicate)
         {
             return set
-                .Include(p => p.Questions)
-                .Include(p => p.Category)
+                .Include(t => t.Questions)
+                .Include(t => t.Category)
                 .FirstOrDefault(predicate);
         }
 
         public Test Get(int id)
         {
             return set
-                .Include(p => p.Questions)
-                .Include(p => p.Category)
-                .FirstOrDefault(p => p.Id == id);
+                .Include(t => t.Questions)
+                .Include(t => t.Category)
+                .FirstOrDefault(t => t.Id == id);
         }
 
         public IEnumerable<Test> GetAll()
         {
             return set
-                .Include(p => p.Questions)
-                .Include(p => p.Category);
+                .Include(t => t.Questions)
+                .Include(t => t.Category);
         }
 
         public void Update(Test item)

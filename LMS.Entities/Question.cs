@@ -8,6 +8,8 @@ namespace LMS.Entities
         public double Complexity { get; set; }
         public string Content { get; set; }
 
+        public bool IsVisible { get; set; }
+
         public QuestionType Type { get; set; }
         public List<Choice> Choices { get; set; }        
     }
