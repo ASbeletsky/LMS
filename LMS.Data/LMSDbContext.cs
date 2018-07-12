@@ -8,9 +8,9 @@ namespace LMS.Data
     {
         private readonly string connectionString;
 
-        public LMSDbContext(IConfigReader reader)
+        public LMSDbContext(string connection)
         {
-            connectionString = reader.GetConnectionString("DefaultConnection");
+            connectionString = connection;
         }
 
         public DbSet<Test> Test { get; set; }
@@ -21,7 +21,7 @@ namespace LMS.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(connectionString);
+            optionsBuilder.UseMySql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
