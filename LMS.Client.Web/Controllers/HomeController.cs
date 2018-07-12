@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Client.Web.Models;
-using LMS.Data.Models;
+using LMS.Data.Models; 
 namespace LMS.Client.Web.Controllers
 {
     public class HomeController : Controller
@@ -45,5 +45,16 @@ namespace LMS.Client.Web.Controllers
             };
             return View(helptest);
         }
+        
+        public IActionResult TimerTest()
+        {
+            return View();
+        }
+
+        public IActionResult AjaxRequst()
+        {
+            return View();
+        }
+
     }
 }
