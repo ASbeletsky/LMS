@@ -12,7 +12,7 @@ namespace LMS.Data
             connectionString = connection;
         }
 
-        public DbSet<QuestionCategory> QuestionCategories { get; }
+        public DbSet<Category> Categories { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -21,8 +21,8 @@ namespace LMS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<QuestionCategory>().HasKey(c => c.Id);
-            modelBuilder.Entity<QuestionCategory>().Property(c => c.Title).IsRequired();
+            modelBuilder.Entity<Category>().HasKey(c => c.Id);
+            modelBuilder.Entity<Category>().Property(c => c.Title).IsRequired();
         }
     }
 }

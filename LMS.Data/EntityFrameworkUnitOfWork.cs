@@ -12,10 +12,10 @@ namespace LMS.Data
         {
             dbContext = context;
 
-            QuestionCategories = new BasicRepository<QuestionCategory>(context);
+            Categories = new BasicRepository<Category>(context);
         }
 
-        public IRepository<QuestionCategory> QuestionCategories { get; }
+        public IRepository<Category> Categories { get; }
 
         public Task SaveAsync()
         {

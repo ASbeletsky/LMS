@@ -5,7 +5,7 @@ namespace LMS.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<QuestionCategory> QuestionCategories { get; }
+        IRepository<Category> Categories { get; }
 
         Task SaveAsync();
     }
