@@ -1,33 +1,78 @@
 ﻿
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+
 }
 @model LMS.Admin.Web.ViewModels.RegisterViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SB Admin - Start Bootstrap Template</title>
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin.css" rel="stylesheet">
+</head>
+<body class="bg-dark">
+    <div class="container">
+        <div class="card card-register mx-auto mt-5">
+            <div class="card-header">Register an Account</div>
+            <div class="card-body">
+                <form method="post" asp-controller="Account" asp-action="Register">
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label asp-for="FirstName">First name</label>
+                                <input asp-for="FirstName" class="form-control" id="exampleInputName" type="text" aria-describedby="nameHelp" placeholder="Enter first name">
+                                <span asp-validation-for="FirstName"></span>
 
-<h2>Регистрация нового пользователя</h2>
-<form method="post" asp-controller="Account" asp-action="Register">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Email"></label><br />
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="LastName">Last name</label>
+                                <input asp-for="LastName" class="form-control" id="exampleInputLastName" type="text" aria-describedby="nameHelp" placeholder="Enter last name">
+                                <span asp-validation-for="LastName"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" >Email address</label>
+                        <input asp-for="Email"  class="form-control" id="exampleInputEmail1" type="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        <span asp-validation-for="Email"></span>                   
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label asp-for="Password">Password</label>
+                                <input asp-for="Password" class="form-control" id="exampleInputPassword1" type="password" placeholder="Password">
+                                <span asp-validation-for="Password"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="PasswordConfirm">Confirm password</label>
+                                <input asp-for="PasswordConfirm" class="form-control" id="exampleConfirmPassword" type="password" placeholder="Confirm password">
+                                <span asp-validation-for="PasswordConfirm"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit"class ="btn btn-primary btn-block" value="Register" />
+                </form>
+                <div class="text-center">
+                    <a class="d-block small mt-3" href="/Account/Login">Login Page</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <label asp-for="FirstName"></label><br />
-        <input asp-for="FirstName" />
-        <span asp-validation-for="FirstName"></span>
-    </div>
-    <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="PasswordConfirm"></label><br />
-        <input asp-for="PasswordConfirm" />
-        <span asp-validation-for="PasswordConfirm"></span>
-    </div>
-    <div>
-        <input type="submit" value="Регистрация" />
-    </div>
-</form>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+</body>
+</html>
