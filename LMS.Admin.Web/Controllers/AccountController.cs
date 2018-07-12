@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using LMS.Admin.Web.ViewModels;
-using LMS.Admin.Web.Models;
 using LMS.Entries.Models;
 
 namespace LMS.Admin.Web.Controllers
@@ -63,19 +62,20 @@ namespace LMS.Admin.Web.Controllers
                 await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
+
                     // проверяем, принадлежит ли URL приложению
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
+                    { 
                         return Redirect(model.ReturnUrl);
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
                 }
             }
             return View(model);

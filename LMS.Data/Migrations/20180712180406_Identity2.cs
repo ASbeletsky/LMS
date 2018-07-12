@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace LMS.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Identity2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -9,8 +9,16 @@ namespace LMS.Identity
     {
         public static void AddIdentity(this IServiceCollection services)
         {
-            services.AddIdentity<User, IdentityRole>()
-      .AddEntityFrameworkStores<LMSDbContext>();
+
+            services.AddIdentity<User, IdentityRole>(opts =>
+            {
+                opts.User.RequireUniqueEmail = true;
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequiredLength = 3;
+            })
+             .AddEntityFrameworkStores<LMSDbContext>();
         }
     }
     

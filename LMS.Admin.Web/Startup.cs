@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LMS.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace LMS.Admin.Web
 {
@@ -24,6 +26,7 @@ namespace LMS.Admin.Web
             services.AddMvc();
             services.AddIdentity();
 
+          
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
@@ -45,7 +48,7 @@ namespace LMS.Admin.Web
             }
 
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

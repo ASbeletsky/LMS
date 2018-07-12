@@ -11,8 +11,8 @@ using System;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180712111138_UpdatUserIdentity1")]
-    partial class UpdatUserIdentity1
+    [Migration("20180712180406_Identity2")]
+    partial class Identity2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
