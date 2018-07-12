@@ -16,6 +16,8 @@ namespace LMS.Data
         public DbSet<Test> Test { get; set; }
         public DbSet<Question> Problem { get; set; }
         public DbSet<Choice> Choice { get; set; }
+        public DbSet<TestCategory> TestCategory { get; set; }
+        public DbSet<QuestionType> QuestionType { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
