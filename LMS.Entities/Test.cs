@@ -9,6 +9,6 @@ namespace LMS.Entities
         public TestCategory Category { get; set; }
         public string Title { get; set; }
         public TimeSpan Duration {get; set; }
-        public List<TestProblem> Problems { get; set; }
+        public List<Question> Questions { get; set; }
     }
 }

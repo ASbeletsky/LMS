@@ -33,7 +33,7 @@ namespace LMS.Data.Repositories
         public IEnumerable<Test> Filter(Func<Test, bool> predicate)
         {
             return set
-                .Include(p => p.Problems)
+                .Include(p => p.Questions)
                 .Include(p => p.Category)
                 .Where(predicate);
         }
@@ -41,7 +41,7 @@ namespace LMS.Data.Repositories
         public Test Find(Func<Test, bool> predicate)
         {
             return set
-                .Include(p => p.Problems)
+                .Include(p => p.Questions)
                 .Include(p => p.Category)
                 .FirstOrDefault(predicate);
         }
@@ -49,7 +49,7 @@ namespace LMS.Data.Repositories
         public Test Get(int id)
         {
             return set
-                .Include(p => p.Problems)
+                .Include(p => p.Questions)
                 .Include(p => p.Category)
                 .FirstOrDefault(p => p.Id == id);
         }
@@ -57,7 +57,7 @@ namespace LMS.Data.Repositories
         public IEnumerable<Test> GetAll()
         {
             return set
-                .Include(p => p.Problems)
+                .Include(p => p.Questions)
                 .Include(p => p.Category);
         }
 

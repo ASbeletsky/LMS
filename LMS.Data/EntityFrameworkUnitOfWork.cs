@@ -11,16 +11,16 @@ namespace LMS.Data
         public EntityFrameworkUnitOfWork(LMSDbContext context)
         {
             dbContext = context;
-            ProblemTypes = new BasicRepository<ProblemType>(context);
+            QuestionTypes = new BasicRepository<QuestionType>(context);
             TestCategories = new BasicRepository<TestCategory>(context);
             Choices = new BasicRepository<Choice>(context);
-            Problems = new TestProblemRepository(context);
+            Questions = new QuestionRepository(context);
             Tests = new TestRepository(context);
         }
 
         public IRepository<Choice> Choices { get; }
-        public IRepository<ProblemType> ProblemTypes { get; }
-        public IRepository<TestProblem> Problems { get; }
+        public IRepository<QuestionType> QuestionTypes { get; }
+        public IRepository<Question> Questions { get; }
         public IRepository<TestCategory> TestCategories { get; }
         public IRepository<Test> Tests { get; }
 

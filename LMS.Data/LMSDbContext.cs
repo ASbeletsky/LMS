@@ -14,7 +14,7 @@ namespace LMS.Data
         }
 
         public DbSet<Test> Test { get; set; }
-        public DbSet<TestProblem> Problem { get; set; }
+        public DbSet<Question> Problem { get; set; }
         public DbSet<Choice> Choice { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,12 +26,12 @@ namespace LMS.Data
         {
             modelBuilder.Entity<Test>().HasKey(x=>x.Id);
             modelBuilder.Entity<Test>().HasOne(x=>x.Category);
-            modelBuilder.Entity<Test>().HasMany(x => x.Problems);
+            modelBuilder.Entity<Test>().HasMany(x => x.Questions);
             modelBuilder.Entity<TestCategory>().HasKey(x => x.Id);
-            modelBuilder.Entity<TestProblem>().HasKey(x => x.Id);
-            modelBuilder.Entity<TestProblem>().HasOne(x => x.Type);
-            modelBuilder.Entity<TestProblem>().HasMany(x => x.Choices);
-            modelBuilder.Entity<ProblemType>().HasKey(x=>x.Id);
+            modelBuilder.Entity<Question>().HasKey(x => x.Id);
+            modelBuilder.Entity<Question>().HasOne(x => x.Type);
+            modelBuilder.Entity<Question>().HasMany(x => x.Choices);
+            modelBuilder.Entity<QuestionType>().HasKey(x=>x.Id);
         }
     }
 }

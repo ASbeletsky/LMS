@@ -6,8 +6,8 @@ namespace LMS.Interfaces
     public interface IUnitOfWork
     {
         IRepository<Choice> Choices { get; }
-        IRepository<ProblemType> ProblemTypes { get; }
-        IRepository<TestProblem> Problems { get; }
+        IRepository<QuestionType> QuestionTypes { get; }
+        IRepository<Question> Questions { get; }
         IRepository<TestCategory> TestCategories { get; }
         IRepository<Test> Tests { get; }
 
