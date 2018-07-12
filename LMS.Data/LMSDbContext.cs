@@ -13,7 +13,7 @@ namespace LMS.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(connectionString);
+            optionsBuilder.UseMySql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
