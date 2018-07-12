@@ -10,8 +10,8 @@ namespace LMS.Entries.Models
 
         public string Surname { get; set; }
 
-        public DateTime Date { get; set; }
+      //  public DateTime Date { get; set; }
 
-        public string Education { get; set; }
+        //public string Education { get; set; }
     }
 }

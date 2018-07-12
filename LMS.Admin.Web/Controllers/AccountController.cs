@@ -27,13 +27,14 @@ namespace LMS.Admin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email};
+                User user = new User { Email = model.Email, Name = model.Name, Surname = model.Surname, UserName = model.Email };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
+                   // _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToAction("Index", "Home");
                 }
                 else

@@ -5,21 +5,17 @@ namespace LMS.Admin.Web.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        [Display(Name = "Name")]
+        public string Name { get; set; }
 
         [Required]
-        [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        [Display(Name = "Surnamee")]
+        public string Surname { get; set; }
 
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
-        [Display(Name = "Phone")]
-        [DataType(DataType.PhoneNumber)]
-        public string Phone { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

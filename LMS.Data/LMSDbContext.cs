@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Data
 {
-    public class LMSDbContext : IdentityUserContext<User>
+    public class LMSDbContext : IdentityDbContext<User>
     {
         private readonly string connectionString;
 
@@ -15,11 +15,12 @@ namespace LMS.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(connectionString);
+            optionsBuilder.UseMySql(connectionString); 
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
