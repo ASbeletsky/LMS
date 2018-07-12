@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using LMS.Entries.Models;
-using LMS.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Data
 {
@@ -9,9 +6,9 @@ namespace LMS.Data
     {
         private readonly string connectionString;
 
-        public LMSDbContext(IConfigReader reader)
+        public LMSDbContext(string connection)
         {
-            connectionString = reader.GetConnectionString("DefaultConnection");
+            connectionString = connection;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
