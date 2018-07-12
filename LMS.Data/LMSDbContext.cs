@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using LMS.Entities;
 
 namespace LMS.Data
 {
@@ -11,6 +12,8 @@ namespace LMS.Data
             connectionString = connection;
         }
 
+        public DbSet<QuestionCategory> QuestionCategories { get; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString);
@@ -18,6 +21,7 @@ namespace LMS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<QuestionCategory>().HasKey(x => x.Id);
         }
     }
 }

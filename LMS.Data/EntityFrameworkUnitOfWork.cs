@@ -1,5 +1,7 @@
-﻿using LMS.Interfaces;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using LMS.Entities;
+using LMS.Interfaces;
+using LMS.Data.Repositories;
 
 namespace LMS.Data
 {
@@ -9,7 +11,11 @@ namespace LMS.Data
         public EntityFrameworkUnitOfWork(LMSDbContext context)
         {
             dbContext = context;
+
+            QuestionCategories = new BasicRepository<QuestionCategory>(context);
         }
+
+        public IRepository<QuestionCategory> QuestionCategories { get; }
 
         public Task SaveAsync()
         {
