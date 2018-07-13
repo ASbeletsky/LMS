@@ -60,13 +60,7 @@ namespace LMS.Business.Services
 
             return unitOfWork.SaveAsync();
         }
-
-        /// <summary>
-        /// Update question, if it is not used
-        /// Mark not modified question as not visible, if it was used in any test, and creates
-        /// </summary>
-        /// <param name="questionDto"></param>
-        /// <returns></returns>
+        
         public Task UpdateAsync(QuestionDTO questionDto)
         {
             if (questionDto == null)
