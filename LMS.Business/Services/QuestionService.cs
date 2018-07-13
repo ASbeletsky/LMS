@@ -19,22 +19,8 @@ namespace LMS.Business.Services
             this.mapper = mapper;
         }
 
-        /// <summary>
-        /// Delete question, if it is not used
-        /// Mark as not visible, if it was used in any test
-        /// </summary>
-        /// <param name="questionId">Id key of question</param>
-        public Task DeleteOrMarkQuestionByIdAsync(int questionId)
+        public Task MarkAsDeletedByIdAsync(int questionId)
         {
-            //var parentTest = unitOfWork.Tests.Find(t => t.Questions.Any(q => q.Id == questionId));
-
-            //if (parentTest == null)
-            //{
-            //    unitOfWork.Questions.Delete(questionId);
-
-            //    return unitOfWork.SaveAsync();
-            //}
-            //else 
             if (unitOfWork.Questions.Get(questionId) is Question question)
             {
                 question.IsVisible = false;
@@ -45,7 +31,7 @@ namespace LMS.Business.Services
             return Task.CompletedTask;
         }
 
-        public QuestionDTO GetQuestionById(int questionId)
+        public QuestionDTO GetById(int questionId)
         {
             var question = unitOfWork.Questions.Get(questionId);
             if (question == null)
@@ -56,7 +42,7 @@ namespace LMS.Business.Services
             return mapper.Map<Question, QuestionDTO>(question);
         }
 
-        public Task CreateQuestionAsync(QuestionDTO question)
+        public Task CreateAsync(QuestionDTO question)
         {
             if (question == null)
             {
@@ -81,7 +67,7 @@ namespace LMS.Business.Services
         /// </summary>
         /// <param name="questionDto"></param>
         /// <returns></returns>
-        public async Task UpdateOrMarkQuestionAsync(QuestionDTO questionDto)
+        public async Task UpdateAsync(QuestionDTO questionDto)
         {
             if (questionDto == null)
             {
@@ -89,13 +75,7 @@ namespace LMS.Business.Services
             }
 
             var entry = mapper.Map<QuestionDTO, Question>(questionDto);
-
-            //var parentTest = unitOfWork.Tests.Filter(t => t.Questions.Any(q => q.Id == question.Id));
-
-            //if (parentTest == null)
-            //{
-            //    unitOfWork.Questions.Update(entry);
-            //}
+            
             if (unitOfWork.Questions.Get(entry.Id) is Question oldQuestion)
             {
                 entry.IsVisible = true;
@@ -113,7 +93,7 @@ namespace LMS.Business.Services
             await unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<QuestionDTO> GetAllQuestions(bool includeInvisible = false)
+        public IEnumerable<QuestionDTO> GetAll(bool includeInvisible = false)
         {
             var questions = unitOfWork.Questions
                 .GetAll();

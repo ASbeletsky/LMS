@@ -43,7 +43,7 @@ namespace LMS.Admin.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm]QuestionDTO question)
         {
-            await questionService.CreateQuestionAsync(question);
+            await questionService.CreateAsync(question);
 
             return RedirectToAction(nameof(List));
         }
@@ -57,7 +57,7 @@ namespace LMS.Admin.Web.Controllers
             };
 
             dtoMapper.Map(
-                questionService.GetQuestionById(id),
+                questionService.GetById(id),
                 viewModel);
 
             return View(viewModel);
@@ -67,7 +67,7 @@ namespace LMS.Admin.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([FromForm]QuestionDTO question)
         {
-            await questionService.UpdateOrMarkQuestionAsync(question);
+            await questionService.UpdateAsync(question);
 
             return RedirectToAction(nameof(List));
         }
@@ -75,14 +75,14 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var questions = questionService.GetAllQuestions();
+            var questions = questionService.GetAll();
             return View(questions);
         }
 
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var question = questionService.GetQuestionById(id);
+            var question = questionService.GetById(id);
             return View(question);
         }
         
@@ -90,8 +90,8 @@ namespace LMS.Admin.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await questionService.DeleteOrMarkQuestionByIdAsync(id);
-            var questions = questionService.GetAllQuestions();
+            await questionService.MarkAsDeletedByIdAsync(id);
+            var questions = questionService.GetAll();
             return View("List", questions);
         }
     }
