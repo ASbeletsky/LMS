@@ -12,8 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\LMS.Business\LMS.Business.csproj" />
     <ProjectReference Include="..\LMS.Data\LMS.Data.csproj" />
-    <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
-    <ProjectReference Include="..\LMS.Entities\LMS.Entities.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
   </ItemGroup>
 
