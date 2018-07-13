@@ -13,6 +13,8 @@ namespace LMS.Data
             connectionString = connection;
         }
 
+        public DbSet<Category> Categories { get; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString); 
@@ -21,6 +23,8 @@ namespace LMS.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Category>().HasKey(c => c.Id);
+            modelBuilder.Entity<Category>().Property(c => c.Title).IsRequired();
         }
     }
 }

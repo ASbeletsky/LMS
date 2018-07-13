@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using LMS.Data.Repositories;
+using LMS.Entities;
 using LMS.Interfaces;
-using LMS.Entries;
+using LMS.Data.Repositories;
 
 namespace LMS.Data
 {
@@ -12,8 +12,12 @@ namespace LMS.Data
         public EntityFrameworkUnitOfWork(LMSDbContext context)
         {
             dbContext = context;
+
+            Categories = new BasicRepository<Category>(context);
             UserRepository = new UserRepository(context);
         }
+
+        public IRepository<Category> Categories { get; }
 
         public IRepository<User> UserRepository { get; }
 
