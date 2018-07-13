@@ -67,7 +67,7 @@ namespace LMS.Business.Services
         /// </summary>
         /// <param name="questionDto"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(QuestionDTO questionDto)
+        public Task UpdateAsync(QuestionDTO questionDto)
         {
             if (questionDto == null)
             {
@@ -78,6 +78,14 @@ namespace LMS.Business.Services
             
             if (unitOfWork.Questions.Get(entry.Id) is Question oldQuestion)
             {
+                if (oldQuestion.Content == entry.Content
+                    && oldQuestion.Complexity == entry.Complexity
+                    && oldQuestion.CategoryId == entry.CategoryId
+                    && oldQuestion.TypeId == entry.TypeId)
+                {
+                    return Task.CompletedTask;
+                }
+
                 entry.IsVisible = true;
                 entry.Id = 0;
 
@@ -90,7 +98,7 @@ namespace LMS.Business.Services
             {
                 unitOfWork.Questions.Create(entry);
             }
-            await unitOfWork.SaveAsync();
+            return unitOfWork.SaveAsync();
         }
 
         public IEnumerable<QuestionDTO> GetAll(bool includeInvisible = false)
