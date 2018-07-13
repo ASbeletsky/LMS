@@ -1,8 +1,9 @@
-﻿@model LMS.Admin.Web.Models.EditOrCreateQuestionViewModel
+﻿@using LMS.Dto
+@model QuestionDTO
 
 @{
-    var types = Model.AvailableTypes.Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-    var categories = Model.AvailableCategories.Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+    var types = ((IEnumerable<QuestionTypeDTO>)ViewData["AvailableTypes"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+    var categories = ((IEnumerable<CategoryDTO>)ViewData["AvailableCategories"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
 
     ViewData["Title"] = "Create";
 }

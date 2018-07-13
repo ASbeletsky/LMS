@@ -1,9 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Dto;
 using LMS.Interfaces;
-using LMS.Admin.Web.Models;
 using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
@@ -30,13 +28,10 @@ namespace LMS.Admin.Web.Controllers
 
         public IActionResult Create()
         {
-            var vm = new EditOrCreateQuestionViewModel
-            {
-                AvailableTypes = questionTypeService.GetAll().ToList(),
-                AvailableCategories = questionCategoryService.GetAll().ToList()
-            };
+            ViewData["AvailableTypes"] = questionTypeService.GetAll();
+            ViewData["AvailableCategories"] = questionCategoryService.GetAll();
 
-            return View(vm);
+            return View();
         }
 
         [HttpPost]
@@ -50,17 +45,11 @@ namespace LMS.Admin.Web.Controllers
        
         public IActionResult Edit(int id)
         {
-            var viewModel = new EditOrCreateQuestionViewModel
-            {
-                AvailableTypes = questionTypeService.GetAll(),
-                AvailableCategories = questionCategoryService.GetAll()
-            };
+            var question = questionService.GetById(id);
 
-            dtoMapper.Map(
-                questionService.GetById(id),
-                viewModel);
-
-            return View(viewModel);
+            ViewData["AvailableTypes"] = questionTypeService.GetAll();
+            ViewData["AvailableCategories"] = questionCategoryService.GetAll();
+            return View(question);
         }
 
         [HttpPost]
