@@ -1,11 +1,9 @@
-﻿using LMS.Entities;
-
-namespace LMS.Dto
+﻿namespace LMS.Dto
 {
     public class QuestionDTO
     {
         public int Id { get; set; }
-        public Complexity Complexity { get; set; }
+        public double Complexity { get; set; }
         public string Content { get; set; }
         
         public bool IsVisible { get; set; }
