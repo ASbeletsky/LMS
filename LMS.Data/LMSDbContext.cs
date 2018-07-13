@@ -12,9 +12,9 @@ namespace LMS.Data
             connectionString = connection;
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionType> QuestionTypes { get; set; }
+        public DbSet<Category> Categories { get; }
+        public DbSet<Question> Questions { get; }
+        public DbSet<QuestionType> QuestionTypes { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
