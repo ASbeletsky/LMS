@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using LMS.Dto;
+using LMS.Entities;
 
 namespace LMS.Bootstrap.Mapping
 {
@@ -6,6 +8,8 @@ namespace LMS.Bootstrap.Mapping
     {
         public OrganizationProfile()
         {
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CategoryDTO, Category>();
         }
     }
 }
