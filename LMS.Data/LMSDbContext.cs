@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LMS.Interfaces;
 using LMS.Entities;
 
 namespace LMS.Data
@@ -13,11 +12,9 @@ namespace LMS.Data
             connectionString = connection;
         }
 
-        public DbSet<Test> Test { get; set; }
-        public DbSet<Question> Problem { get; set; }
-        public DbSet<Choice> Choice { get; set; }
-        public DbSet<TestCategory> TestCategory { get; set; }
-        public DbSet<QuestionType> QuestionType { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Question> Questions { get; set; }
+        public DbSet<QuestionType> QuestionTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -26,14 +23,26 @@ namespace LMS.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Test>().HasKey(x=>x.Id);
-            modelBuilder.Entity<Test>().HasOne(x=>x.Category);
-            modelBuilder.Entity<Test>().HasMany(x => x.Questions);
-            modelBuilder.Entity<TestCategory>().HasKey(x => x.Id);
-            modelBuilder.Entity<Question>().HasKey(x => x.Id);
-            modelBuilder.Entity<Question>().HasOne(x => x.Type);
-            modelBuilder.Entity<Question>().HasMany(x => x.Choices);
-            modelBuilder.Entity<QuestionType>().HasKey(x=>x.Id);
+            modelBuilder.Entity<Category>()
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Question>()
+                .HasKey(q => q.Id);
+            modelBuilder.Entity<Question>()
+                .HasOne(q => q.Category)
+                .WithMany()
+                .HasForeignKey(q => q.CategoryId)
+                .IsRequired();
+            modelBuilder.Entity<Question>()
+                .HasOne(q => q.Type)
+                .WithMany()
+                .HasForeignKey(q => q.TypeId)
+                .IsRequired();
+
+            modelBuilder.Entity<QuestionType>()
+                .HasKey(q => q.Id);
+            modelBuilder.Entity<QuestionType>()
+                .Property(q => q.Title).IsRequired();
         }
     }
 }

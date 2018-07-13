@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LMS.Entities
+﻿namespace LMS.Entities
 {
     public class Question
     {
@@ -11,6 +9,14 @@ namespace LMS.Entities
         public bool IsVisible { get; set; }
 
         public QuestionType Type { get; set; }
-        public List<Choice> Choices { get; set; }        
+        public int TypeId { get; set; }
+        public Category Category { get; set; }
+        public int CategoryId { get; set; }
+
+        public Question Clone()
+        {
+            return (Question)MemberwiseClone();
+        }
+//        public List<Choice> Choices { get; set; }        
     }
 }

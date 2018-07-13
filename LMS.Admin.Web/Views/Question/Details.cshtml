@@ -1,42 +1,42 @@
-﻿@model LMS.Entities.Question
+﻿@model LMS.Dto.QuestionDTO
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div>
     <h4>Question</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Id)
+            <label asp-for="Complexity" />
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Id)
+            <label>@Model.Complexity</label>
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Complexity)
+            <label asp-for="Content" />
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Complexity)
+            <label>@Model.Content</label>
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Content)
+            <label asp-for="Type" />
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Content)
+            <label>@Model.Type</label>
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.IsVisible)
+            <label asp-for="IsVisible" />
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.IsVisible)
+            <label>@Model.IsVisible</label>
         </dd>
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
     <a asp-action="Index">Back to List</a>
 </div>

@@ -5,11 +5,9 @@ namespace LMS.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<Choice> Choices { get; }
-        IRepository<QuestionType> QuestionTypes { get; }
+        IRepository<Category> Categories { get; }
         IRepository<Question> Questions { get; }
-        IRepository<TestCategory> TestCategories { get; }
-        IRepository<Test> Tests { get; }
+        IRepository<QuestionType> QuestionTypes { get; }
 
         Task SaveAsync();
     }

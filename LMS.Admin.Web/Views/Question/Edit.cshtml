@@ -1,17 +1,20 @@
-﻿@model LMS.Entities.Question
+﻿@model LMS.Admin.Web.Models.EditOrCreateQuestionViewModel
 
 @{
-    ViewData["Title"] = "EditOrCreate";
-}
+    var types = Model.AvailableTypes.Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+    var categories = Model.AvailableCategories.Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
 
-<h2>@ViewData["Title"]</h2>
+    ViewData["Title"] = "Edit";}
+
+<h2>Edit</h2>
 
 <h4>Question</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditOrCreate">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
             <div class="form-group">
                 <label asp-for="Complexity" class="control-label"></label>
                 <input asp-for="Complexity" class="form-control" />
@@ -23,11 +26,14 @@
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsVisible" /> @Html.DisplayNameFor(model => model.IsVisible)
-                    </label>
-                </div>
+                <label asp-for="TypeId" class="control-label"></label>
+                <select asp-for="TypeId" asp-items="@types" class="form-control"></select>
+                <span asp-validation-for="TypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" asp-items="@categories" class="form-control"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />

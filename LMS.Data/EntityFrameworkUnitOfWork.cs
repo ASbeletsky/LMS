@@ -12,17 +12,13 @@ namespace LMS.Data
         {
             dbContext = context;
             QuestionTypes = new BasicRepository<QuestionType>(context);
-            TestCategories = new BasicRepository<TestCategory>(context);
-            Choices = new BasicRepository<Choice>(context);
+            Categories = new BasicRepository<Category>(context);
             Questions = new QuestionRepository(context);
-            Tests = new TestRepository(context);
         }
 
-        public IRepository<Choice> Choices { get; }
-        public IRepository<QuestionType> QuestionTypes { get; }
+        public IRepository<Category> Categories { get; }
         public IRepository<Question> Questions { get; }
-        public IRepository<TestCategory> TestCategories { get; }
-        public IRepository<Test> Tests { get; }
+        public IRepository<QuestionType> QuestionTypes { get; }
 
         public Task SaveAsync()
         {

@@ -3,6 +3,7 @@ using Autofac.Core;
 using LMS.Data;
 using LMS.Data.Migrations;
 using LMS.Interfaces;
+using LMS.Business.Services;
 
 namespace LMS.Bootstrap
 {
@@ -10,7 +11,12 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AspNetConfigReader>().As<IConfigReader>()
+            builder.RegisterType<AutoMapper>()
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<AspNetConfigReader>()
+                .As<IConfigReader>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<LMSDbContext>()
@@ -21,6 +27,18 @@ namespace LMS.Bootstrap
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<QuestionService>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CategoryService>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<QuestionTypeService>()
+                .AsSelf()
                 .InstancePerLifetimeScope();
 
             builder.RegisterBuildCallback(container =>

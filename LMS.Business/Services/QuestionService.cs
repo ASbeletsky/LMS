@@ -1,79 +1,126 @@
-﻿using LMS.Entities;
-using LMS.Interfaces;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
-using System;
+using LMS.Dto;
+using LMS.Entities;
+using LMS.Interfaces;
 
 namespace LMS.Business.Services
 {
     public class QuestionService
     {
         private readonly IUnitOfWork unitOfWork;
-        public QuestionService(IUnitOfWork unitOfWork)
+        private readonly IMapper mapper;
+
+        public QuestionService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
+            this.mapper = mapper;
         }
 
-        public Task DeleteQuestion(Question question)
+        /// <summary>
+        /// Delete question, if it is not used
+        /// Mark as not visible, if it was used in any test
+        /// </summary>
+        /// <param name="questionId">Id key of question</param>
+        public Task DeleteOrMarkQuestionByIdAsync(int questionId)
+        {
+            //var parentTest = unitOfWork.Tests.Find(t => t.Questions.Any(q => q.Id == questionId));
+
+            //if (parentTest == null)
+            //{
+            //    unitOfWork.Questions.Delete(questionId);
+
+            //    return unitOfWork.SaveAsync();
+            //}
+            //else 
+            if (unitOfWork.Questions.Get(questionId) is Question question)
+            {
+                question.IsVisible = false;
+
+                return unitOfWork.SaveAsync();
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public QuestionDTO GetQuestionById(int questionId)
+        {
+            var question = unitOfWork.Questions.Get(questionId);
+            if (question == null)
+            {
+                throw new EntityNotFoundException<Question>(questionId);
+            }
+
+            return mapper.Map<Question, QuestionDTO>(question);
+        }
+
+        public Task CreateQuestionAsync(QuestionDTO question)
         {
             if (question == null)
             {
                 throw new ArgumentNullException(nameof(question));
-            }
-            unitOfWork.Questions.Delete(question.Id);
-            return unitOfWork.SaveAsync();
-        }
-
-        public Task NewQuestion(Question question)
-        {
-            if (question == null)
-            {
-                throw new ArgumentNullException(nameof(question));
-            }
-            if (question.Type == null)
-            {
-                throw new ArgumentException($"{nameof(Question)}.{nameof(Question.Type)} cannot be null");
             }
             if (string.IsNullOrEmpty(question.Content))
             {
                 throw new ArgumentException($"{nameof(Question)}.{nameof(Question.Content)} cannot be null or empty");
             }
 
-            unitOfWork.Questions.Create(question);
+            var entry = mapper.Map<QuestionDTO, Question>(question);
+            entry.IsVisible = true;
+
+            unitOfWork.Questions.Create(entry);
+
             return unitOfWork.SaveAsync();
         }
 
-        public Task UpdateQuestion(Question question)
+        /// <summary>
+        /// Update question, if it is not used
+        /// Mark not modified question as not visible, if it was used in any test, and creates
+        /// </summary>
+        /// <param name="questionDto"></param>
+        /// <returns></returns>
+        public async Task UpdateOrMarkQuestionAsync(QuestionDTO questionDto)
         {
-            if (question == null)
+            if (questionDto == null)
             {
-                throw new ArgumentNullException(nameof(question));
+                throw new ArgumentNullException(nameof(questionDto));
             }
 
-            var parentTest = unitOfWork.Tests.Find(t => t.Questions.Any(q => q.Id == question.Id));
-            if (parentTest == null)
+            var entry = mapper.Map<QuestionDTO, Question>(questionDto);
+
+            //var parentTest = unitOfWork.Tests.Filter(t => t.Questions.Any(q => q.Id == question.Id));
+
+            //if (parentTest == null)
+            //{
+            //    unitOfWork.Questions.Update(entry);
+            //}
+            if (unitOfWork.Questions.Get(entry.Id) is Question oldQuestion)
             {
-                unitOfWork.Questions.Update(question);
+                entry.Id = 0;
+
+                oldQuestion.IsVisible = false;
+
+                unitOfWork.Questions.Update(oldQuestion);
+                unitOfWork.Questions.Create(entry);
             }
             else
             {
-                question.IsVisible = false;
-                unitOfWork.Questions.Update(question);
-
-                unitOfWork.Questions.Create(question);
+                unitOfWork.Questions.Create(entry);
             }
-            return unitOfWork.SaveAsync();
+            await unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<Question> GetAllQuestions()
+        public IEnumerable<QuestionDTO> GetAllQuestions(bool includeInvisible = false)
         {
-            return unitOfWork.Questions.GetAll();
-        }
+            var questions = unitOfWork.Questions
+                .GetAll();
 
-        public IEnumerable<Question> GetAllQuestionsByTest(int testId)
-        {
-            return unitOfWork.Tests.Get(testId).Questions;
+            if (!includeInvisible)
+                questions = questions.Where(q => q.IsVisible);
+
+            return mapper.Map<IEnumerable<Question>, IEnumerable<QuestionDTO>>(questions);
         }
     }
 }

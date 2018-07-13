@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using LMS.Interfaces;
 using LMS.Entities;
+using LMS.Interfaces;
 
 namespace LMS.Data.Repositories
 {
@@ -33,7 +33,7 @@ namespace LMS.Data.Repositories
         public IEnumerable<Question> Filter(Func<Question, bool> predicate)
         {
             return set
-                .Include(q => q.Choices)
+                .Include(q => q.Category)
                 .Include(q => q.Type)
                 .Where(predicate);
         }
@@ -41,7 +41,7 @@ namespace LMS.Data.Repositories
         public Question Find(Func<Question, bool> predicate)
         {
             return set
-                .Include(q => q.Choices)
+                .Include(q => q.Category)
                 .Include(q => q.Type)
                 .FirstOrDefault(predicate);
         }
@@ -49,7 +49,7 @@ namespace LMS.Data.Repositories
         public Question Get(int id)
         {
             return set
-                .Include(q => q.Choices)
+                .Include(q => q.Category)
                 .Include(q => q.Type)
                 .FirstOrDefault(q => q.Id == id);
         }
@@ -57,7 +57,7 @@ namespace LMS.Data.Repositories
         public IEnumerable<Question> GetAll()
         {
             return set
-                .Include(q => q.Choices)
+                .Include(q => q.Category)
                 .Include(q => q.Type);
         }
 
