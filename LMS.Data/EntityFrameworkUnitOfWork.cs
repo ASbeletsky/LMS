@@ -1,7 +1,7 @@
-﻿using LMS.Entities;
+﻿using System.Threading.Tasks;
+using LMS.Entities;
 using LMS.Interfaces;
 using LMS.Data.Repositories;
-using System.Threading.Tasks;
 
 namespace LMS.Data
 {

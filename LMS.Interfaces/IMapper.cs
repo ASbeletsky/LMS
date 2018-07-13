@@ -2,7 +2,7 @@
 {
     public interface IMapper
     {
-        TTo Map<TFrom, TTo>(TFrom source);
-        void Map<TFrom, TTo>(TFrom source, TTo dest);
+        TDest Map<TSrc, TDest>(TSrc src);
+        void Map<TSrc, TDest>(TSrc src, TDest dest);
     }
 }

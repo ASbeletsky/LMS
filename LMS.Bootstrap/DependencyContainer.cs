@@ -11,7 +11,7 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AutoMapper>()
+            builder.RegisterType<Mapping.AutoMapper>()
                 .As<IMapper>()
                 .InstancePerLifetimeScope();
 

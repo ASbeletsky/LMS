@@ -25,6 +25,9 @@ namespace LMS.Data
         {
             modelBuilder.Entity<Category>()
                 .HasKey(x => x.Id);
+            modelBuilder.Entity<Category>()
+                .Property(c => c.Title)
+                .IsRequired();
 
             modelBuilder.Entity<Question>()
                 .HasKey(q => q.Id);
