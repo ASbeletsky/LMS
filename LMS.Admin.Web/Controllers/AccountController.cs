@@ -1,51 +1,51 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
+using System.Linq;
 using LMS.Admin.Web.ViewModels;
-using LMS.Entries.Models;
+using LMS.Business.Services;
+using LMS.Entries;
 
 namespace LMS.Admin.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<User> _userManager; // сервис по управлению пользователями
-        private readonly SignInManager<User> _signInManager; //сервис который позволяет аутентифицировать пользователя и устанавливать или удалять его куки
+        private  IdentityService _identityService;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(IdentityService identityService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _identityService = identityService;
         }
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, Name = model.Name, Surname = model.Surname, UserName = model.Email };
+                var user = new User { Email = model.Email, Name = model.Name, Surname = model.Surname, UserName = model.Email };
                 // добавляем пользователя
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var errors = await _identityService.Register(user, model.Password);
+
+                if (errors.Any())
                 {
-                    // установка куки
-                    await _signInManager.SignInAsync(user, false);
-                   // _logger.LogInformation(3, "User created a new account with password.");
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
+                    foreach (var error in errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
@@ -59,19 +59,15 @@ namespace LMS.Admin.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result =
-                await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-                if (result.Succeeded)
-                {
+                await _identityService.LogIn(model.Email, model.Password, model.RememberMe);
 
+                if (result == true)
+                {
                     // проверяем, принадлежит ли URL приложению
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    { 
                         return Redirect(model.ReturnUrl);
-                    }
                     else
-                    {
-                    return RedirectToAction("Index", "Home");
-                    }
+                        return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -85,8 +81,7 @@ namespace LMS.Admin.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()
         {
-            // удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
+            await _identityService.LogOff();
             return RedirectToAction("Index", "Home");
         }
     }

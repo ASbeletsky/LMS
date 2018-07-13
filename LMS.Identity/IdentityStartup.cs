@@ -1,7 +1,7 @@
-﻿using LMS.Data;
-using LMS.Entries.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+using LMS.Entries;
+using LMS.Data;
 
 namespace LMS.Identity
 {
@@ -9,7 +9,6 @@ namespace LMS.Identity
     {
         public static void AddIdentity(this IServiceCollection services)
         {
-
             services.AddIdentity<User, IdentityRole>(opts =>
             {
                 opts.User.RequireUniqueEmail = true;
@@ -21,5 +20,6 @@ namespace LMS.Identity
              .AddEntityFrameworkStores<LMSDbContext>();
         }
     }
-    
 }
+    
+

@@ -1,6 +1,6 @@
-﻿using LMS.Entries.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using LMS.Entries;
 
 namespace LMS.Data
 {

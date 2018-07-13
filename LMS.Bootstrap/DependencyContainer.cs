@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
+using LMS.Business.Services;
 using LMS.Data;
 using LMS.Data.Migrations;
 using LMS.Interfaces;
@@ -21,6 +22,10 @@ namespace LMS.Bootstrap
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<IdentityService>()
+                .AsSelf()
                 .InstancePerLifetimeScope();
 
             builder.RegisterBuildCallback(container =>

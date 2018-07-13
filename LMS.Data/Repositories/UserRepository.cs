@@ -1,9 +1,10 @@
-﻿using LMS.Entries.Models;
-using LMS.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using LMS.Interfaces;
+using LMS.Entries;
+
 
 namespace LMS.Data.Repositories
 {
