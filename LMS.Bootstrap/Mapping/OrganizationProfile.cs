@@ -2,9 +2,9 @@
 
 namespace LMS.Bootstrap.Mapping
 {
-    public class OrganizationProfile : Profile
+    public class MappingsContainer : Profile
     {
-        public OrganizationProfile()
+        public MappingsContainer()
         {
         }
     }

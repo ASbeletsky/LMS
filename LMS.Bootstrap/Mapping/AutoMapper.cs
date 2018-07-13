@@ -8,7 +8,7 @@ namespace LMS.Bootstrap.Mapping
 
         public AutoMapper()
         {
-            var configuration = new MapperConfiguration(config => config.AddProfile<OrganizationProfile>());
+            var configuration = new MapperConfiguration(config => config.AddProfile<MappingsContainer>());
             mapper = configuration.CreateMapper();
         }
 
