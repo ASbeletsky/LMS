@@ -6,41 +6,29 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div>
+<div class="@(@Model.IsVisible ? "visible" : "")">
     <h4>Question</h4>
     <hr />
-    <dl class="dl">
-        <dt>
-            <label asp-for="Complexity"></label>
-        </dt>
-        <dd>
-            <label>@Model.Complexity</label>
-        </dd>
-        <dt>
-            <label asp-for="Content"></label>
-        </dt>
-        <dd>
-            <label>@Model.Content</label>
-        </dd>
-        <dt>
-            <label asp-for="Type"></label>
-        </dt>
-        <dd>
-            <label>@Model.Type.Title</label>
-        </dd>
-        <dt>
-            <label asp-for="Category"></label>
-        </dt>
-        <dd>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="details-block col-12 col-md-6">
+                <label class="details-header" asp-for="Complexity"></label>
+                <label>@Model.Complexity</label>
+            </div>
+            <div class="details-block col-12 col-md-6">
+                <label class="details-header" asp-for="Type"></label>
+                <label>@Model.Type.Title</label>
+            </div>
+        </div>
+        <div class="details-block">
+            <label class="details-header" asp-for="Category"></label>
             <label>@Model.Category.Title</label>
-        </dd>
-        <dt>
-            <label asp-for="IsVisible"></label>
-        </dt>
-        <dd>
-            <label>@Model.IsVisible</label>
-        </dd>
-    </dl>
+        </div>
+        <div class="details-block">
+            <label class="details-header" asp-for="Content"></label>
+            <label>@Model.Content</label>
+        </div>
+    </div>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>

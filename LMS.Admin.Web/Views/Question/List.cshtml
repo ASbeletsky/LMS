@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<LMS.Dto.QuestionDTO>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "List";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -14,19 +14,16 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Id)
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Complexity)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category)
                 </th>
                 <th>
                     Actions
@@ -38,19 +35,16 @@
             {
             <tr class="@(item.IsVisible ? "visible" : "")">
                 <td>
-                    <label>@item.Id</label>
+                    <label>@item.Category.Title</label>
+                </td>
+                <td>
+                    <label>@item.Type.Title</label>
                 </td>
                 <td>
                     <label>@item.Complexity</label>
                 </td>
                 <td>
                     <label>@item.Content</label>
-                </td>
-                <td>
-                    <label>@item.Type.Title</label>
-                </td>
-                <td>
-                    <label>@item.Category.Title</label>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
