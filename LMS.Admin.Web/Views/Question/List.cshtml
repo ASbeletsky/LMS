@@ -23,6 +23,12 @@
                     @Html.DisplayNameFor(model => model.Content)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
                     Actions
                 </th>
             </tr>
@@ -30,22 +36,28 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr class="@(item.IsVisible ? "visible" : "")">
-                    <td>
-                        <label>@item.Id</label>
-                    </td>
-                    <td>
-                        <label>@item.Complexity</label>
-                    </td>
-                    <td>
-                        <label>@item.Content</label>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a href="#" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
+            <tr class="@(item.IsVisible ? "visible" : "")">
+                <td>
+                    <label>@item.Id</label>
+                </td>
+                <td>
+                    <label>@item.Complexity</label>
+                </td>
+                <td>
+                    <label>@item.Content</label>
+                </td>
+                <td>
+                    <label>@item.Type.Title</label>
+                </td>
+                <td>
+                    <label>@item.Category.Title</label>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a href="#" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id">Delete</a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
