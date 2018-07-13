@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace LMS.Bootstrap
+namespace LMS.Bootstrap.Mapping
 {
     public class AutoMapper : Interfaces.IMapper
     {
@@ -8,7 +8,7 @@ namespace LMS.Bootstrap
 
         public AutoMapper()
         {
-            var configuration = new MapperConfiguration(config => config.CreateMissingTypeMaps = true);
+            var configuration = new MapperConfiguration(config => config.AddProfile<OrganizationProfile>());
             mapper = configuration.CreateMapper();
         }
 
