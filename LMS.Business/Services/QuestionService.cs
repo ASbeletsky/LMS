@@ -98,6 +98,7 @@ namespace LMS.Business.Services
             //}
             if (unitOfWork.Questions.Get(entry.Id) is Question oldQuestion)
             {
+                entry.IsVisible = true;
                 entry.Id = 0;
 
                 oldQuestion.IsVisible = false;

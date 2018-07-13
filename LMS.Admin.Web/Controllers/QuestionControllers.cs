@@ -73,7 +73,6 @@ namespace LMS.Admin.Web.Controllers
         }
         
         [HttpGet]
-        [Route("")]
         public IActionResult List()
         {
             var questions = questionService.GetAllQuestions();

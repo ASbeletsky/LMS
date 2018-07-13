@@ -9,27 +9,33 @@
 <div>
     <h4>Question</h4>
     <hr />
-    <dl class="dl-horizontal">
+    <dl class="dl">
         <dt>
-            <label asp-for="Complexity" />
+            <label asp-for="Complexity"></label>
         </dt>
         <dd>
             <label>@Model.Complexity</label>
         </dd>
         <dt>
-            <label asp-for="Content" />
+            <label asp-for="Content"></label>
         </dt>
         <dd>
             <label>@Model.Content</label>
         </dd>
         <dt>
-            <label asp-for="Type" />
+            <label asp-for="Type"></label>
         </dt>
         <dd>
-            <label>@Model.Type</label>
+            <label>@Model.Type.Title</label>
         </dd>
         <dt>
-            <label asp-for="IsVisible" />
+            <label asp-for="Category"></label>
+        </dt>
+        <dd>
+            <label>@Model.Category.Title</label>
+        </dd>
+        <dt>
+            <label asp-for="IsVisible"></label>
         </dt>
         <dd>
             <label>@Model.IsVisible</label>
