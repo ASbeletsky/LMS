@@ -16,12 +16,12 @@ namespace LMS.Data.Repositories
             set = context.Set<T>();
         }
 
-        public void Create(T item)
+        public void CreateAsync(T item)
         {
             set.Add(item);
         }
 
-        public void Delete(int id)
+        public void DeleteAsync(int id)
         {
             var item = set.Find(id);
             if (item != null)
@@ -50,7 +50,7 @@ namespace LMS.Data.Repositories
             return set;
         }
 
-        public void Update(T item)
+        public void UpdateAsync(T item)
         {
             set.Update(item);
         }

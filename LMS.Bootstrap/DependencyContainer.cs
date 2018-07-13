@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Core;
-using LMS.Business.Services;
+using LMS.Identity;
 using LMS.Data;
 using LMS.Data.Migrations;
 using LMS.Interfaces;

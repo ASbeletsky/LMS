@@ -27,8 +27,6 @@ namespace LMS.Data
             modelBuilder.Entity<Category>().Property(c => c.Title).IsRequired();
 
             modelBuilder.Entity<User>();
-         // .Property(p => p.UserName)
-          //.HasComputedColumnSql("[LastName] + ', ' + [FirstName]");
         }
     }
 }

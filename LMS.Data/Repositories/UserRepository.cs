@@ -17,12 +17,12 @@ namespace LMS.Data.Repositories
             dbContext = context;
         }
 
-        public void Create(User item)
+        public void CreateAsync(User item)
         {
             dbContext.Users.Add(item);
         }
 
-        public void Delete(int id)
+        public void DeleteAsync(int id)
         {
             User usr = dbContext.Users.Find(id);
             if (usr != null)
@@ -49,7 +49,7 @@ namespace LMS.Data.Repositories
             return dbContext.Users;
         }
 
-        public void Update(User item)
+        public void UpdateAsync(User item)
         {
             dbContext.Entry(item).State = EntityState.Modified;
         }

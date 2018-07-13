@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using System.Linq;
 using LMS.Admin.Web.ViewModels;
-using LMS.Business.Services;
+using LMS.Identity;
 using LMS.Entities;
+using System;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -28,19 +29,16 @@ namespace LMS.Admin.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = new User { Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email };
-                // добавляем пользователя
-                var errors = await _identityService.Register(user, model.Password);
-
-                if (errors.Any())
+                // add user
+                try
                 {
-                    foreach (var error in errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-                else
-                {
+                    var result = await _identityService.Register(user, model.Password);
                     return RedirectToAction("Index", "Home");
+                }
+                catch(AggregateException e)
+                {
+                    foreach (Exception ex in e.InnerExceptions)
+                        ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
             return View(model);

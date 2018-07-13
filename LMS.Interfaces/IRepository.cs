@@ -9,8 +9,8 @@ namespace LMS.Interfaces
         IEnumerable<T> Filter(Func<T, bool> predicate);
         T Get(int id);
         T Find(Func<T, bool> predicate);
-        void Create(T item);
-        void Update(T item);
-        void Delete(int id);
+        void CreateAsync(T item);
+        void UpdateAsync(T item);
+        void DeleteAsync(int id);
     }
 }
