@@ -10,6 +10,10 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<Mapping.AutoMapper>()
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AspNetConfigReader>().As<IConfigReader>()
                 .InstancePerLifetimeScope();
 
