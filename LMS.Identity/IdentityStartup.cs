@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
-using LMS.Entries;
+using LMS.Entities;
 using LMS.Data;
 
 namespace LMS.Identity

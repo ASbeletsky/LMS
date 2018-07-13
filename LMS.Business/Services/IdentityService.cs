@@ -1,4 +1,4 @@
-﻿using LMS.Entries;
+﻿using LMS.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;

@@ -9,8 +9,8 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LMS.Entries\LMS.Entries.csproj" />
+  <ItemGroup>    <ProjectReference Include="..\LMS.Entities\LMS.Entities.csproj" />
+
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
   </ItemGroup>
 

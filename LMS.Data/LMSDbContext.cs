@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LMS.Entries;
+using LMS.Entities;
 
 namespace LMS.Data
 {
@@ -25,6 +25,10 @@ namespace LMS.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Category>().HasKey(c => c.Id);
             modelBuilder.Entity<Category>().Property(c => c.Title).IsRequired();
+
+            modelBuilder.Entity<User>();
+         // .Property(p => p.UserName)
+          //.HasComputedColumnSql("[LastName] + ', ' + [FirstName]");
         }
     }
 }

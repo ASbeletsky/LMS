@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LMS.Data\LMS.Data.csproj" />
-    <ProjectReference Include="..\LMS.Entries\LMS.Entries.csproj" />
+    <ProjectReference Include="..\LMS.Data\LMS.Data.csproj" />    <ProjectReference Include="..\LMS.Entities\LMS.Entities.csproj" />
+
   </ItemGroup>
 
   <ItemGroup>

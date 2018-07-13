@@ -5,17 +5,16 @@ namespace LMS.Admin.Web.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "Name")]
-        public string Name { get; set; }
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "Surnamee")]
-        public string Surname { get; set; }
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
 
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
 
         [Required]
         [DataType(DataType.Password)]
@@ -23,9 +22,9 @@ namespace LMS.Admin.Web.ViewModels
         public string Password { get; set; }
 
         [Required]
-        [Compare("Password", ErrorMessage = "Password do no match")]
+        [Compare("Password", ErrorMessage = "Password do not match")]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirn password")]
+        [Display(Name = "Confirm password")]
         public string PasswordConfirm { get; set; }
     }
 }

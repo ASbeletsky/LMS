@@ -1,9 +1,9 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using System.Linq;
 using LMS.Admin.Web.ViewModels;
 using LMS.Business.Services;
-using LMS.Entries;
+using LMS.Entities;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -27,7 +27,7 @@ namespace LMS.Admin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User { Email = model.Email, Name = model.Name, Surname = model.Surname, UserName = model.Email };
+                var user = new User { Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email };
                 // добавляем пользователя
                 var errors = await _identityService.Register(user, model.Password);
 

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using LMS.Interfaces;
-using LMS.Entries;
+using LMS.Entities;
 
 
 namespace LMS.Data.Repositories
