@@ -1,0 +1,28 @@
+﻿@using LMS.Data.Models;
+@using System.Collections.Generic;
+@model TestProblem
+@*@Html.DropDownList("Organization", @Model.Choices,
+    new { @class = "form-control", id = "orglist", onchange = "changed(this.value)"})*@
+@{
+    ViewBag.Title = "ShowProblem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> result = new List<string>();
+}
+<div class="well" @*style="text-align-last:center" *@>
+    @using (@Html.BeginForm("GetResult", "Home"))
+    {
+        <h3>
+            <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
+            <strong>@Model.Content</strong>
+        </h3>
+        @foreach (var choice in Model.Choices)
+        {
+            @Html.RadioButton("result", @choice.Answer)
+            <span>@choice.Answer</span>
+            <br />
+        }
+        int number = ViewBag.Index;
+        @Html.Hidden("number", number);
+        <input type="submit" class="btn btn-success" value="Подтвердить" />
+    }
+</div>

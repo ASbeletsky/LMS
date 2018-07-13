@@ -14,7 +14,6 @@ namespace LMS.Client.Web.Controllers
         {
             return View();
         }
-
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -44,6 +43,59 @@ namespace LMS.Client.Web.Controllers
                 Problems = new List<TestProblem>(20)
             };
             return View(helptest);
+        }
+        public ActionResult ShowProblem(int number)
+        {
+            ViewBag.Index = number;
+            List<TestProblem> helpProblem = new List<TestProblem>
+            {
+                new TestProblem
+                {
+                    Id = 1,
+                    Complexity = 2,
+                    Content = "Будет true or false?",
+                    Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
+                    Test = new Test(),
+                    Choices = new List<Choice> { new Choice { Id = 1, Answer = "True", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "False", IsRight = false, Problem = new TestProblem() } }
+                },
+                new TestProblem
+                {
+                    Id = 3,
+                    Complexity = 2,
+                    Content = "Доброе утро?",
+                    Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
+                    Test = new Test(),
+                    Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new TestProblem() } }
+                },
+                new TestProblem
+                {
+                    Id = 2,
+                    Complexity = 2,
+                    Content = "Как дела?",
+                    Type = new ProblemType { Id = 1, Title = "Тест на выбор нескольких ответов" },
+                    Test = new Test(),
+                    Choices = new List<Choice> { new Choice { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Плохо", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "Норм", IsRight = true, Problem = new TestProblem() } }
+                }
+            };
+            switch (helpProblem[number].Type.Id)
+            {
+                case 0:
+                    return PartialView("_OneAnswerProblem",helpProblem[number]);
+                case 1:
+                    return PartialView("_MultipleAnswerProblem", helpProblem[number]);
+            }
+            return PartialView("_OneAnswerProblem");
+        }
+        public RedirectToActionResult Start()
+        {
+            int number = 0;
+            return RedirectToAction("ShowProblem", new { number});
+        }
+        [HttpPost]
+        public RedirectToActionResult GetResult(int number,List<string> result)
+        {
+            number++;
+            return RedirectToAction("ShowProblem", new { number });
         }
     }
 }

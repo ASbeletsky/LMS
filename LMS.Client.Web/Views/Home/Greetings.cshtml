@@ -4,7 +4,7 @@
     ViewData["Title"] = "Greetings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="well" style="text-align-last:center">
+<div class="well" @*style="text-align-last:center"*@>
     <h3>
         <strong>Добрый день!</strong>
     </h3>
@@ -23,7 +23,6 @@
     </span>
     @using (Html.BeginForm("Start", "Home"))
     {
-        @Html.HiddenFor(x => x.Problems)
         <input type="submit" class="btn btn-success" value="Старт" />
     }
 </div>
