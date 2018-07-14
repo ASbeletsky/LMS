@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
@@ -28,8 +30,8 @@ namespace LMS.Admin.Web.Controllers
 
         public IActionResult Create()
         {
-            ViewData["AvailableTypes"] = questionTypeService.GetAll();
-            ViewData["AvailableCategories"] = questionCategoryService.GetAll();
+            ViewData["AvailableTypes"] = questionTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableCategories"] = questionCategoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
 
             return View();
         }
@@ -47,8 +49,8 @@ namespace LMS.Admin.Web.Controllers
         {
             var question = questionService.GetById(id);
 
-            ViewData["AvailableTypes"] = questionTypeService.GetAll();
-            ViewData["AvailableCategories"] = questionCategoryService.GetAll();
+            ViewData["AvailableTypes"] = questionTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableCategories"] = questionCategoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
             return View(question);
         }
 
@@ -60,7 +62,7 @@ namespace LMS.Admin.Web.Controllers
 
             return RedirectToAction(nameof(List));
         }
-        
+
         [HttpGet]
         public IActionResult List()
         {

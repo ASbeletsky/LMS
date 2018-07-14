@@ -5,15 +5,11 @@ using LMS.Interfaces;
 
 namespace LMS.Business.Services
 {
-    public class TaskTypeService
+    public class TaskTypeService : BaseService
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
-
-        public TaskTypeService(IUnitOfWork unitOfWork, IMapper mapper)
+        public TaskTypeService(IUnitOfWork unitOfWork, IMapper mapper) 
+            : base(unitOfWork, mapper)
         {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
         }
 
         public IEnumerable<TaskTypeDTO> GetAll()

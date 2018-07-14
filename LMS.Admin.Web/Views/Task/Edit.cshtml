@@ -1,10 +1,6 @@
-﻿@using LMS.Dto
-@model TaskDTO
+﻿@model LMS.Dto.TaskDTO
 
 @{
-    var types = ((IEnumerable<TaskTypeDTO>)ViewData["AvailableTypes"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-    var categories = ((IEnumerable<CategoryDTO>)ViewData["AvailableCategories"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-
     ViewData["Title"] = "Edit";
 }
 
@@ -15,37 +11,11 @@
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Id" type="hidden" />
-            <div class="row">
-                <div class="form-group col-12 col-md-6">
-                    <label asp-for="Complexity" class="control-label"></label>
-                    <input asp-for="Complexity" class="form-control form-control-range" type="range" min="0" max="10" />
-                    <span asp-validation-for="Complexity" class="text-danger"></span>
-                </div>
-                <div class="form-group col-12 col-md-6">
-                    <label asp-for="TypeId" class="control-label"></label>
-                    <select asp-for="TypeId" asp-items="@types" class="form-control custom-select"></select>
-                    <span asp-validation-for="TypeId" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" asp-items="@categories" class="form-control custom-select"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control"><</textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+            @Html.Partial("EditCreatePartial", Model)
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="List">Back to List</a>
 </div>

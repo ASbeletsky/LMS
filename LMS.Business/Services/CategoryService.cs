@@ -5,15 +5,11 @@ using LMS.Interfaces;
 
 namespace LMS.Business.Services
 {
-    public class CategoryService
+    public class CategoryService : BaseService
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
-
-        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CategoryService(IUnitOfWork unitOfWork, IMapper mapper) 
+            : base(unitOfWork, mapper)
         {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
         }
 
         public IEnumerable<CategoryDTO> GetAll()

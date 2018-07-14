@@ -12,11 +12,5 @@
         public int TypeId { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-
-        public Task Clone()
-        {
-            return (Task)MemberwiseClone();
-        }
-        //        public List<Choice> Choices { get; set; }        
     }
 }

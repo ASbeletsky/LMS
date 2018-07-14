@@ -4,9 +4,12 @@ namespace LMS.Dto
 {
     public class TaskDTO
     {
+        public const int MinComplexity = 1;
+        public const int MaxComplexity = 10;
+
         public int Id { get; set; }
 
-        [Range(0, 10, ErrorMessage = "Value out of range")]
+        [Range(MinComplexity, MaxComplexity, ErrorMessage = "Value out of range")]
         public int Complexity { get; set; }
 
         [Required(ErrorMessage = "Content must be defined")]

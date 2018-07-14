@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LMS.Business.Services
+namespace LMS.Interfaces
 {
     public class EntityNotFoundException : Exception
     {
