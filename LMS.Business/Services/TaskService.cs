@@ -14,11 +14,11 @@ namespace LMS.Business.Services
         {
         }
 
-        public Task MarkAsDeletedByIdAsync(int questionId)
+        public Task MarkAsDeletedByIdAsync(int taskId)
         {
-            if (unitOfWork.Tasks.Get(questionId) is Entities.Task question)
+            if (unitOfWork.Tasks.Get(taskId) is Entities.Task task)
             {
-                question.IsActive = false;
+                task.IsActive = false;
 
                 return unitOfWork.SaveAsync();
             }
@@ -26,29 +26,29 @@ namespace LMS.Business.Services
             return Task.CompletedTask;
         }
 
-        public TaskDTO GetById(int questionId)
+        public TaskDTO GetById(int taskId)
         {
-            var question = unitOfWork.Tasks.Get(questionId);
-            if (question == null)
+            var task = unitOfWork.Tasks.Get(taskId);
+            if (task == null)
             {
-                throw new EntityNotFoundException<Entities.Task>(questionId);
+                throw new EntityNotFoundException<Entities.Task>(taskId);
             }
 
-            return mapper.Map<Entities.Task, TaskDTO>(question);
+            return mapper.Map<Entities.Task, TaskDTO>(task);
         }
 
-        public Task CreateAsync(TaskDTO question)
+        public Task CreateAsync(TaskDTO task)
         {
-            if (question == null)
+            if (task == null)
             {
-                throw new ArgumentNullException(nameof(question));
+                throw new ArgumentNullException(nameof(task));
             }
-            if (string.IsNullOrEmpty(question.Content))
+            if (string.IsNullOrEmpty(task.Content))
             {
                 throw new ArgumentException($"{nameof(Entities.Task)}.{nameof(Entities.Task.Content)} cannot be null or empty");
             }
 
-            var entry = mapper.Map<TaskDTO, Entities.Task>(question);
+            var entry = mapper.Map<TaskDTO, Entities.Task>(task);
             entry.IsActive = true;
 
             unitOfWork.Tasks.Create(entry);
@@ -56,14 +56,14 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public Task UpdateAsync(TaskDTO questionDto)
+        public Task UpdateAsync(TaskDTO taskDto)
         {
-            if (questionDto == null)
+            if (taskDto == null)
             {
-                throw new ArgumentNullException(nameof(questionDto));
+                throw new ArgumentNullException(nameof(taskDto));
             }
 
-            var newTask = mapper.Map<TaskDTO, Entities.Task>(questionDto);
+            var newTask = mapper.Map<TaskDTO, Entities.Task>(taskDto);
 
             if (unitOfWork.Tasks.Get(newTask.Id) is Entities.Task oldTask)
             {
@@ -92,13 +92,13 @@ namespace LMS.Business.Services
 
         public IEnumerable<TaskDTO> GetAll(bool includeInvisible = false)
         {
-            var questions = unitOfWork.Tasks
+            var tasks = unitOfWork.Tasks
                 .GetAll();
 
             if (!includeInvisible)
-                questions = questions.Where(q => q.IsActive);
+                tasks = tasks.Where(q => q.IsActive);
 
-            return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(questions);
+            return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }
     }
 }

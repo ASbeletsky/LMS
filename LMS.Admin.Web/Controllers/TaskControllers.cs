@@ -10,55 +10,55 @@ namespace LMS.Admin.Web.Controllers
 {
     public class TaskController : Controller
     {
-        private readonly TaskService questionService;
-        private readonly TaskTypeService questionTypeService;
-        private readonly CategoryService questionCategoryService;
+        private readonly TaskService taskService;
+        private readonly TaskTypeService taskTypeService;
+        private readonly CategoryService categoryService;
 
         private readonly IMapper dtoMapper;
 
         public TaskController(
-            TaskService questions, 
-            TaskTypeService questionTypes,
-            CategoryService questionCategories,
+            TaskService tasks, 
+            TaskTypeService taskTypes,
+            CategoryService taskCategories,
             IMapper mapper)
         {
-            questionService = questions;
-            questionTypeService = questionTypes;
-            questionCategoryService = questionCategories;
+            taskService = tasks;
+            taskTypeService = taskTypes;
+            categoryService = taskCategories;
             dtoMapper = mapper;
         }
 
         public IActionResult Create()
         {
-            ViewData["AvailableTypes"] = questionTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            ViewData["AvailableCategories"] = questionCategoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
 
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm]TaskDTO question)
+        public async Task<IActionResult> Create([FromForm]TaskDTO task)
         {
-            await questionService.CreateAsync(question);
+            await taskService.CreateAsync(task);
 
             return RedirectToAction(nameof(List));
         }
        
         public IActionResult Edit(int id)
         {
-            var question = questionService.GetById(id);
+            var task = taskService.GetById(id);
 
-            ViewData["AvailableTypes"] = questionTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            ViewData["AvailableCategories"] = questionCategoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            return View(question);
+            ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            return View(task);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromForm]TaskDTO question)
+        public async Task<IActionResult> Edit([FromForm]TaskDTO task)
         {
-            await questionService.UpdateAsync(question);
+            await taskService.UpdateAsync(task);
 
             return RedirectToAction(nameof(List));
         }
@@ -66,24 +66,24 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var questions = questionService.GetAll();
-            return View(questions);
+            var tasks = taskService.GetAll();
+            return View(tasks);
         }
 
         [HttpGet]
         public IActionResult Details(int id)
         {
-            var question = questionService.GetById(id);
-            return View(question);
+            var task = taskService.GetById(id);
+            return View(task);
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await questionService.MarkAsDeletedByIdAsync(id);
-            var questions = questionService.GetAll();
-            return View("List", questions);
+            await taskService.MarkAsDeletedByIdAsync(id);
+            var tasks = taskService.GetAll();
+            return View("List", tasks);
         }
     }
 }
