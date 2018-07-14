@@ -30,20 +30,17 @@
                         <span class="nav-link-text">Home</span>
                     </a>
                 </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Questions">
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tasks">
                     <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
                         <i class="fa fa-fw fa-question-circle"></i>
-                        <span class="nav-link-text">Questions</span>
+                        <span class="nav-link-text">Tasks</span>
                     </a>
                     <ul class="sidenav-second-level collapse" id="collapseComponents">
                         <li>
-                            <a asp-controller="Question" asp-action="Create">Create new</a>
+                            <a asp-controller="Task" asp-action="Create">Create new</a>
                         </li>
                         <li>
-                            <a asp-controller="Question" asp-action="List">List all</a>
-                        </li>
-                        <li>
-                            <a asp-controller="QuestionType" asp-action="List">Types</a>
+                            <a asp-controller="Task" asp-action="List">List all</a>
                         </li>
                     </ul>
                 </li>

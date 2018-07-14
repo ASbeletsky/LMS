@@ -1,22 +1,21 @@
 ﻿@using LMS.Dto
-@model QuestionDTO
+@model TaskDTO
 
 @{
-    var types = ((IEnumerable<QuestionTypeDTO>)ViewData["AvailableTypes"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+    var types = ((IEnumerable<TaskTypeDTO>)ViewData["AvailableTypes"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
     var categories = ((IEnumerable<CategoryDTO>)ViewData["AvailableCategories"]).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
 
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<h4>Question</h4>
+<h4>Task</h4>
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Edit">
+        <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input asp-for="Id" type="hidden" />
             <div class="row">
                 <div class="form-group col-12 col-md-6">
                     <label asp-for="Complexity" class="control-label"></label>
@@ -49,3 +48,4 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+

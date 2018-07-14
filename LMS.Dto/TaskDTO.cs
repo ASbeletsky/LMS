@@ -2,7 +2,7 @@
 
 namespace LMS.Dto
 {
-    public class QuestionDTO
+    public class TaskDTO
     {
         public int Id { get; set; }
 
@@ -12,10 +12,10 @@ namespace LMS.Dto
         [Required(ErrorMessage = "Content must be defined")]
         public string Content { get; set; }
 
-        [Display(Name = "Is visible")]
-        public bool IsVisible { get; set; }
+        [Display(Name = "Is active")]
+        public bool IsActive { get; set; }
 
-        public QuestionTypeDTO Type { get; set; }
+        public TaskTypeDTO Type { get; set; }
 
         [Display(Name = "Type")]
         public int TypeId { get; set; }

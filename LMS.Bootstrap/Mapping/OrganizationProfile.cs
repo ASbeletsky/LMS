@@ -11,11 +11,11 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<Category, CategoryDTO>();
             CreateMap<CategoryDTO, Category>();
 
-            CreateMap<QuestionType, QuestionTypeDTO>();
-            CreateMap<QuestionTypeDTO, QuestionType>();
+            CreateMap<TaskType, TaskTypeDTO>();
+            CreateMap<TaskTypeDTO, TaskType>();
 
-            CreateMap<QuestionDTO, Question>();
-            CreateMap<Question, QuestionDTO>();
+            CreateMap<TaskDTO, Task>();
+            CreateMap<Task, TaskDTO>();
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace LMS.Entities
+﻿namespace LMS.Dto
 {
-    public class QuestionType
+    public class TaskTypeDTO
     {
         public int Id { get; set; }
         public string Title { get; set; }

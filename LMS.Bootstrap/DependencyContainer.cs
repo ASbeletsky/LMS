@@ -29,7 +29,7 @@ namespace LMS.Bootstrap
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<QuestionService>()
+            builder.RegisterType<TaskService>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
@@ -37,7 +37,7 @@ namespace LMS.Bootstrap
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<QuestionTypeService>()
+            builder.RegisterType<TaskTypeService>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
 

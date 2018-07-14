@@ -1,22 +1,22 @@
 ﻿namespace LMS.Entities
 {
-    public class Question
+    public class Task
     {
         public int Id { get; set; }
         public int Complexity { get; set; }
         public string Content { get; set; }
 
-        public bool IsVisible { get; set; }
+        public bool IsActive { get; set; }
 
-        public QuestionType Type { get; set; }
+        public TaskType Type { get; set; }
         public int TypeId { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
 
-        public Question Clone()
+        public Task Clone()
         {
-            return (Question)MemberwiseClone();
+            return (Task)MemberwiseClone();
         }
-//        public List<Choice> Choices { get; set; }        
+        //        public List<Choice> Choices { get; set; }        
     }
 }

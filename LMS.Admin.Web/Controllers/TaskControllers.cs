@@ -6,17 +6,17 @@ using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
-    public class QuestionController : Controller
+    public class TaskController : Controller
     {
-        private readonly QuestionService questionService;
-        private readonly QuestionTypeService questionTypeService;
+        private readonly TaskService questionService;
+        private readonly TaskTypeService questionTypeService;
         private readonly CategoryService questionCategoryService;
 
         private readonly IMapper dtoMapper;
 
-        public QuestionController(
-            QuestionService questions, 
-            QuestionTypeService questionTypes,
+        public TaskController(
+            TaskService questions, 
+            TaskTypeService questionTypes,
             CategoryService questionCategories,
             IMapper mapper)
         {
@@ -36,7 +36,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm]QuestionDTO question)
+        public async Task<IActionResult> Create([FromForm]TaskDTO question)
         {
             await questionService.CreateAsync(question);
 
@@ -54,7 +54,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromForm]QuestionDTO question)
+        public async Task<IActionResult> Edit([FromForm]TaskDTO question)
         {
             await questionService.UpdateAsync(question);
 

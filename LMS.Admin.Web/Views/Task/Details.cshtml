@@ -1,4 +1,4 @@
-﻿@model LMS.Dto.QuestionDTO
+﻿@model LMS.Dto.TaskDTO
 
 @{
     ViewData["Title"] = "Details";
@@ -6,8 +6,8 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="@(@Model.IsVisible ? "visible" : "")">
-    <h4>Question</h4>
+<div class="@(@Model.IsActive ? "visible" : "")">
+    <h4>Task</h4>
     <hr />
     <div class="col-md-6">
         <div class="row">

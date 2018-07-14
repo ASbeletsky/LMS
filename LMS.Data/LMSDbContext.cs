@@ -13,8 +13,8 @@ namespace LMS.Data
         }
 
         public DbSet<Category> Categories { get; }
-        public DbSet<Question> Questions { get; }
-        public DbSet<QuestionType> QuestionTypes { get; }
+        public DbSet<Task> Tasks { get; }
+        public DbSet<TaskType> TaskTypes { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,23 +29,23 @@ namespace LMS.Data
                 .Property(c => c.Title)
                 .IsRequired();
 
-            modelBuilder.Entity<Question>()
-                .HasKey(q => q.Id);
-            modelBuilder.Entity<Question>()
-                .HasOne(q => q.Category)
+            modelBuilder.Entity<Task>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.Category)
                 .WithMany()
-                .HasForeignKey(q => q.CategoryId)
+                .HasForeignKey(t => t.CategoryId)
                 .IsRequired();
-            modelBuilder.Entity<Question>()
-                .HasOne(q => q.Type)
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.Type)
                 .WithMany()
-                .HasForeignKey(q => q.TypeId)
+                .HasForeignKey(t => t.TypeId)
                 .IsRequired();
 
-            modelBuilder.Entity<QuestionType>()
-                .HasKey(q => q.Id);
-            modelBuilder.Entity<QuestionType>()
-                .Property(q => q.Title).IsRequired();
+            modelBuilder.Entity<TaskType>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TaskType>()
+                .Property(t => t.Title).IsRequired();
         }
     }
 }
