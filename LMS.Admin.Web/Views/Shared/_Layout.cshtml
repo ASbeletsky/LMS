@@ -23,27 +23,12 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">
-                        <i class="fa fa-fw fa-home"></i>
-                        <span class="nav-link-text">Home</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tasks">
-                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
-                        <i class="fa fa-fw fa-question-circle"></i>
-                        <span class="nav-link-text">Tasks</span>
-                    </a>
-                    <ul class="sidenav-second-level collapse" id="collapseComponents">
-                        <li>
-                            <a asp-controller="Task" asp-action="Create">Create new</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Task" asp-action="List">List all</a>
-                        </li>
-                    </ul>
-                </li>
+            <ul class="navbar-nav navbar-sidenav" id="accordion">
+                <menu-item controller="Home" action="Index" title="Home" icon="fa-home"></menu-item>
+                <menu-item title="Tasks" icon="fa-tasks">
+                    <menu-item controller="Task" action="Create" title="Create new"></menu-item>
+                    <menu-item controller="Task" action="List" title="List all"></menu-item>
+                </menu-item>
             </ul>
             <ul class="navbar-nav sidenav-toggler">
                 <li class="nav-item">
