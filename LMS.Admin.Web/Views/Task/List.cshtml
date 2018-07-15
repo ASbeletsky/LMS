@@ -1,4 +1,5 @@
-﻿@model IEnumerable<LMS.Dto.TaskDTO>
+﻿@using LMS.Dto
+@model IEnumerable<TaskDTO>
 
 @{
     ViewData["Title"] = "List";
@@ -7,54 +8,60 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Type)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Complexity)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Content)
-                </th>
-                <th>
-                    Actions
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-            <tr class="@(item.IsActive ? "visible" : "")">
-                <td>
-                    <label>@item.Category.Title</label>
-                </td>
-                <td>
-                    <label>@item.Type.Title</label>
-                </td>
-                <td>
-                    <label>@item.Complexity</label>
-                </td>
-                <td>
-                    <label>@item.Content</label>
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a href="#" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-</div>
-
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Complexity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Content)
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <label>@item.Category.Title</label>
+                        </td>
+                        <td>
+                            <label>@item.Type.Title</label>
+                        </td>
+                        <td>
+                            <label>@item.Complexity/@TaskDTO.MaxComplexity</label>
+                        </td>
+                        <td>
+                            <label>@item.Content</label>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <center>No items found</center>
+}
 <div id="deleteModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

@@ -1,4 +1,5 @@
-﻿@model LMS.Dto.TaskDTO
+﻿@using LMS.Dto
+@model TaskDTO
 
 @{
     ViewData["Title"] = "Details";
@@ -11,7 +12,7 @@
         <div class="row">
             <div class="details-block col-12 col-md-6">
                 <label class="details-header" asp-for="Complexity"></label>
-                <label>@Model.Complexity</label>
+                <label>@Model.Complexity/@TaskDTO.MaxComplexity</label>
             </div>
             <div class="details-block col-12 col-md-6">
                 <label class="details-header" asp-for="Type"></label>
@@ -28,7 +29,9 @@
         </div>
     </div>
 </div>
+<br />
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <br />
     <a asp-action="List">Back to List</a>
 </div>
