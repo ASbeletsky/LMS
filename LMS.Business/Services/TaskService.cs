@@ -91,12 +91,12 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<TaskDTO> GetAll(bool includeInvisible = false)
+        public IEnumerable<TaskDTO> GetAll(bool includeInactive = false)
         {
             var tasks = unitOfWork.Tasks
                 .GetAll();
 
-            if (!includeInvisible)
+            if (!includeInactive)
                 tasks = tasks.Where(q => q.IsActive);
 
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
