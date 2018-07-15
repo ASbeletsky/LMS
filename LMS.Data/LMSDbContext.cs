@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using LMS.Interfaces;
-using LMS.Data.Models;
+using LMS.Entities;
 
 namespace LMS.Data
 {
@@ -8,35 +7,48 @@ namespace LMS.Data
     {
         private readonly string connectionString;
 
-        public LMSDbContext(IConfigReader reader)
+        public LMSDbContext(string connection)
         {
-            connectionString = reader.GetConnectionString("DefaultConnection");
+            connectionString = connection;
         }
 
-        public DbSet<Test> Test { get; set; }
-        public DbSet<TestProblem> Problem { get; set; }
-        public DbSet<Choice> Choice { get; set; }
+        public DbSet<Category> Categories { get; }
+        public DbSet<Task> Tasks { get; }
+        public DbSet<TaskType> TaskTypes { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(connectionString);
+            optionsBuilder.UseMySql(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Test>().HasKey(x=>x.Id);
-            modelBuilder.Entity<Test>().HasOne(x=>x.Category);
-            modelBuilder.Entity<Test>().HasMany(x => x.Problems);
-            modelBuilder.Entity<TestCategory>().HasKey(x => x.Id);
-            modelBuilder.Entity<TestProblem>().HasKey(x => x.Id);
-            modelBuilder.Entity<TestProblem>().HasOne(x => x.Type);
-            modelBuilder.Entity<TestProblem>().HasMany(x => x.Choices);
-            modelBuilder.Entity<ProblemType>().HasKey(x=>x.Id);
-            modelBuilder.Entity<TestResult>().HasKey(x => x.Id);
-            modelBuilder.Entity<TestResult>().HasMany(x => x.Answers);
-            modelBuilder.Entity<Answer>().HasKey(x => x.Id);
-            modelBuilder.Entity<Answer>().HasOne(x => x.TestProblem);
-            modelBuilder.Entity<Answer>().HasMany(x => x.Choices);
+            modelBuilder.Entity<Category>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<Category>()
+                .Property(c => c.Title)
+                .IsRequired();
+
+            modelBuilder.Entity<Task>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.Category)
+                .WithMany()
+                .HasForeignKey(t => t.CategoryId)
+                .IsRequired();
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.PreviousVersion)
+                .WithMany();
+            modelBuilder.Entity<Task>()
+                .HasOne(t => t.Type)
+                .WithMany()
+                .HasForeignKey(t => t.TypeId)
+                .IsRequired();
+
+            modelBuilder.Entity<TaskType>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TaskType>()
+                .Property(t => t.Title).IsRequired();
         }
     }
 }
