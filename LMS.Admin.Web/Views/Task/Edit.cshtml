@@ -1,0 +1,19 @@
+﻿@model LMS.Dto.TaskDTO
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Task</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            @Html.Partial("EditCreatePartial", Model)
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
