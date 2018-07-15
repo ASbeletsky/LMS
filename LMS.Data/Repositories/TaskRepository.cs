@@ -43,6 +43,7 @@ namespace LMS.Data.Repositories
             return set
                 .Include(t => t.Category)
                 .Include(t => t.Type)
+                .Include(t => t.PreviousVersion)
                 .FirstOrDefault(predicate);
         }
 
@@ -51,6 +52,7 @@ namespace LMS.Data.Repositories
             return set
                 .Include(t => t.Category)
                 .Include(t => t.Type)
+                .Include(t => t.PreviousVersion)
                 .FirstOrDefault(t => t.Id == id);
         }
 

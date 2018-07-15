@@ -75,6 +75,7 @@ namespace LMS.Business.Services
                     return Task.CompletedTask;
                 }
 
+                newTask.PreviousVersion = oldTask;
                 newTask.IsActive = true;
                 newTask.Id = 0;
 

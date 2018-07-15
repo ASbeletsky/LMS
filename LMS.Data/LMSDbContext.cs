@@ -37,6 +37,9 @@ namespace LMS.Data
                 .HasForeignKey(t => t.CategoryId)
                 .IsRequired();
             modelBuilder.Entity<Task>()
+                .HasOne(t => t.PreviousVersion)
+                .WithMany();
+            modelBuilder.Entity<Task>()
                 .HasOne(t => t.Type)
                 .WithMany()
                 .HasForeignKey(t => t.TypeId)

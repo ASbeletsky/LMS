@@ -27,5 +27,8 @@ namespace LMS.Dto
 
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
+
+        [Display(Name = "Previous version")]
+        public TaskDTO PreviousVersion { get; set; }
     }
 }
