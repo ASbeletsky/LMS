@@ -14,8 +14,8 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<TaskType, TaskTypeDTO>();
             CreateMap<TaskTypeDTO, TaskType>();
 
-            CreateMap<TaskDTO, Task>();
-            CreateMap<Task, TaskDTO>();
+            CreateMap<AnswerDTO, Task>();
+            CreateMap<Task, AnswerDTO>();
         }
     }
 }

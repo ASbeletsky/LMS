@@ -7,7 +7,7 @@ namespace LMS.Interfaces
         IRepository<Category> Categories { get; }
         IRepository<Task> Tasks { get; }
         IRepository<TaskType> TaskTypes { get; }
-
+        IRepository<Answer> Answers { get; }
         System.Threading.Tasks.Task SaveAsync();
     }
 }
