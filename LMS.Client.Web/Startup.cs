@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LMS.Admin.Web
+namespace LMS.Client.Web
 {
     public class Startup
     {
@@ -18,17 +18,13 @@ namespace LMS.Admin.Web
 
         public IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
-            var builder = new ContainerBuilder();
-            builder.Populate(services);
-            builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
-            var container = builder.Build();
-            return new AutofacServiceProvider(container);
         }
-        
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

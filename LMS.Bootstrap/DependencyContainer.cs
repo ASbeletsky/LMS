@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using LMS.Data;
+using LMS.Data.Migrations;
 using LMS.Interfaces;
 
 namespace LMS.Bootstrap
@@ -9,6 +10,10 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<Mapping.AutoMapper>()
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AspNetConfigReader>().As<IConfigReader>()
                 .InstancePerLifetimeScope();
 
@@ -21,6 +26,9 @@ namespace LMS.Bootstrap
 
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterBuildCallback(container =>
+                DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));
         }
     }
 }

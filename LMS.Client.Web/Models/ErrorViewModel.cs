@@ -1,4 +1,6 @@
-namespace LMS.Admin.Web.Models
+using System;
+
+namespace LMS.Client.Web.Models
 {
     public class ErrorViewModel
     {
