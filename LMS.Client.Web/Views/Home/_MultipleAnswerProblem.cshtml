@@ -29,5 +29,11 @@
         <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
         if (number < kolvo - 1)
         {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>}
+        <br />
+        for (int i = 0; i < kolvo; i++)
+        {
+            <button onclick="@Html.Hidden("got", @i)"> @(i + 1)</button>
+        }
+
     }
 </div>

@@ -16,15 +16,21 @@
             <strong>@Model.Content</strong>
         </h3>
 
-        @Html.TextArea("result", null, 15, 50, null);
+        @Html.TextArea("result", null, 10, 80, null);
         <br />
         int number = ViewBag.Index;
-        int kolvo = ViewBag.Kolvo;
         @Html.Hidden("number", number);
+        int kolvo = ViewBag.Kolvo;
         if (number > 0)
         {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button> }
         <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
         if (number < kolvo - 1)
         {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>}
+        <br />
+        for (int i = 0; i < kolvo; i++)
+        {
+            <button onclick="@Html.Hidden("got", @i)"> @(i + 1)</button>
+        }
+
     }
 </div>

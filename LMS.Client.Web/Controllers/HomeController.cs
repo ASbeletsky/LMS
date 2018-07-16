@@ -112,7 +112,7 @@ namespace LMS.Client.Web.Controllers
             int number = 0;
             return RedirectToAction("ShowProblem", new { number});
         }
-        public RedirectToActionResult Navigate(int number,string mode, List<string> result)
+        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got)
         {
             switch (mode)
             {
@@ -124,6 +124,9 @@ namespace LMS.Client.Web.Controllers
                     break;
                 case "Forward":
                     number++;
+                    break;
+                default:
+                    number = got;
                     break;
             }
             return RedirectToAction("ShowProblem", new { number });

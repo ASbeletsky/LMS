@@ -10,23 +10,30 @@
     string mode="";
 }
 <div class="well" @*style="text-align-last:center" *@>
-    @using (@Html.BeginForm("Navigate","Home"))
+    @using (@Html.BeginForm("Navigate", "Home"))
     {
-    <h3>
-        <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
-        <strong>@Model.Content</strong>
-    </h3>
-    @foreach (var choice in Model.Choices)
+        <h3>
+            <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
+            <strong>@Model.Content</strong>
+        </h3>
+        @foreach (var choice in Model.Choices)
         {
-        @Html.RadioButton("result", @choice.Answer)
-        <span>@choice.Answer</span>
-        <br />
+            @Html.RadioButton("result", @choice.Answer)
+            <span>@choice.Answer</span>
+            <br />
         }
         int number = ViewBag.Index;
         int kolvo = ViewBag.Kolvo;
-    @Html.Hidden("number", number);
-        if (number > 0) {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button> }    
+        @Html.Hidden("number", number);
+        if (number > 0)
+        {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button> }
         <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
-        if (number < kolvo - 1) {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>}
+        if (number < kolvo - 1)
+        {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>}
+        <br />
+        for (int i = 0; i < kolvo; i++)
+        {
+            <button onclick="@Html.Hidden("got", @i)"> @(i + 1)</button>
+        }
     }
 </div>
