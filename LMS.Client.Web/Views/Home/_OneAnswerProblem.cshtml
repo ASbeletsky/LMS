@@ -7,22 +7,25 @@
     ViewBag.Title = "ShowProblem";
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
+    string mode="";
 }
 <div class="well" @*style="text-align-last:center" *@>
-    @using (@Html.BeginForm("GetResult", "Home"))
+    @using (@Html.BeginForm("Navigate","Home"))
     {
-        <h3>
-            <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
-            <strong>@Model.Content</strong>
-        </h3>
-        @foreach (var choice in Model.Choices)
+    <h3>
+        <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
+        <strong>@Model.Content</strong>
+    </h3>
+    @foreach (var choice in Model.Choices)
         {
-            @Html.RadioButton("result", @choice.Answer)
-            <span>@choice.Answer</span>
-            <br />
+    @Html.RadioButton("result", @choice.Answer)
+    <span>@choice.Answer</span>
+    <br />
         }
         int number = ViewBag.Index;
-        @Html.Hidden("number", number);
-        <input type="submit" class="btn btn-success" value="Подтвердить" />
+    @Html.Hidden("number", number);
+    <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button>
+    <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
+    <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>
     }
 </div>

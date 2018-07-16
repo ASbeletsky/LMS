@@ -75,6 +75,15 @@ namespace LMS.Client.Web.Controllers
                     Type = new ProblemType { Id = 1, Title = "Тест на выбор нескольких ответов" },
                     Test = new Test(),
                     Choices = new List<Choice> { new Choice { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Плохо", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "Норм", IsRight = true, Problem = new TestProblem() } }
+                },
+                new TestProblem
+                {
+                    Id = 4,
+                    Complexity = 2,
+                    Content = "Франция чемпион?",
+                    Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
+                    Test = new Test(),
+                    Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new TestProblem() } }
                 }
             };
             switch (helpProblem[number].Type.Id)
@@ -91,10 +100,20 @@ namespace LMS.Client.Web.Controllers
             int number = 0;
             return RedirectToAction("ShowProblem", new { number});
         }
-        [HttpPost]
-        public RedirectToActionResult GetResult(int number,List<string> result)
+        public RedirectToActionResult Navigate(int number,string mode, List<string> result)
         {
-            number++;
+            switch (mode)
+            {
+                case "Back":
+                    if (number > 0) number--;
+                    break;
+                case "Result":
+                    number++;
+                    break;
+                case "Forward":
+                    number++;
+                    break;
+            }
             return RedirectToAction("ShowProblem", new { number });
         }
     }
