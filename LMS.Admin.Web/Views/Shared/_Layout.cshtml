@@ -23,13 +23,23 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="accordion">
-                <menu-item controller="Home" action="Index" title="Home" icon="fa-home"></menu-item>
-                <menu-item title="Tasks" icon="fa-tasks">
-                    <menu-item controller="Task" action="Create" title="Create new"></menu-item>
-                    <menu-item controller="Task" action="List" title="List all"></menu-item>
-                </menu-item>
-            </ul>
+            @Html.Partial("Menu", new MenuViewModel()
+            {
+                new MenuItemViewModel("Home", "fa-home", "Index", "Home"),
+                new MenuItemViewModel("Tasks", "fa-tasks")
+                {
+                    new MenuItemViewModel("Create new", "Create", "Task"),
+                    new MenuItemViewModel("List all", "List", "Task"),
+                    new MenuItemViewModel("Some", "fn-adn")
+                    {
+                        new MenuItemViewModel("Sample", "List", "Task"),
+                    }
+                },
+                new MenuItemViewModel("Some", "fa-address-book")
+                {
+                    new MenuItemViewModel("Sample", "List", "Task"),
+                }
+            })
             <ul class="navbar-nav sidenav-toggler">
                 <li class="nav-item">
                     <a class="nav-link text-center" id="sidenavToggler">

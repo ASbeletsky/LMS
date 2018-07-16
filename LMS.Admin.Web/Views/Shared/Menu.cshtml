@@ -1,0 +1,68 @@
+﻿@model LMS.Admin.Web.Models.MenuViewModel
+@{
+    var idGenerator = new Random();
+
+    string AppendItems(ICollection<MenuItemViewModel> items, int layer = 1)
+    {
+        var result = "";
+        foreach (var item in items)
+        {
+            if (item.Any())
+            {
+                layer++;
+                var collapseId = "collapseComponents" + idGenerator.Next();
+
+                result += $"<li class='nav-item' data-toggle='tooltip' data-placement='right' title='{item.Title}'>";
+                result +=
+$@"<a class='nav-link nav-link-collapse collapsed' data-toggle='collapse' href='#{collapseId}' data-parent'#accordion'>
+{AppendMenuItemContent(item)}
+</a>";
+                result +=
+$@"<ul class='{GetLayerClass(layer)} collapse' id='{collapseId}'>
+{AppendItems(item, layer)}
+</ul>";
+                result += "</li>";
+            }
+            else
+            {
+                result +=
+$@"<li class='nav-item' data-toggle='tooltip' data-placement='right' title='{item.Title}'>
+<a class='nav-link' href='{Url.Action(item.Controller, item.Action)}'>{AppendMenuItemContent(item)}</a>
+</li>";
+            }
+        }
+        return result;
+    }
+    string AppendMenuItemContent(MenuItemViewModel item)
+    {
+        if (string.IsNullOrWhiteSpace(item.Icon))
+        {
+            return item.Title;
+        }
+        else
+        {
+            return
+   $@"<i class='fa fa-fw {item.Icon}'></i>
+<span class='nav-link-text'>{item.Title}</span>";
+        }
+    }
+    string GetLayerClass(int layer)
+    {
+        switch (layer)
+        {
+            case 0:
+            case 1:
+                return "";
+            case 2:
+                return "sidenav-second-level";
+            case 3:
+                return "sidenav-third-level";
+            default:
+                throw new NotSupportedException("Layer not supported");
+        }
+    }
+}
+
+<ul class="navbar-nav navbar-sidenav" id="accordion">
+    @Html.Raw(AppendItems(Model));
+</ul>
