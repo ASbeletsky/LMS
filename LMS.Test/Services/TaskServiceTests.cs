@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using LMS.Dto;
 using LMS.Interfaces;
@@ -18,7 +19,11 @@ namespace LMS.Test.Services
             var taskGet = new Entities.Task
             {
                 Id = 1,
-                IsActive = true
+                IsActive = true,
+                CategoryId = 1,
+                TypeId = 1,
+                Complexity = 1,
+                Content = "Sample"
             };
 
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
@@ -31,6 +36,13 @@ namespace LMS.Test.Services
 
             var actualGet = service.GetById(1);
             Assert.NotNull(actualGet);
+            Assert.Equal(taskGet.Content, actualGet.Content);
+            Assert.True(actualGet.IsActive);
+            Assert.Equal(taskGet.IsActive, actualGet.IsActive);
+            Assert.Equal(taskGet.CategoryId, actualGet.CategoryId);
+            Assert.Equal(taskGet.TypeId, actualGet.TypeId);
+            Assert.Equal(taskGet.Complexity, actualGet.Complexity);
+            Assert.Equal(taskGet.Content, actualGet.Content);
 
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
@@ -79,15 +91,15 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public async Task Should_Create_New_Task_If_New_On_Update()
+        public async Task Should_Create_If_New_On_Update()
         {
-            var newItem = new TaskDTO
+            var newTask = new TaskDTO
             {
                 Id = 1,
                 IsActive = true,
                 CategoryId = 1,
                 TypeId = 1,
-                Complexity = 1,
+                Complexity = 1, 
                 Content = "Sample"
             };
 
@@ -99,10 +111,16 @@ namespace LMS.Test.Services
 
             var service = new TaskService(unitOfWorkMock.Object, mapper);
 
-            await service.UpdateAsync(newItem);
+            await service.UpdateAsync(newTask);
 
             repositoryMock.Verify(m => m.Get(1));
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(dto => dto.Content == newItem.Content)));
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(dto => 
+                dto.IsActive
+                && dto.Content == newTask.Content
+                && dto.Complexity == newTask.Complexity
+                && dto.CategoryId == newTask.CategoryId
+                && dto.TypeId == newTask.TypeId
+                && dto.PreviousVersion == null)));
             repositoryMock.VerifyNoOtherCalls();
             unitOfWorkMock.Verify(m => m.SaveAsync());
         }
@@ -110,7 +128,7 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Not_Make_Any_Change_If_Not_Updated()
         {
-            var oldItem = new Entities.Task
+            var oldTask = new Entities.Task
             {
                 Id = 1,
                 IsActive = true,
@@ -119,10 +137,10 @@ namespace LMS.Test.Services
                 Complexity = 1,
                 Content = "Sample"
             };
-            var notUpdatedDtoItem = mapper.Map<Entities.Task, TaskDTO>(oldItem);
+            var notUpdatedDtoItem = mapper.Map<Entities.Task, TaskDTO>(oldTask);
 
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
-            repositoryMock.Setup(u => u.Get(1)).Returns(oldItem);
+            repositoryMock.Setup(u => u.Get(1)).Returns(oldTask);
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
@@ -135,13 +153,13 @@ namespace LMS.Test.Services
             repositoryMock.VerifyNoOtherCalls();
             unitOfWorkMock.VerifyGet(m => m.Tasks);
             unitOfWorkMock.VerifyNoOtherCalls();
-            Assert.True(oldItem.IsActive);
+            Assert.True(oldTask.IsActive);
         }
 
         [Fact]
         public async Task Should_Create_New_And_Mark_Old_On_Updated()
         {
-            var oldItem = new Entities.Task
+            var oldTask = new Entities.Task
             {
                 Id = 1,
                 IsActive = true,
@@ -150,11 +168,11 @@ namespace LMS.Test.Services
                 Complexity = 1,
                 Content = "Sample"
             };
-            var updatedDtoItem = mapper.Map<Entities.Task, TaskDTO>(oldItem);
+            var updatedDtoItem = mapper.Map<Entities.Task, TaskDTO>(oldTask);
             updatedDtoItem.Content = "Sample 2";
 
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
-            repositoryMock.Setup(u => u.Get(1)).Returns(oldItem);
+            repositoryMock.Setup(u => u.Get(1)).Returns(oldTask);
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
@@ -164,17 +182,24 @@ namespace LMS.Test.Services
             await service.UpdateAsync(updatedDtoItem);
 
             repositoryMock.Verify(m => m.Get(1));
-            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(t => !t.IsActive && t.Content == oldItem.Content)));
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t => t.IsActive && t.Content == updatedDtoItem.Content)));
+            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(t => 
+                !t.IsActive && t.Content == oldTask.Content)));
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t => 
+                t.IsActive 
+                && t.Content == updatedDtoItem.Content
+                && t.Complexity == updatedDtoItem.Complexity
+                && t.TypeId == updatedDtoItem.TypeId
+                && t.CategoryId == updatedDtoItem.CategoryId
+                && t.PreviousVersion.Id == oldTask.Id)));
             repositoryMock.VerifyNoOtherCalls();
             unitOfWorkMock.Verify(m => m.SaveAsync());
-            Assert.False(oldItem.IsActive);
+            Assert.False(oldTask.IsActive);
         }
 
         [Fact]
         public async Task Should_Create_New_Item()
         {
-            var newItem = new TaskDTO
+            var newTask = new TaskDTO
             {
                 Id = 1,
                 IsActive = true,
@@ -190,11 +215,52 @@ namespace LMS.Test.Services
 
             var service = new TaskService(unitOfWorkMock.Object, mapper);
 
-            await service.CreateAsync(newItem);
+            await service.CreateAsync(newTask);
 
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t => t.IsActive && t.Content == newItem.Content)));
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t =>
+                t.IsActive
+                && t.Content == newTask.Content
+                && t.Complexity == newTask.Complexity
+                && t.TypeId == newTask.TypeId
+                && t.CategoryId == newTask.CategoryId)));
             repositoryMock.VerifyNoOtherCalls();
             unitOfWorkMock.Verify(m => m.SaveAsync());
+        }
+
+        [Fact]
+        public async Task Should_Create_New_And_Get_Item()
+        {
+            var newTask = new TaskDTO
+            {
+                Id = 1,
+                IsActive = true,
+                CategoryId = 1,
+                TypeId = 1,
+                Complexity = 1,
+                Content = "Sample"
+            };
+
+            Entities.Task tempTask = null;
+            var repositoryMock = new Mock<IRepository<Entities.Task>>();
+            repositoryMock.Setup(r => r.Create(It.IsAny<Entities.Task>()))
+                .Callback(new Action<Entities.Task>(task => tempTask = task));
+            repositoryMock.Setup(r => r.Get(It.IsAny<int>()))
+                .Returns(() => tempTask);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+
+            var service = new TaskService(unitOfWorkMock.Object, mapper);
+
+            await service.CreateAsync(newTask);
+
+            var createdTask =  service.GetById(1);
+            Assert.True(createdTask.IsActive);
+            Assert.Equal(newTask.IsActive, createdTask.IsActive);
+            Assert.Equal(newTask.CategoryId, createdTask.CategoryId);
+            Assert.Equal(newTask.TypeId, createdTask.TypeId);
+            Assert.Equal(newTask.Complexity, createdTask.Complexity);
+            Assert.Equal(newTask.Content, createdTask.Content);
         }
 
         [Fact]
