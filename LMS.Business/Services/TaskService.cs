@@ -83,12 +83,12 @@ namespace LMS.Business.Services
 
                 unitOfWork.Tasks.Update(oldTask);
                 unitOfWork.Tasks.Create(newTask);
+                return unitOfWork.SaveAsync();
             }
             else
             {
-                unitOfWork.Tasks.Create(newTask);
+                return CreateAsync(taskDto);
             }
-            return unitOfWork.SaveAsync();
         }
 
         public IEnumerable<TaskDTO> GetAll(bool includeInactive = false)
