@@ -15,12 +15,9 @@
             <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
             <strong>@Model.Content</strong>
         </h3>
-        @foreach (var choice in Model.Choices)
-        {
-            @Html.CheckBox("result", @choice.Answer)
-            <span>@choice.Answer</span>
-            <br />
-        }
+
+        @Html.TextArea("result", null, 15, 50, null);
+        <br />
         int number = ViewBag.Index;
         int kolvo = ViewBag.Kolvo;
         @Html.Hidden("number", number);

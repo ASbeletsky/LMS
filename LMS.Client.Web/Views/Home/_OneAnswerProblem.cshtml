@@ -18,14 +18,15 @@
     </h3>
     @foreach (var choice in Model.Choices)
         {
-    @Html.RadioButton("result", @choice.Answer)
-    <span>@choice.Answer</span>
-    <br />
+        @Html.RadioButton("result", @choice.Answer)
+        <span>@choice.Answer</span>
+        <br />
         }
         int number = ViewBag.Index;
+        int kolvo = ViewBag.Kolvo;
     @Html.Hidden("number", number);
-    <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button>
-    <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
-    <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>
+        if (number > 0) {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button> }    
+        <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
+        if (number < kolvo - 1) {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>}
     }
 </div>

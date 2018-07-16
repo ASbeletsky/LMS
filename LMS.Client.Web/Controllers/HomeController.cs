@@ -46,7 +46,6 @@ namespace LMS.Client.Web.Controllers
         }
         public ActionResult ShowProblem(int number)
         {
-            ViewBag.Index = number;
             List<TestProblem> helpProblem = new List<TestProblem>
             {
                 new TestProblem
@@ -84,14 +83,27 @@ namespace LMS.Client.Web.Controllers
                     Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
                     Test = new Test(),
                     Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new TestProblem() } }
+                },
+                new TestProblem
+                {
+                    Id = 5,
+                    Complexity = 2,
+                    Content = "Объясните что такое полиморфизм",
+                    Type = new ProblemType { Id = 2, Title = "Тест на написание развёрнутого ответа" },
+                    Test = new Test(),
+                    Choices = new List<Choice>()
                 }
             };
+            ViewBag.Index = number;
+            ViewBag.Kolvo = helpProblem.Count;
             switch (helpProblem[number].Type.Id)
             {
                 case 0:
                     return PartialView("_OneAnswerProblem",helpProblem[number]);
                 case 1:
                     return PartialView("_MultipleAnswerProblem", helpProblem[number]);
+                case 2:
+                    return PartialView("_ToWriteTextProblem", helpProblem[number]);
             }
             return PartialView("_OneAnswerProblem");
         }
