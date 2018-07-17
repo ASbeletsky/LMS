@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
-using LMS.Entities;
 using System;
+using LMS.Entities;
 
 namespace LMS.Identity
 {

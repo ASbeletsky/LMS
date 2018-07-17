@@ -4,7 +4,7 @@ namespace LMS.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<User> UserRepository { get;}
+        IRepositoryAsync<User> UserRepository { get;}
         IRepository<Category> Categories { get; }
         IRepository<Task> Tasks { get; }
         IRepository<TaskType> TaskTypes { get; }
