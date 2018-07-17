@@ -60,7 +60,7 @@ namespace LMS.Admin.Web.Controllers
                 await _identityService.LogIn(model.Email, model.Password, model.RememberMe);
 
                 if (result == true)
-                {
+                {   
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
