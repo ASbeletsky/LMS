@@ -7,7 +7,9 @@ namespace LMS.Interfaces
         IRepository<Category> Categories { get; }
         IRepository<Task> Tasks { get; }
         IRepository<TaskType> TaskTypes { get; }
-
+        IRepository<TestTemplate> TestConfigs { get; }
+        IRepository<Level> Levels { get; }
+        
         System.Threading.Tasks.Task SaveAsync();
     }
 }
