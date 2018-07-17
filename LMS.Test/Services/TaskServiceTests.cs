@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
+using LMS.Entities;
 using Moq;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 
 namespace LMS.Test.Services
 {
@@ -300,6 +302,50 @@ namespace LMS.Test.Services
             var service = new TaskService(unitOfWorkMock.Object, mapper);
             var tasks = service.GetAll(includeInactive: true).ToArray();
             Assert.Equal(3, tasks.Length);
+        }
+
+        [Fact]
+        public void Should_Get_All_By_Filter()
+        {
+            var repositoryMock = new Mock<IRepository<Entities.Task>>();
+            repositoryMock.Setup(m => m.GetAll()).Returns(() => new[]
+            {
+                new Entities.Task { IsActive = true, Complexity = 3, TypeId = 1, CategoryId = 1},
+                new Entities.Task { IsActive = false, Complexity = 4, TypeId = 2, CategoryId = 2},
+                new Entities.Task { IsActive = true, Complexity = 9, TypeId = 2, CategoryId = 3},
+                new Entities.Task { IsActive = true, Complexity = 4, TypeId = 2, CategoryId = 3}
+            });
+            
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+
+            var filter = new TaskFilterDTO
+            {
+                MinComplexity = 3,
+                MaxComplexity = 5,
+                TaskTypes = new List<TaskTypeDTO>
+                {
+                    new TaskTypeDTO
+                    {
+                        Id = 2
+                    }
+                },
+                Categories = new List<CategoryDTO>
+                {
+                    new CategoryDTO
+                    {
+                        Id = 3
+                    },
+                    new CategoryDTO
+                    {
+                        Id = 2
+                    }
+                }
+            };
+            
+            var service = new TaskService(unitOfWorkMock.Object, mapper);
+            var tasks = service.GetActiveByFilter(filter).ToArray();
+            Assert.Equal(1, tasks.Length);
         }
     }
 }
