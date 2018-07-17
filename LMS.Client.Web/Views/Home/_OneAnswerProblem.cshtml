@@ -7,11 +7,15 @@
     ViewBag.Title = "ShowProblem";
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
-    string mode="";
+    int number = ViewBag.Index;
+    int kolvo = ViewBag.Kolvo;
 }
 <div class="well" @*style="text-align-last:center" *@>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
+        @Html.Hidden("mode", "")
+        @Html.Hidden("number", number);
+        @Html.Hidden("got", 1);
         <h3>
             <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
             <strong>@Model.Content</strong>
@@ -22,18 +26,16 @@
             <span>@choice.Answer</span>
             <br />
         }
-        int number = ViewBag.Index;
-        int kolvo = ViewBag.Kolvo;
-        @Html.Hidden("number", number);
         if (number > 0)
-        {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Back")">Previous</button> }
-        <button class="btn btn-primary" onclick="@Html.Hidden("mode", "Result")"> OK</button>
+        {
+        <button class="btn btn-primary" onclick="javascript: document.querySelector('input[name=mode]').value = 'prev'">Previous</button> }
+        <button class="btn btn-primary" onclick="javascript: document.querySelector('input[name=mode]').value = 'res'"> OK</button>
         if (number < kolvo - 1)
-        {<button class="btn btn-primary" onclick="@Html.Hidden("mode", "Forward")"> Next</button>}
+        {<button class="btn btn-primary" onclick="javascript: document.querySelector('input[name=mode]').value = 'next'"> Next</button>}
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="@Html.Hidden("got", @i)"> @(i + 1)</button>
+            <button onclick="javascript: document.querySelector('input[name=got]').value = '@i'"> @(i + 1)</button>
         }
     }
 </div>

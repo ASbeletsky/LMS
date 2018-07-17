@@ -92,6 +92,15 @@ namespace LMS.Client.Web.Controllers
                     Type = new ProblemType { Id = 2, Title = "Тест на написание развёрнутого ответа" },
                     Test = new Test(),
                     Choices = new List<Choice>()
+                },
+                new TestProblem
+                {
+                    Id = 6,
+                    Complexity = 2,
+                    Content = "Напишите Hello World",
+                    Type = new ProblemType { Id = 3, Title = "Тест на написание кода" },
+                    Test = new Test(),
+                    Choices = new List<Choice>()
                 }
             };
             ViewBag.Index = number;
@@ -104,6 +113,8 @@ namespace LMS.Client.Web.Controllers
                     return PartialView("_MultipleAnswerProblem", helpProblem[number]);
                 case 2:
                     return PartialView("_ToWriteTextProblem", helpProblem[number]);
+                case 3:
+                    return PartialView("_ToWriteCodeProblem", helpProblem[number]);
             }
             return PartialView("_OneAnswerProblem");
         }
@@ -116,13 +127,13 @@ namespace LMS.Client.Web.Controllers
         {
             switch (mode)
             {
-                case "Back":
+                case "prev":
                     if (number > 0) number--;
                     break;
-                case "Result":
+                case "res":
                     number++;
                     break;
-                case "Forward":
+                case "next":
                     number++;
                     break;
                 default:
