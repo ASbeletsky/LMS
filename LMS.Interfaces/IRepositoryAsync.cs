@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace LMS.Interfaces
 {
     public interface IRepositoryAsync<T> where T : class
     {
         Task<IEnumerable<T>> GetAll();
-        Task<IEnumerable<T>> Filter(Func<T, bool> predicate);
+        Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate);
         Task<T> GetAsync(int id);
-        Task<T> FindAsync(Func<T, bool> predicate);
+        Task<T> FindAsync(Expression<Func<T, bool>> predicate);
         Task CreateAsync(T item);
         Task UpdateAsync(T item);
         Task DeleteAsync(int id);

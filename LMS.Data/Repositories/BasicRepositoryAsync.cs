@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using LMS.Interfaces;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Linq.Expressions;
 
 namespace LMS.Data.Repositories
 {
@@ -21,17 +20,17 @@ namespace LMS.Data.Repositories
 
         public Task CreateAsync(T item)
         {
-             return set.AddAsync(item);
+            set.Add(item);
+            return Task.CompletedTask;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-           var item = set.Find(id);
+            var item = await set.FindAsync(id);
             if (item != null)
             {
                 set.Remove(item);
             }
-            return Task.CompletedTask;
         }
 
         public Task UpdateAsync(T item)
@@ -40,31 +39,24 @@ namespace LMS.Data.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<T>> Filter(Func<T, bool> predicate)
+        public async Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate)
         {
-            return await set.ToAsyncEnumerable().Where(predicate).ToArray();
+            return await set.Where(predicate).ToListAsync();
         }
 
-        public async Task<T> FindAsync(Func<T, bool> predicate)
+        public async Task<T> FindAsync(Expression<Func<T, bool>> predicate)
         {
-            return await set.FirstOrDefaultAsync(t => predicate(t), CancellationToken.None);
+            return await set.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<IEnumerable<T>> GetAll()
         {
-            return await set.ToAsyncEnumerable().ToArray();
+            return await set.ToListAsync();
         }
 
         public Task<T> GetAsync(int id)
         {
             return set.FindAsync(id);
         }
-
-        
-
-      
-
-
-        
     }
 }
