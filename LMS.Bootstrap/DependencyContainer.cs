@@ -3,6 +3,7 @@ using Autofac.Core;
 using LMS.Data;
 using LMS.Data.Migrations;
 using LMS.Interfaces;
+using LMS.Business.Services;
 
 namespace LMS.Bootstrap
 {
@@ -14,7 +15,8 @@ namespace LMS.Bootstrap
                 .As<IMapper>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<AspNetConfigReader>().As<IConfigReader>()
+            builder.RegisterType<AspNetConfigReader>()
+                .As<IConfigReader>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<LMSDbContext>()
@@ -25,6 +27,18 @@ namespace LMS.Bootstrap
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<TaskService>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CategoryService>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<TaskTypeService>()
+                .AsSelf()
                 .InstancePerLifetimeScope();
 
             builder.RegisterBuildCallback(container =>

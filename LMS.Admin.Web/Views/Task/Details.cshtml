@@ -1,0 +1,37 @@
+﻿@using LMS.Dto
+@model TaskDTO
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div>
+    <h4>Task</h4>
+    <hr />
+    <div class="col-md-6">
+        <div class="row">
+            <div class="details-block col-12 col-md-6">
+                <label class="details-header" asp-for="Complexity"></label>
+                <label>@Model.Complexity/@TaskDTO.MaxComplexity</label>
+            </div>
+            <div class="details-block col-12 col-md-6">
+                <label class="details-header" asp-for="Type"></label>
+                <label>@Model.Type.Title</label>
+            </div>
+        </div>
+        <div class="details-block">
+            <label class="details-header" asp-for="Category"></label>
+            <label>@Model.Category.Title</label>
+        </div>
+        <div class="details-block">
+            <label class="details-header" asp-for="Content"></label>
+            <p>@Model.Content</p>
+        </div>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <br />
+    <a asp-action="List">Back to List</a>
+</div>
