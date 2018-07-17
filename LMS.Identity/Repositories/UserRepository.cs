@@ -6,6 +6,7 @@ using LMS.Interfaces;
 using LMS.Entities;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Identity.Repositories
 {
@@ -20,7 +21,7 @@ namespace LMS.Identity.Repositories
 
         public System.Threading.Tasks.Task CreateAsync(User item)
         {
-           return _userManager.CreateAsync(item);
+            return _userManager.CreateAsync(item);
         }
 
         public async System.Threading.Tasks.Task DeleteAsync(int id)
@@ -37,27 +38,25 @@ namespace LMS.Identity.Repositories
             return _userManager.UpdateAsync(item);
         }
 
-        public Task<IEnumerable<User>> FilterAsync(Expression<Func<User, bool>> predicate)
+        public async Task<IEnumerable<User>> FilterAsync(Expression<Func<User, bool>> predicate)
         {
-            return System.Threading.Tasks.Task.FromResult(_userManager.Users.Where(predicate).AsEnumerable());
+            return await _userManager.Users.Where(predicate).ToListAsync();
         }
 
-        public Task<User> FindAsync(Expression<Func<User, bool>> predicate)
+        public async Task<User> FindAsync(Expression<Func<User, bool>> predicate)
         {
-            return System.Threading.Tasks.Task.FromResult(_userManager.Users.FirstOrDefault(predicate));
+            return await _userManager.Users.FirstOrDefaultAsync(predicate);
+
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            return System.Threading.Tasks.Task.FromResult(_userManager.Users.AsEnumerable());
+            return await _userManager.Users.ToListAsync();
         }
 
         public Task<User> GetAsync(int id)
         {
-           return _userManager.FindByIdAsync(id.ToString());
+            return _userManager.FindByIdAsync(id.ToString());
         }
-
-
-
     }
 }

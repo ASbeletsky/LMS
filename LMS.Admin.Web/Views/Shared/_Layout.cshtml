@@ -32,12 +32,19 @@
                     new MenuItemViewModel("List all", "List", "Task")
                 },
                 new MenuItemViewModel("Register", "fa-user-plus", "Register", "Account"),
-                new MenuItemViewModel("Sign out", "fa-sign-out", "LogOff", "Account"),
             })
+
             <ul class="navbar-nav sidenav-toggler">
                 <li class="nav-item">
                     <a class="nav-link text-center" id="sidenavToggler">
                         <i class="fa fa-fw fa-angle-left"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="modal" data-target="#logOutModal">
+                        <i class="fa fa-fw fa-sign-out"></i>Logout
                     </a>
                 </li>
             </ul>
@@ -69,7 +76,33 @@
             <i class="fa fa-angle-up"></i>
         </a>
 
+
+
     </div>
+
+    <div id="logOutModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ready to Leave?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Select "Logout" below if you are ready to end your current session.</p>
+                </div>
+                <div class="modal-footer">
+                
+                    <form method="post" asp-controller="Account" asp-action="Logout">
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="~/js/vendor.js" asp-append-version="true"></script>
     <environment include="Development">

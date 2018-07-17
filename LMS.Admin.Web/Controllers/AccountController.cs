@@ -61,7 +61,6 @@ namespace LMS.Admin.Web.Controllers
 
                 if (result == true)
                 {
-                    // проверяем, принадлежит ли URL приложению
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
@@ -75,10 +74,11 @@ namespace LMS.Admin.Web.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> LogOff()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
         {
-            await _identityService.LogOff();
+            await _identityService.Logout();
             return RedirectToAction("Login", "Account");
         }
     }
