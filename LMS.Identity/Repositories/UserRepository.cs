@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using LMS.Interfaces;
 using LMS.Entities;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace LMS.Identity.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IRepositoryAsync<User>
     {
         private readonly UserManager<User> _userManager;
 
@@ -16,43 +18,46 @@ namespace LMS.Identity.Repositories
             _userManager = userManager;
         }
 
-        public async void CreateAsync(User item)
+        public System.Threading.Tasks.Task CreateAsync(User item)
         {
-            var result = await _userManager.CreateAsync(item);
+           return _userManager.CreateAsync(item);
         }
 
-        public async void DeleteAsync(int id)
+        public async System.Threading.Tasks.Task DeleteAsync(int id)
         {
             User user = await _userManager.FindByIdAsync(id.ToString());
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
+                await _userManager.DeleteAsync(user);
             }
         }
 
-        public IEnumerable<User> Filter(Func<User, bool> predicate)
+        public System.Threading.Tasks.Task UpdateAsync(User item)
         {
-            return _userManager.Users.Where(predicate);
+            return _userManager.UpdateAsync(item);
         }
 
-        public User Find(Func<User, bool> predicate)
+        public Task<IEnumerable<User>> FilterAsync(Expression<Func<User, bool>> predicate)
         {
-            return _userManager.Users.FirstOrDefault(predicate);
+            return System.Threading.Tasks.Task.FromResult(_userManager.Users.Where(predicate).AsEnumerable());
         }
 
-        public User Get(int id)
+        public Task<User> FindAsync(Expression<Func<User, bool>> predicate)
         {
-            return _userManager.FindByIdAsync(id.ToString()).GetAwaiter().GetResult();
+            return System.Threading.Tasks.Task.FromResult(_userManager.Users.FirstOrDefault(predicate));
         }
 
-        public IEnumerable<User> GetAll()
+        public Task<IEnumerable<User>> GetAllAsync()
         {
-            return _userManager.Users;
+            return System.Threading.Tasks.Task.FromResult(_userManager.Users.AsEnumerable());
         }
 
-        public async void UpdateAsync(User item)
+        public Task<User> GetAsync(int id)
         {
-           await _userManager.UpdateAsync(item);
+           return _userManager.FindByIdAsync(id.ToString());
         }
+
+
+
     }
 }

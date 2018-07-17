@@ -5,16 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\**" />
-    <Content Remove="Models\**" />
-    <EmbeddedResource Remove="Models\**" />
-    <None Remove="Models\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
   </ItemGroup>
 
@@ -27,6 +21,7 @@
     <ProjectReference Include="..\LMS.Business\LMS.Business.csproj" />
     <ProjectReference Include="..\LMS.Entities\LMS.Entities.csproj" />
     <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
+    <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
   </ItemGroup>
 

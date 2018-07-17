@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using LMS.Entities;
+﻿using LMS.Entities;
 
 namespace LMS.Interfaces
 {
@@ -7,7 +6,9 @@ namespace LMS.Interfaces
     {
         IRepository<User> UserRepository { get;}
         IRepository<Category> Categories { get; }
+        IRepository<Task> Tasks { get; }
+        IRepository<TaskType> TaskTypes { get; }
 
-        Task SaveAsync();
+        System.Threading.Tasks.Task SaveAsync();
     }
 }

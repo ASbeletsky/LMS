@@ -23,20 +23,16 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                    <a class="nav-link" href="index.html">
-                        <i class="fa fa-fw fa-dashboard"></i>
-                        <span class="nav-link-text">Home</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Register">
-                    <a class="nav-link" href="/Account/Register">
-                        <i class="fa fa-fw fa-dashboard"></i>
-                        <span class="nav-link-text">Register</span>
-                    </a>
-                </li>
-            </ul>
+            @Html.Partial("Menu", new MenuViewModel()
+            {
+            new MenuItemViewModel("Home", "fa-home", "Index", "Home"),
+            new MenuItemViewModel("Tasks", "fa-tasks")
+            {
+            new MenuItemViewModel("Create new", "Create", "Task"),
+            new MenuItemViewModel("List all", "List", "Task")
+            },
+            new MenuItemViewModel("Register", "fa-user-plus", "Register", "Account")
+            })
             <ul class="navbar-nav sidenav-toggler">
                 <li class="nav-item">
                     <a class="nav-link text-center" id="sidenavToggler">
@@ -51,7 +47,7 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="#">Dashboard</a>
+                    <a href="/">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item active">@ViewData["Title"]</li>
             </ol>

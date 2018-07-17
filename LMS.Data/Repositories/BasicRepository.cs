@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using LMS.Interfaces;
@@ -16,12 +17,12 @@ namespace LMS.Data.Repositories
             set = context.Set<T>();
         }
 
-        public void CreateAsync(T item)
+        public void Create(T item)
         {
             set.Add(item);
         }
 
-        public void DeleteAsync(int id)
+        public void Delete(int id)
         {
             var item = set.Find(id);
             if (item != null)
@@ -30,12 +31,12 @@ namespace LMS.Data.Repositories
             }
         }
 
-        public IEnumerable<T> Filter(Func<T, bool> predicate)
+        public IEnumerable<T> Filter(Expression<Func<T, bool>> predicate)
         {
             return set.Where(predicate);
         }
 
-        public T Find(Func<T, bool> predicate)
+        public T Find(Expression<Func<T, bool>> predicate)
         {
             return set.FirstOrDefault(predicate);
         }
@@ -50,7 +51,7 @@ namespace LMS.Data.Repositories
             return set;
         }
 
-        public void UpdateAsync(T item)
+        public void Update(T item)
         {
             set.Update(item);
         }

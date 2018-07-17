@@ -33,6 +33,47 @@ namespace LMS.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("LMS.Entities.Task", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CategoryId");
+
+                    b.Property<int>("Complexity");
+
+                    b.Property<string>("Content");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<int?>("PreviousVersionId");
+
+                    b.Property<int>("TypeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PreviousVersionId");
+
+                    b.HasIndex("TypeId");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("LMS.Entities.TaskType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TaskTypes");
+                });
+
             modelBuilder.Entity("LMS.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -192,6 +233,23 @@ namespace LMS.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("LMS.Entities.Task", b =>
+                {
+                    b.HasOne("LMS.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.Task", "PreviousVersion")
+                        .WithMany()
+                        .HasForeignKey("PreviousVersionId");
+
+                    b.HasOne("LMS.Entities.TaskType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

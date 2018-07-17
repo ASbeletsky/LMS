@@ -36,7 +36,7 @@ namespace LMS.Identity
             return result.Succeeded;
         }
 
-        public async Task LogOff()
+        public async System.Threading.Tasks.Task LogOff()
         {
             // delete cookies
             await _signInManager.SignOutAsync();
