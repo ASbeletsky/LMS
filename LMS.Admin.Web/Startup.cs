@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LMS.Identity;
 
 namespace LMS.Admin.Web
 {
@@ -21,11 +22,14 @@ namespace LMS.Admin.Web
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
+            services.AddIdentity();
+
+          
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
             var container = builder.Build();
+          
             return new AutofacServiceProvider(container);
         }
         
@@ -42,7 +46,7 @@ namespace LMS.Admin.Web
             }
 
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

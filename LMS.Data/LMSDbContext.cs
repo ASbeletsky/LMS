@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using LMS.Entities;
 
 namespace LMS.Data
 {
-    public class LMSDbContext : DbContext
+    public class LMSDbContext : IdentityDbContext<User>
     {
         private readonly string connectionString;
 
@@ -18,7 +19,7 @@ namespace LMS.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySql(connectionString);
+            optionsBuilder.UseMySql(connectionString); 
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -49,6 +50,10 @@ namespace LMS.Data
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskType>()
                 .Property(t => t.Title).IsRequired();
+
+            modelBuilder.Entity<User>();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

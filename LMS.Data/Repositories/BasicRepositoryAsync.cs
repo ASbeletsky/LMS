@@ -39,7 +39,7 @@ namespace LMS.Data.Repositories
             return Task.CompletedTask;
         }
 
-        public async Task<IEnumerable<T>> Filter(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> FilterAsync(Expression<Func<T, bool>> predicate)
         {
             return await set.Where(predicate).ToListAsync();
         }
@@ -49,7 +49,7 @@ namespace LMS.Data.Repositories
             return await set.FirstOrDefaultAsync(predicate);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await set.ToListAsync();
         }

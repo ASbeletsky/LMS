@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using LMS.Admin.Web.Models;
+using LMS.Admin.Web.ViewModels;
+
 
 namespace LMS.Admin.Web.Controllers
 {
