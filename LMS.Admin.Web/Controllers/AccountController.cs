@@ -75,12 +75,11 @@ namespace LMS.Admin.Web.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpGet]
         public async Task<IActionResult> LogOff()
         {
             await _identityService.LogOff();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
     }
 }
