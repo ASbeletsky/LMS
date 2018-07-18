@@ -7,7 +7,7 @@ using LMS.Interfaces;
 using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
-{
+{ 
     public class TaskController : Controller
     {
         private readonly TaskService taskService;

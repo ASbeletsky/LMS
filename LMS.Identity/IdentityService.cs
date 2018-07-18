@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using LMS.Entities;
+using System.Collections.Generic;
 
 namespace LMS.Identity
 {
@@ -10,18 +11,26 @@ namespace LMS.Identity
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager; // allows  to authenticate a user and install or delete his cookies
+        private RoleManager<IdentityRole> _roleManager;
 
-        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+        }
+        public IEnumerable<IdentityRole> GetAllRoles()
+        {
+            return _roleManager.Roles;
         }
 
-        public async Task<bool> Register(User user, string password)
+        public async Task<bool> Register(User user, string password, string role)
         {
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
-                await _signInManager.SignInAsync(user, false);  // set cookies
+            {
+                await _userManager.AddToRoleAsync(user, role); // add role
+            }
             else
                 throw new AggregateException(result.Errors.Select(error => new Exception(error.Description)));
 

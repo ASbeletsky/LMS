@@ -5,6 +5,7 @@ using LMS.Admin.Web.ViewModels;
 using LMS.Identity;
 using LMS.Entities;
 using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -20,6 +21,7 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name});
             return View();
         }
 
@@ -32,7 +34,7 @@ namespace LMS.Admin.Web.Controllers
                 // add user
                 try
                 {
-                    var result = await _identityService.Register(user, model.Password);
+                    var result = await _identityService.Register(user, model.Password, model.Role);
                     return RedirectToAction("Index", "Home");
                 }
                 catch(AggregateException e)

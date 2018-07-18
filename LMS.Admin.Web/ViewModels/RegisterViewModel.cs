@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Admin.Web.ViewModels
 {
@@ -26,5 +28,9 @@ namespace LMS.Admin.Web.ViewModels
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         public string PasswordConfirm { get; set; }
+
+        [Required]
+        [Display(Name = "AllRoles")]
+        public string Role { get; set; }
     }
 }
