@@ -26,15 +26,22 @@
 
         if (number > 0)
         {
-            <button class="btn btn-primary" onclick="javascript: document.querySelector('input[name=mode]').value = 'prev'">Previous</button> }
-        <button class="btn btn-primary" onclick="javascript: document.querySelector('input[name=mode]').value = 'res'"> OK</button>
+            <button class="btn btn-primary" onclick="changeMode('prev')">Previous</button> }
+        <button class="btn btn-primary" onclick="changeMode('res')"> OK</button>
         if (number < kolvo - 1)
-        {<button class="btn btn-primary" onclick="javascript: document.querySelector('input[name=mode]').value = 'next'"> Next</button>}
+        {<button class="btn btn-primary" onclick="changeMode('next')"> Next</button>}
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="javascript: document.querySelector('input[name=got]').value = '@i'"> @(i + 1)</button>
+            <button onclick="changeGot('@i')"> @(i + 1)</button>
         }
-
     }
+    <script>
+        function changeMode(mode) {
+            document.querySelector('input[name=mode]').value = mode;
+        }
+        function changeGot(got) {
+            document.querySelector('input[name=got]').value = got;
+        }
+    </script>
 </div>
