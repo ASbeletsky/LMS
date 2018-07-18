@@ -27,10 +27,10 @@ namespace LMS.Identity
 
             return result.Succeeded;
         }
-        public async Task<bool> LogIn(string email, string password, bool rememberMe)
+        public async Task<bool> LogIn(string userName, string password, bool rememberMe)
         {
             var result =
-            await _signInManager.PasswordSignInAsync(email, password, rememberMe, false);
+            await _signInManager.PasswordSignInAsync(userName, password, rememberMe, false);
 
             return result.Succeeded;
         }

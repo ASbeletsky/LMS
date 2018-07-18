@@ -11,7 +11,7 @@ namespace LMS.Identity
         {
             services.AddIdentity<User, IdentityRole>(opts =>
             {
-                opts.User.RequireUniqueEmail = true;
+                opts.User.RequireUniqueEmail = false;
                 opts.Password.RequireDigit = true;
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireUppercase = false;
