@@ -18,6 +18,11 @@ namespace LMS.Admin.Web.Controllers
             _identityService = identityService;
         }
 
+        public IActionResult AccessDenied(Uri ReturnUrl)
+        {
+            throw new Exception("You dont have permissions.");
+        }
+
         [HttpGet]
         public IActionResult Register()
         {
@@ -43,6 +48,7 @@ namespace LMS.Admin.Web.Controllers
                         ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
+            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
             return View(model);
         }
 

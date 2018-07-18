@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Admin.Web.Controllers
-{ 
+{
+    [Authorize(Roles = "admin, moderator, reviewer")]
     public class TaskController : Controller
     {
         private readonly TaskService taskService;

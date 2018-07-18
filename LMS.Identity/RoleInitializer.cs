@@ -1,21 +1,35 @@
 ﻿using LMS.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Task = System.Threading.Tasks.Task;
 
 namespace LMS.Identity
 {
-    public class RoleInitializer
+    public static class RoleInitializer
     {
-        public static async System.Threading.Tasks.Task InitializeAsync(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
-            string adminEmail = "admin";
+            string adminEmail = "admin@gmail.com";
             string password = "apriorit";
-            if (await roleManager.FindByNameAsync("admin") == null)
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+            if (!await roleManager.RoleExistsAsync("admin"))
             {
                 await roleManager.CreateAsync(new IdentityRole("admin"));
             }
-            if (await roleManager.FindByNameAsync("user") == null)
+            if (!await roleManager.RoleExistsAsync("moderator"))
             {
-                await roleManager.CreateAsync(new IdentityRole("user"));
+                await roleManager.CreateAsync(new IdentityRole("moderator"));
+            }
+            if (!await roleManager.RoleExistsAsync("reviewer"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("reviewer"));
+            }
+            if (!await roleManager.RoleExistsAsync("examinee"))
+            {
+                await roleManager.CreateAsync(new IdentityRole("examinee"));
             }
 
             if (await userManager.FindByNameAsync(adminEmail) == null)
