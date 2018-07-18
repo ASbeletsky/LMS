@@ -19,6 +19,8 @@ namespace LMS.Data
         public IRepository<Task> Tasks { get; }
         public IRepository<TaskType> TaskTypes { get; }
 
+        public IRepository<Answer> Answers => throw new System.NotImplementedException();
+
         public System.Threading.Tasks.Task SaveAsync()
         {
             return dbContext.SaveChangesAsync();

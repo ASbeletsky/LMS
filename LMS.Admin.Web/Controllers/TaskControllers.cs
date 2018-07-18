@@ -38,7 +38,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm]TaskDTO task)
+        public async Task<IActionResult> Create([FromForm]AnswerDTO task)
         {
             await taskService.CreateAsync(task);
 
@@ -56,7 +56,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromForm]TaskDTO task)
+        public async Task<IActionResult> Edit([FromForm]AnswerDTO task)
         {
             await taskService.UpdateAsync(task);
 

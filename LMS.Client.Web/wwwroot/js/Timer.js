@@ -13,7 +13,7 @@ if (strch != undefined) {
     }
 }
 function SetTime(h, m, s) {
-    TimerM.setTime(h, m, s);
+    TimerM.setTime.call(TimerM, h, m, s);
 }
 function CreatTimer(el, h, m, s) {
     TimerM = StartTimerM(el, h, m, s);
@@ -48,21 +48,22 @@ function StartTimerM(element, hours, minutes, sec) {
         clearInterval(interval);
     }
     this.pause = function () {
-        clearInterval(interval);
+        clearInterval(this.interval);
         this.duration = this.EndTime.diff(moment());
-        sessionStorage.setItem('duration', duration);
+        sessionStorage.setItem('duration', this.duration);
         sessionStorage.setItem("Started", false);
     }
     this.continue = function () {
         this.EndTime = moment().add(this.duration);
-        sessionStorage.setItem('EndTime', EndTime);
-        this.interval = this.start();
+        sessionStorage.setItem('EndTime', this.EndTime);
+        interval = this.start();
         sessionStorage.setItem("Started", true);
     }
     this.setTime = function (h, m, s) {
         this.duration = moment.duration({ y: 0, M: 0, d: 0, h: h, m: m, s: s, ms: 0 });
         this.EndTime = moment().add(duration);
         sessionStorage.setItem('EndTime', EndTime);
+        window.document.getElementById(this.ele) = TimeToString(duration);
     }
     return this;
 }
