@@ -4,12 +4,17 @@
 <input type="text" value="setTimer" id="comand">
 <input type="text" value="30000" id="message">
 <input type="button" onclick="send()">
+    <div id="report"></div>
 <script src="~/lib/signalr/signalr.js"></script>
+<script src="~/js/ReportModel.js"></script>
 <script>
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/testHub")
         .configureLogging(signalR.LogLevel.Information)
         .build();
+    connection.on("Report", (report) => {
+        document.getElementById("report").innerHTML = UnserReport(report);
+    });
     connection.start().catch(err => console.error(err.toString()));
 
     function send() {

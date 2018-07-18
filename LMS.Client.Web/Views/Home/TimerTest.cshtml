@@ -23,24 +23,8 @@
 <script src="~/lib/momentjs/moment-with-locales.min.js"></script>
 <script src="~/js/Timer.js"></script>
 <script src="~/lib/signalr/signalr.js"></script>
-<script>
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/testHub")
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
-
-    connection.on("Task", (comand, message) => {
-        switch (comand) {
-            case "setTimer":
-                var time = TimeToArray(message);
-                console.log(time);
-                SetTime(time[0], time[1], time[2]); break;
-        }
-    });
-
-    connection.start().catch(err => console.error(err.toString()));
-
-</script>
+<script src="~/js/UserHub.js"></script>
+<script src="~/js/ReportModel.js"></script>
 
 
 

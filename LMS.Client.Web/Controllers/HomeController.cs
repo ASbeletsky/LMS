@@ -55,5 +55,10 @@ namespace LMS.Client.Web.Controllers
             return PartialView();
         }
 
+        public IActionResult Baned()
+        {
+            return View();
+        }
+
     }
 }
