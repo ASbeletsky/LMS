@@ -39,14 +39,17 @@ namespace LMS.Identity
         public async Task<bool> LogIn(string userName, string password, bool rememberMe)
         {
             User user = await _userManager.FindByNameAsync(userName);
-            if (await _userManager.IsInRoleAsync(user, "admin") || await _userManager.IsInRoleAsync(user, "reviewer") || await _userManager.IsInRoleAsync(user, "moderator"))
+            if (user == null)
+                throw new Exception("The user name or password provided is incorrector.");
+            var currentUserRoler = await _userManager.GetRolesAsync(user);
+            if (currentUserRoler.Contains("admin") || currentUserRoler.Contains("moderator") || currentUserRoler.Contains("reviewer"))
             {
                 var result =
                     await _signInManager.PasswordSignInAsync(userName, password, rememberMe, false);
                 return result.Succeeded;
             }
             else
-                return false;
+                throw new Exception("Your role does not allow you to enter.");
         }
 
         public async System.Threading.Tasks.Task Logout()

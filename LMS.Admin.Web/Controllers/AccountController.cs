@@ -44,7 +44,7 @@ namespace LMS.Admin.Web.Controllers
                 try
                 {
                     var result = await _identityService.Register(user, model.Password, model.Role);
-                    return RedirectToAction("Index", "Home");
+                    return View(model);
                 }
                 catch(AggregateException e)
                 {
@@ -68,19 +68,19 @@ namespace LMS.Admin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result =
+                try
+                {
+                    var result =
                 await _identityService.LogIn(model.UserName, model.Password, model.RememberMe);
 
-                if (result == true)
-                {   
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
                         return RedirectToAction("Index", "Home");
                 }
-                else
+                catch (Exception e)
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrector or your role does not allow you to enter.");
+                        ModelState.AddModelError(string.Empty, e.Message);
                 }
             }
             return View(model);
