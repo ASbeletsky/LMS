@@ -3,7 +3,7 @@
 @model TestProblem
 @{
     ViewBag.Title = "ShowProblem";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
     int number = ViewBag.Index;
     int kolvo = ViewBag.Kolvo;
@@ -22,13 +22,13 @@
             padding: 0;
         }
 
-        #save-button {
+        /*#save-button {
             position: absolute;
             top: 200px;
             right: 20px;
             border: solid 5px green;
 
-        }
+        }*/
         #buttons {
             top: 510px;
             width: 80%;
@@ -61,7 +61,7 @@
             if (number > 0)
             {
                 <button class="btn btn-primary" onclick="changeMode('prev')">Previous</button> }
-            <button class="btn btn-primary" onclick="changeMode('res')"> OK</button>
+            <button class="btn btn-primary" id="save-button" onclick="exportXML()"> OK</button>
             if (number < kolvo - 1)
             {<button class="btn btn-primary" onclick="changeMode('next')"> Next</button>}
             <br />
@@ -71,6 +71,24 @@
             }
         }
     </div>
+    <script>
+        function exportDiagram() {
+
+            bpmnModeler.saveXML({ format: true }, function (err, xml) {
+
+                if (err) {
+                    console.error('diagram save failed', err);
+                } else {
+                    console.info('diagram saved');
+                    var xmlText = new XMLSerializer().serializeToString(xml);
+                    document.getElementById('result').value = xmlText;
+                    document.querySelector('input[name=mode]').value = 'res';
+                    console.info(xmlText);
+                }
+                alert('diagram saved (see console (F12))');
+            });
+        }
+    </script>
 </body>
 </html>
 
