@@ -1,21 +1,20 @@
 ﻿@using LMS.Data.Models;
-@model Test
+@model TestInfo
 @{
-    ViewData["Title"] = "Greetings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="well" @*style="text-align-last:center"*@>
+<div class="well">
     <h3>
         <strong>Добрый день!</strong>
     </h3>
     <h4>
-        <strong>@Model.Title</strong>
+        <strong>@Model.test.Title</strong>
         <br><br>
-        <strong>Тема теста: @Model.Category.Title</strong>
+        <strong>Тема теста: @Model.test.Category.Title</strong>
         <br><br>
-        <strong>Время на тест: @Model.Duration</strong>
+        <strong>Время на тест: @Model.test.Duration</strong>
         <br><br>
-        <strong>Количество вопросов: @Model.Problems.Capacity</strong>
+        <strong>Количество вопросов: @Model.test.Problems.Capacity</strong>
     </h4>
     <span>
         При нажатии на кнопку "Старт" запуститься таймер, по истечению которого тест завершится. <br>

@@ -1,15 +1,12 @@
 ﻿@using LMS.Data.Models;
 @using System.Collections.Generic;
-@model TestProblem
+@model TestInfo
 @{
-    ViewBag.Title = "ShowProblem";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
-    int number = ViewBag.Index;
-    int kolvo = ViewBag.Kolvo;
+    int number = Model.CurrentQuestionNumber;
+    int kolvo = Model.test.Problems.Count;
 }
-<!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -41,8 +38,8 @@
 </head>
 <body>
     <h3>
-        <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
-        <strong>@Model.Content</strong>
+        <strong>Вопрос№ @(number + 1)</strong><br />
+        <strong>@Model.test.Problems[number].Content</strong>
     </h3>
     <!-- element to draw bpmn diagram in -->
     <div id="canvas" style=" height:500px"></div>
@@ -71,24 +68,6 @@
             }
         }
     </div>
-    <script>
-        function exportDiagram() {
-
-            bpmnModeler.saveXML({ format: true }, function (err, xml) {
-
-                if (err) {
-                    console.error('diagram save failed', err);
-                } else {
-                    console.info('diagram saved');
-                    var xmlText = new XMLSerializer().serializeToString(xml);
-                    document.getElementById('result').value = xmlText;
-                    document.querySelector('input[name=mode]').value = 'res';
-                    console.info(xmlText);
-                }
-                alert('diagram saved (see console (F12))');
-            });
-        }
-    </script>
 </body>
 </html>
 

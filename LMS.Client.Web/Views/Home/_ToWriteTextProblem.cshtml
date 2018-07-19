@@ -1,28 +1,24 @@
 ﻿@using LMS.Data.Models;
 @using System.Collections.Generic;
-@model TestProblem
-@*@Html.DropDownList("Organization", @Model.Choices,
-    new { @class = "form-control", id = "orglist", onchange = "changed(this.value)"})*@
+@model TestInfo
 @{
-    ViewBag.Title = "ShowProblem";
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
-    int number = ViewBag.Index;
-    int kolvo = ViewBag.Kolvo;
+    int number = Model.CurrentQuestionNumber;
+    int kolvo = Model.test.Problems.Count;
 }
-<div class="well" @*style="text-align-last:center" *@>
+<div class="well">
     <script src="~/js/Functions.js"></script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
+        @Html.Hidden("mode", "")
         @Html.Hidden("number", number);
-        @Html.Hidden("mode", "");
-        @Html.Hidden("got", 0);
+        @Html.Hidden("got", 1);
         <h3>
-            <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
-            <strong>@Model.Content</strong>
+            <strong>Вопрос№ @(number + 1)</strong><br />
+            <strong>@Model.test.Problems[number].Content</strong>
         </h3>
-
-        @Html.TextArea("result", null, 10, 80, null);
+            @Html.TextArea("result", null, 10, 80, null);
         <br />
 
         if (number > 0)
