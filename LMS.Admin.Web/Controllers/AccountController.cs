@@ -35,7 +35,7 @@ namespace LMS.Admin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User { Email = model.Email, FirstName = model.FirstName, LastName = model.LastName, UserName = model.Email };
+                var user = new User { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName };
                 // add user
                 try
                 {
@@ -65,7 +65,7 @@ namespace LMS.Admin.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result =
-                await _identityService.LogIn(model.Email, model.Password, model.RememberMe);
+                await _identityService.LogIn(model.UserName, model.Password, model.RememberMe);
 
                 if (result == true)
                 {   

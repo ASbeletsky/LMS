@@ -15,8 +15,8 @@ namespace LMS.Admin.Web.ViewModels
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
+        [Display(Name = "UserName")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
