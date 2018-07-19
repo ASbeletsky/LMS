@@ -1,0 +1,76 @@
+﻿@using LMS.Data.Models;
+@using System.Collections.Generic;
+@model TestProblem
+@{
+    ViewBag.Title = "ShowProblem";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> result = new List<string>();
+    int number = ViewBag.Index;
+    int kolvo = ViewBag.Kolvo;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>bpmn-js seed</title>
+    <style type="text/css">
+
+        html, body, #canvas {
+            height: 500px;
+            padding: 0;
+        }
+
+        #save-button {
+            position: absolute;
+            top: 200px;
+            right: 20px;
+            border: solid 5px green;
+
+        }
+        #buttons {
+            top: 510px;
+            width: 80%;
+            height: 80%;
+        }
+    </style>
+    <script src="~/js/Functions.js"></script>
+    <link rel="stylesheet" href="~/lib/bpmn-js-seed-master/bower_components/bpmn-js/dist/assets/diagram-js.css">
+    <link rel="stylesheet" href="~/lib/bpmn-js-seed-master/bower_components/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css">
+</head>
+<body>
+    <h3>
+        <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
+        <strong>@Model.Content</strong>
+    </h3>
+    <!-- element to draw bpmn diagram in -->
+    <div id="canvas" style=" height:500px"></div>
+    <!-- scripts -->
+    <!-- bpmn-js modeler -->
+    <script src="~/lib/bpmn-js-seed-master/bower_components/bpmn-js/dist/bpmn-modeler.js"></script>
+    <!-- application -->
+    <script src="~/lib/bpmn-js-seed-master/modeler.js"></script>
+    <div id="buttons">
+        @using (@Html.BeginForm("Navigate", "Home"))
+        {
+            @Html.Hidden("number", number);
+            @Html.Hidden("mode", "");
+            @Html.Hidden("got", 0);
+            <input id="result" name="result" type="hidden" />
+            if (number > 0)
+            {
+                <button class="btn btn-primary" onclick="changeMode('prev')">Previous</button> }
+            <button class="btn btn-primary" onclick="changeMode('res')"> OK</button>
+            if (number < kolvo - 1)
+            {<button class="btn btn-primary" onclick="changeMode('next')"> Next</button>}
+            <br />
+            for (int i = 0; i < kolvo; i++)
+            {
+                <button onclick="changeGot('@i')"> @(i + 1)</button>
+            }
+        }
+    </div>
+</body>
+</html>
+

@@ -101,6 +101,15 @@ namespace LMS.Client.Web.Controllers
                     Type = new ProblemType { Id = 3, Title = "Тест на написание кода" },
                     Test = new Test(),
                     Choices = new List<Choice>()
+                },
+                new TestProblem
+                {
+                    Id = 7,
+                    Complexity = 2,
+                    Content = "Покажите схему заказа в Маке",
+                    Type = new ProblemType { Id = 4, Title = "Тест на диаграмму" },
+                    Test = new Test(),
+                    Choices = new List<Choice>()
                 }
             };
             ViewBag.Index = number;
@@ -115,6 +124,8 @@ namespace LMS.Client.Web.Controllers
                     return PartialView("_ToWriteTextProblem", helpProblem[number]);
                 case 3:
                     return PartialView("_ToWriteCodeProblem", helpProblem[number]);
+                case 4:
+                    return PartialView("_ToDrawDiagramProblem", helpProblem[number]);
             }
             return PartialView("_OneAnswerProblem");
         }
