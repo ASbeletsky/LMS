@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using LMS.Admin.Web.Models;
+using LMS.Admin.Web.ViewModels;
+
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -8,6 +9,9 @@ namespace LMS.Admin.Web.Controllers
     {
         public IActionResult Index()
         {
+            if(!User.Identity.IsAuthenticated)
+                return RedirectToAction("Login", "Account");
+            
             return View();
         }
 

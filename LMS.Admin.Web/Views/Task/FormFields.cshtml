@@ -1,0 +1,35 @@
+﻿@using LMS.Dto
+@model TaskDTO
+
+@{
+    var types = ((IEnumerable<SelectListItem>)ViewData["AvailableTypes"]);
+    var categories = ((IEnumerable<SelectListItem>)ViewData["AvailableCategories"]);
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input asp-for="Id" type="hidden" />
+<div class="row">
+    <div class="form-group col-12 col-md-6">
+        <label asp-for="Complexity" class="control-label"></label>
+        <input asp-for="Complexity" class="form-control form-control-range" type="range" min="@TaskDTO.MinComplexity" max="@TaskDTO.MaxComplexity" />
+        <span asp-validation-for="Complexity" class="text-danger"></span>
+    </div>
+    <div class="form-group col-12 col-md-6">
+        <label asp-for="TypeId" class="control-label"></label>
+        <select asp-for="TypeId" asp-items="@types" class="form-control custom-select"></select>
+        <span asp-validation-for="TypeId" class="text-danger"></span>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="CategoryId" class="control-label"></label>
+    <select asp-for="CategoryId" asp-items="@categories" class="form-control custom-select"></select>
+    <span asp-validation-for="CategoryId" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Content" class="control-label"></label>
+    <textarea asp-for="Content" class="form-control"><</textarea>
+    <span asp-validation-for="Content" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <input type="submit" value="Save" class="btn btn-default" />
+</div>
