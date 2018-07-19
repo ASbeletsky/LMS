@@ -11,7 +11,7 @@
     int kolvo = ViewBag.Kolvo;
 }
 <div class="well" @*style="text-align-last:center" *@>
-    <script src="~/js/site.js"></script>
+    <script src="~/js/Functions.js"></script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
@@ -39,12 +39,4 @@
             <button onclick="changeGot('@i')"> @(i + 1)</button>
         }
     }
-    @*<script>
-            function changeMode(mode) {
-                document.querySelector('input[name=mode]').value = mode;
-            }
-            function changeGot(got) {
-                document.querySelector('input[name=got]').value = got;
-            }
-        </script>*@
 </div>

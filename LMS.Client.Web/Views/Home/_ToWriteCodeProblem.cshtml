@@ -16,19 +16,20 @@
         #editor {
             position: absolute;
             width: 80%;
-            height: 60%;
+            height: 410px;
         }
 
         #buttons {
-            top: 500px;
+            top: 510px;
             width: 80%;
             height: 80%;
         }
     </style>
 </head>
 <body>
+    <script src="~/js/Functions.js"></script>
     <div class="well" id="well">
-        <div style="height:480px;width:80%">
+        <div style="height:500px;width:60%">
             <h3>
                 <strong>Вопрос№ @(ViewBag.Index + 1)</strong><br />
                 <strong>@Model.Content</strong>
@@ -70,12 +71,6 @@
             var res = editor.getValue(); // -> String (получаем)
             document.getElementById('result').value = res;
             document.querySelector('input[name=mode]').value = 'res'
-        }
-        function changeMode(mode) {
-            document.querySelector('input[name=mode]').value = mode;
-        }
-        function changeGot(got) {
-            document.querySelector('input[name=got]').value = got;
         }
     </script>
 </body>
