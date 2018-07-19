@@ -4,15 +4,24 @@ namespace LMS.Entities
 {
     public class TestTemplateLevel
     {
+        public TestTemplateLevel()
+        {
+            TaskTypes = new List<LevelTaskType>();
+            Categories = new List<LevelCategory>();
+        }
+        
         public int Id { get; set; }
         public string Description { get; set; }
         
         public int Count { get; set; } 
-        public int Score { get; set; }
+        public double MaxScore { get; set; }
         
-        public TestTemplate TestTemplate { get; set; }
-        public int TestTemplategId { get; set; }
+        public int MinComplexity { get; set; }
+        public int MaxComplexity { get; set; }
+
+        public ICollection<LevelTaskType> TaskTypes { get; set; }
+        public ICollection<LevelCategory> Categories { get; set; }
         
-        public TaskFilter Filter { get; set; }
+        public int TestTemplateLevelId { get; set; }
     }
 }

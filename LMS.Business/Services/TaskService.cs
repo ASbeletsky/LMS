@@ -102,7 +102,7 @@ namespace LMS.Business.Services
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }
 
-        public IEnumerable<TaskDTO> GetActiveByFilter(TaskFilterDTO filter)
+        public IEnumerable<TaskDTO> GetByFilter(TaskFilterDTO filter)
         {
             var tasks = unitOfWork.Tasks
                 .GetAll()

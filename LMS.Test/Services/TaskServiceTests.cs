@@ -4,7 +4,6 @@ using System.Linq;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
-using LMS.Entities;
 using Moq;
 using Xunit;
 using Task = System.Threading.Tasks.Task;
@@ -305,7 +304,7 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public void Should_Get_All_By_Filter()
+        public void Should_Get_Active_By_Filter()
         {
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
             repositoryMock.Setup(m => m.GetAll()).Returns(() => new[]
@@ -319,7 +318,7 @@ namespace LMS.Test.Services
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
 
-            var filter = new TaskFilterDTO
+            var level = new TaskFilterDTO
             {
                 MinComplexity = 3,
                 MaxComplexity = 5,
@@ -344,7 +343,7 @@ namespace LMS.Test.Services
             };
             
             var service = new TaskService(unitOfWorkMock.Object, mapper);
-            var tasks = service.GetActiveByFilter(filter).ToArray();
+            var tasks = service.GetByFilter(level).ToArray();
             Assert.Equal(1, tasks.Length);
         }
     }

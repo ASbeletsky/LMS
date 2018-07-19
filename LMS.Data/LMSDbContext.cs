@@ -16,6 +16,8 @@ namespace LMS.Data
         public DbSet<Task> Tasks { get; }
         public DbSet<TaskType> TaskTypes { get; }
         
+        public DbSet<TestTemplate> TestTemplates { get; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString);
@@ -55,22 +57,22 @@ namespace LMS.Data
             modelBuilder.Entity<TestTemplate>()
                 .Property(t => t.Title)
                 .IsRequired();
-
+            modelBuilder.Entity<TestTemplate>()
+                .HasMany(t => t.Levels)
+                .WithOne()
+                .HasForeignKey(l => l.TestTemplateLevelId);
+            
             modelBuilder.Entity<TestTemplateLevel>()
                 .HasKey(l => l.Id);
             modelBuilder.Entity<TestTemplateLevel>()
-                .HasOne(l => l.TestTemplate);
+                .HasMany(f => f.Categories)
+                .WithOne(c => c.TestTemplateLevel)
+                .HasForeignKey(c => c.TestTemplateLevelId);
             modelBuilder.Entity<TestTemplateLevel>()
-                .OwnsOne(l => l.Filter);
+                .HasMany(f => f.TaskTypes)
+                .WithOne(t => t.TestTemplateLevel)
+                .HasForeignKey(t => t.TestTemplateLevelId);
             
-            modelBuilder.Entity<TestTemplateLevel>()
-                .HasMany(l => l.Filter.Categories)
-                .WithOne(c => c.TestTemplateLevel);
-            
-            modelBuilder.Entity<TestTemplateLevel>()
-                .HasMany(l => l.Filter.TaskTypes)
-                .WithOne(t => t.TestTemplateLevel);
-
             modelBuilder.Entity<LevelCategory>()
                 .HasKey(c => new
                 {
@@ -78,7 +80,8 @@ namespace LMS.Data
                     c.TestTemplateLevelId
                 });
             modelBuilder.Entity<LevelCategory>()
-                .HasOne(c => c.Category);
+                .HasOne(c => c.Category)
+                .WithMany();
 
             modelBuilder.Entity<LevelTaskType>()
                 .HasKey(t => new
@@ -87,7 +90,8 @@ namespace LMS.Data
                     t.TestTemplateLevelId
                 });
             modelBuilder.Entity<LevelTaskType>()
-                .HasOne(c => c.TaskType);
+                .HasOne(c => c.TaskType)
+                .WithMany();
         }
     }
 }

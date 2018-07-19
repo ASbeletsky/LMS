@@ -13,13 +13,13 @@ namespace LMS.Data
             TaskTypes = new BasicRepository<TaskType>(context);
             Categories = new BasicRepository<Category>(context);
             Tasks = new TaskRepository(context);
-            TestConfigs = new BasicRepository<TestTemplate>(context);
+            TestTemplates = new TestTemplateRepository(context);
         }
 
         public IRepository<Category> Categories { get; }
         public IRepository<Task> Tasks { get; }
         public IRepository<TaskType> TaskTypes { get; }
-        public IRepository<TestTemplate> TestConfigs { get; }
+        public IRepository<TestTemplate> TestTemplates { get; }
 
         public System.Threading.Tasks.Task SaveAsync()
         {
