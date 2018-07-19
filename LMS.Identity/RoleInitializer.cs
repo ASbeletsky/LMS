@@ -8,9 +8,9 @@ namespace LMS.Identity
 {
     public static class RoleInitializer
     {
-        public static async Task CreateUserRoles(IServiceProvider serviceProvider)
+        public static async Task CreateUsersRoles(IServiceProvider serviceProvider)
         {
-            string adminEmail = "admin@gmail.com";
+            string adminUserName = "admin";
             string password = "apriorit";
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
@@ -32,9 +32,9 @@ namespace LMS.Identity
                 await roleManager.CreateAsync(new IdentityRole("examinee"));
             }
 
-            if (await userManager.FindByNameAsync(adminEmail) == null)
+            if (await userManager.FindByNameAsync(adminUserName) == null)
             {
-                var admin = new User { Email = adminEmail, UserName = adminEmail };
+                var admin = new User {UserName = adminUserName };
                 var result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(admin, "admin");

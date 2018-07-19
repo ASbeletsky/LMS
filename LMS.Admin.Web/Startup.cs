@@ -53,8 +53,7 @@ namespace LMS.Admin.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            RoleInitializer.CreateUserRoles(serviceProvider).GetAwaiter().GetResult();
+            RoleInitializer.CreateUsersRoles(serviceProvider).GetAwaiter().GetResult();
         }
     }
 }

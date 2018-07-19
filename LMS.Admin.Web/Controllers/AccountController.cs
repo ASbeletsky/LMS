@@ -6,6 +6,7 @@ using LMS.Identity;
 using LMS.Entities;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -18,12 +19,14 @@ namespace LMS.Admin.Web.Controllers
             _identityService = identityService;
         }
 
+        [HttpGet]
         public IActionResult AccessDenied(Uri ReturnUrl)
         {
-            throw new Exception("You dont have permissions.");
+            return View();
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public IActionResult Register()
         {
             ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name});
@@ -31,6 +34,7 @@ namespace LMS.Admin.Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -76,7 +80,7 @@ namespace LMS.Admin.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                    ModelState.AddModelError("", "The user name or password provided is incorrector or your role does not allow you to enter.");
                 }
             }
             return View(model);

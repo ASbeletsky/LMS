@@ -38,10 +38,15 @@ namespace LMS.Identity
         }
         public async Task<bool> LogIn(string userName, string password, bool rememberMe)
         {
-            var result =
-            await _signInManager.PasswordSignInAsync(userName, password, rememberMe, false);
-
-            return result.Succeeded;
+            User user = await _userManager.FindByNameAsync(userName);
+            if (await _userManager.IsInRoleAsync(user, "admin") || await _userManager.IsInRoleAsync(user, "reviewer") || await _userManager.IsInRoleAsync(user, "moderator"))
+            {
+                var result =
+                    await _signInManager.PasswordSignInAsync(userName, password, rememberMe, false);
+                return result.Succeeded;
+            }
+            else
+                return false;
         }
 
         public async System.Threading.Tasks.Task Logout()
