@@ -1,24 +1,24 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using LMS.Dto;
 using LMS.Business.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LMS.Admin.Web.Controllers
 {
-    public class TaskController : Controller
+    public class TestTemplateController : Controller
     {
-        private readonly TaskService taskService;
+        private readonly TestTemplateService testTemplateService;
         private readonly TaskTypeService taskTypeService;
         private readonly CategoryService categoryService;
 
-        public TaskController(
-            TaskService tasks, 
+        public TestTemplateController(
+            TestTemplateService testTemplates,
             TaskTypeService taskTypes,
             CategoryService taskCategories)
         {
-            taskService = tasks;
+            testTemplateService = testTemplates;
             taskTypeService = taskTypes;
             categoryService = taskCategories;
         }
@@ -33,27 +33,28 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm]TaskDTO task)
+        public async Task<IActionResult> Create([FromForm] TestTemplateDTO template)
         {
-            await taskService.CreateAsync(task);
+            await testTemplateService.CreateAsync(template);
 
             return RedirectToAction(nameof(List));
         }
-       
+
         public IActionResult Edit(int id)
         {
-            var task = taskService.GetById(id);
-
+            var template = testTemplateService.GetById(id);
+            
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
             ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            return View(task);
+
+            return View(template);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([FromForm]TaskDTO task)
+        public async Task<IActionResult> Edit([FromForm] TestTemplateDTO template)
         {
-            await taskService.UpdateAsync(task);
+            await testTemplateService.UpdateAsync(template);
 
             return RedirectToAction(nameof(List));
         }
@@ -61,35 +62,17 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var tasks = taskService.GetAll();
-            return View(tasks);
+            var templateListItems = testTemplateService.GetListItems();
+            return View(templateListItems);
         }
 
-        [HttpGet]
-        public IActionResult Details(int id)
-        {
-            var task = taskService.GetById(id);
-            return View(task);
-        }
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await taskService.MarkAsDeletedByIdAsync(id);
-            var tasks = taskService.GetAll();
-            return View("List", tasks);
-        }
-
-        [HttpPost]
-        public IActionResult Filter([FromForm]TaskFilterDTO filter)
-        {
-            var filtered = taskService.GetByFilter(filter).ToList();
-            return Json(new
-            {
-                tasks = filtered,
-                count = filtered.Count
-            });
+            await testTemplateService.DeleteByIdAsync(id);
+            var templateListItems = testTemplateService.GetListItems();
+            return View("List", templateListItems);
         }
     }
 }

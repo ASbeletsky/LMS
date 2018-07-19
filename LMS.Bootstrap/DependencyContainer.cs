@@ -40,6 +40,10 @@ namespace LMS.Bootstrap
             builder.RegisterType<TaskTypeService>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            
+            builder.RegisterType<TestTemplateService>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
 
             builder.RegisterBuildCallback(container =>
                 DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));
