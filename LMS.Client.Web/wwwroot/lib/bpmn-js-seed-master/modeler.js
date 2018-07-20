@@ -53,7 +53,7 @@ function  exportXML() {
         } else {
             console.info('diagram saved');
             //var xmlText = new XMLSerializer().serializeToString(diagramXML);
-            document.getElementById('result').value = diagramXML;
+            document.querySelector('input[name=result]').value = diagramXML;
             document.querySelector('input[name=mode]').value = 'res';
             //console.info(xml);
         }

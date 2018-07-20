@@ -68,7 +68,7 @@
     <script>
         function getResults() {
             var res = editor.getValue(); // -> String (получаем)
-            document.getElementById('result').value = res;
+            document.querySelector('input[name=result]').value = res;
             document.querySelector('input[name=mode]').value = 'res'
         }
     </script>
