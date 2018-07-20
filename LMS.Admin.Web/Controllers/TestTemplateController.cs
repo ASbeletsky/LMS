@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using LMS.Dto;
 using LMS.Business.Services;
+using Newtonsoft.Json;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -36,7 +37,13 @@ namespace LMS.Admin.Web.Controllers
                 Text = t.Title
             });
 
-            return View(new TestTemplateDTO());
+            return View(new TestTemplateDTO()
+            {
+                Levels =
+                {
+                    new TestTemplateLevelDTO()
+                }
+            });
         }
 
         [HttpPost]
@@ -50,7 +57,9 @@ namespace LMS.Admin.Web.Controllers
 
         public IActionResult Edit(int id)
         {
-            var template = testTemplateService.GetById(id);
+            var template = TempData["EditTemplate" + id] is string templateStr
+                ? JsonConvert.DeserializeObject<TestTemplateDTO>(templateStr)
+                : testTemplateService.GetById(id);
 
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
             {
@@ -64,6 +73,16 @@ namespace LMS.Admin.Web.Controllers
             });
 
             return View(template);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NewLevel([FromForm] TestTemplateDTO template)
+        {
+            template.Levels.Add(new TestTemplateLevelDTO());
+            TempData["EditTemplate" + template.Id] = JsonConvert.SerializeObject(template);
+
+            return RedirectToAction("Edit", new { id = template.Id });
         }
 
         [HttpPost]

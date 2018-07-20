@@ -41,7 +41,7 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "wwwroot/js/testTemplate.js"
     ],
     "minify": {
       "enabled": true,
