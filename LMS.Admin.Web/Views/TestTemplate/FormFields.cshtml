@@ -1,4 +1,5 @@
-﻿@using LMS.Dto;
+﻿@using System.Globalization;
+@using LMS.Dto;
 @model TestTemplateDTO
 @{
     var types = ((IEnumerable<SelectListItem>) ViewData["AvailableTypes"]);
@@ -33,33 +34,49 @@
     <hr/>
     @for (var index = 0; index < Model.Levels.Count; index++)
     {
-        <div class="level" data-index="@index">
+        <div class="level">
             <input asp-for="Levels[index].Id" type="hidden"/>
             <div class="row">
                 <div class="form-group col-12 col-md-6">
-                    <label asp-for="Levels[index].MaxScore" class="control-label"></label>
+                    <label asp-for="Levels[index].ValidTaskCount" class="control-label"></label>
                     <br/>
-                    <input style="width: 100%" asp-for="Levels[index].MaxScore" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="0" data-slider-max="@TestTemplateDTO.MaxScore"/>
+                    <input asp-for="Levels[index].ValidTaskCount" class="form-control" type="text" readonly/>
+                </div>
+                <div class="form-group col-12 col-md-6">
+                    <label asp-for="Levels[index].ScorePerTask" class="control-label"></label>
+                    <br/>
+                    <input value="@string.Format(CultureInfo.InvariantCulture, "{0:0.##}", Model.Levels[index].ScorePerTask)" name="@($"Levels[{index}].ScorePerTask")" class="form-control" type="text" readonly/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-12 col-md-6">
+                    <label asp-for="Levels[index].MaxScore" class="control-label"></label>
+                    <label id="@("levelMaxScoreLabel" + index)">@Model.Levels[index].MaxScore</label>
+                    <label>/@TestTemplateDTO.MaxScore</label>
+                    <br/>
+                    <input onchange="updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].MaxScore" data-slider-value="@Model.Levels[index].MaxScore" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxScore"/>
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label asp-for="Levels[index].Count" class="control-label"></label>
+                    <label id="@("levelCountLabel" + index)">@Model.Levels[index].Count</label>
+                    <label>/@TestTemplateDTO.MaxTaskPerLevelCount</label>
                     <br/>
-                    <input style="width: 100%" asp-for="Levels[index].Count" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="0" data-slider-max="@TestTemplateDTO.MaxTaskPerLevelCount"/>
+                    <input onchange="updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].Count" data-slider-value="@Model.Levels[index].Count" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxTaskPerLevelCount"/>
                 </div>
             </div>
             <div class="form-group">
                 <label asp-for="Levels[index].Filter.ComplexityRange" class="control-label"></label>
                 <br/>
-                <input style="width: 100%" asp-for="Levels[index].Filter.ComplexityRange" class="form-control" type="text" data-provide="slider" data-slider-value="[@Model.Levels[index].Filter.ComplexityRange]" data-slider-min="@TaskDTO.MinComplexity" data-slider-max="@TaskDTO.MaxComplexity" data-slider-step="1"/>
+                <input onchange="refreshLevel(@index)" style="width: 100%" asp-for="Levels[index].Filter.ComplexityRange" class="form-control" type="text" data-provide="slider" data-slider-value="[@Model.Levels[index].Filter.ComplexityRange]" data-slider-min="@TaskDTO.MinComplexity" data-slider-max="@TaskDTO.MaxComplexity" data-slider-step="1"/>
             </div>
             <div class="row">
                 <div class="form-group col-12 col-md-6">
                     <label asp-for="Levels[index].Filter.CategoryIds" class="control-label"></label>
-                    <select multiple asp-for="Levels[index].Filter.CategoryIds" asp-items="@categories" data-live-search="true" class="form-control selectpicker"></select>
+                    <select onchange="refreshLevel(@index)" multiple asp-for="Levels[index].Filter.CategoryIds" asp-items="@categories" data-live-search="true" class="form-control selectpicker"></select>
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label asp-for="Levels[index].Filter.TaskTypeIds" class="control-label"></label>
-                    <select multiple asp-for="Levels[index].Filter.TaskTypeIds" asp-items="@types" data-live-search="true" class="form-control selectpicker"></select>
+                    <select onchange="refreshLevel(@index)" multiple asp-for="Levels[index].Filter.TaskTypeIds" asp-items="@types" data-live-search="true" class="form-control selectpicker"></select>
                 </div>
             </div>
             <div class="form-group">
@@ -74,3 +91,47 @@
 <div class="form-group">
     <input type="submit" value="Save" class="btn btn-default"/>
 </div>
+
+<script>
+    var refreshByIdTimers = [];
+
+    function updateScorePerTask(index) {
+        var maxScore = $("input[name='Levels[" + index + "].MaxScore']").val();
+        var count = $("input[name='Levels[" + index + "].Count']").val();
+        $("#levelMaxScoreLabel" + index).text(maxScore);
+        $("#levelCountLabel" + index).text(count);
+        var scorePerTask = (maxScore / count).toFixed(2);
+        $("input[name='Levels[" + index + "].ScorePerTask']").val(scorePerTask);
+    }
+
+    function refreshLevel(index) {
+        if (refreshByIdTimers[index]) {
+            clearTimeout(refreshByIdTimers[index]);
+        }
+        refreshByIdTimers[index] = setTimeout(function() {
+                var complexityRange = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").attr("value");
+                var selectedCategories = $("select[name='Levels[" + index + "].Filter.CategoryIds']")
+                    .val()
+                    .map(function (o) {return parseInt(o);});
+                var selectedTasks = $("select[name='Levels[" + index + "].Filter.TaskTypeIds']")
+                    .val()
+                    .map(function (o) {return parseInt(o);});
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@(Url.Action("Filter", "Task"))',
+                    traditional: true,
+                    data: {
+                        ComplexityRange: complexityRange,
+                        CategoryIds: selectedCategories,
+                        TaskTypeIds: selectedTasks
+                    },
+                    contentType: "application/x-www-form-urlencoded",
+                    success: function(data) {
+                        $("input[name='Levels[" + index + "].ValidTaskCount']").val(data["count"]);
+                    }
+                });
+            },
+            500);
+    }
+</script>

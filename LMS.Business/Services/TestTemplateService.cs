@@ -11,7 +11,7 @@ namespace LMS.Business.Services
     public class TestTemplateService : BaseService
     {
         private readonly TaskService taskService;
-        
+
         public TestTemplateService(TaskService taskService, IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)
         {
@@ -26,7 +26,14 @@ namespace LMS.Business.Services
                 throw new EntityNotFoundException<TestTemplateDTO>(id);
             }
 
-            return mapper.Map<TestTemplate, TestTemplateDTO>(template);
+            var templateDto = mapper.Map<TestTemplate, TestTemplateDTO>(template);
+
+            foreach (var level in templateDto.Levels)
+            {
+                level.ValidTaskCount = taskService.GetByFilter(level.Filter).Count();
+            }
+
+            return templateDto;
         }
 
         public Task DeleteByIdAsync(int id)
@@ -77,7 +84,8 @@ namespace LMS.Business.Services
                         .Select(level =>
                         {
                             var filter = mapper.Map<TestTemplateLevel, TestTemplateLevelDTO>(level).Filter;
-                            var types = mapper.Map<IEnumerable<LevelTaskType>, IEnumerable<TaskTypeDTO>>(level.TaskTypes).ToList();
+                            var types = mapper
+                                .Map<IEnumerable<LevelTaskType>, IEnumerable<TaskTypeDTO>>(level.TaskTypes).ToList();
                             return new TaskTemplateDTO
                             {
                                 Types = types,

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using LMS.Dto;
 using LMS.Business.Services;
@@ -25,10 +26,27 @@ namespace LMS.Admin.Web.Controllers
 
         public IActionResult Create()
         {
-            ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
+            {
+                Value = t.Id.ToString(),
+                Text = t.Title
+            });
+            ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem()
+            {
+                Value = t.Id.ToString(),
+                Text = t.Title
+            });
 
-            return View();
+            return View(new TestTemplateDTO
+            {
+                Levels = new List<TestTemplateLevelDTO>
+                {
+                    new TestTemplateLevelDTO
+                    {
+                        Filter = new TaskFilterDTO()
+                    }
+                }
+            });
         }
 
         [HttpPost]
@@ -43,9 +61,17 @@ namespace LMS.Admin.Web.Controllers
         public IActionResult Edit(int id)
         {
             var template = testTemplateService.GetById(id);
-            
-            ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+
+            ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
+            {
+                Value = t.Id.ToString(),
+                Text = t.Title
+            });
+            ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem()
+            {
+                Value = t.Id.ToString(),
+                Text = t.Title
+            });
 
             return View(template);
         }

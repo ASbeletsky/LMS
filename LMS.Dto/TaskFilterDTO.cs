@@ -32,7 +32,7 @@ namespace LMS.Dto
         public ICollection<TaskTypeDTO> TaskTypes { get; set; }
 
         [Display(Name = "Task types")]
-        public ICollection<int> TaskTypeIds
+        public List<int> TaskTypeIds
         {
             get => TaskTypes.Select(t => t.Id).ToList();
             set => TaskTypes = value.Select(id => new TaskTypeDTO {Id = id}).ToList();
@@ -41,7 +41,7 @@ namespace LMS.Dto
         public ICollection<CategoryDTO> Categories { get; set; }
 
         [Display(Name = "Categories")]
-        public ICollection<int> CategoryIds
+        public List<int> CategoryIds
         {
             get => Categories.Select(t => t.Id).ToList();
             set => Categories = value.Select(id => new CategoryDTO {Id = id}).ToList();

@@ -7,6 +7,9 @@ namespace LMS.Dto
         public int Id { get; set; }
         public string Description { get; set; }
 
+        [Display(Name = "Score per task")]
+        public double ScorePerTask => MaxScore / Count;
+        
         public int Count { get; set; }
         
         [Display(Name = "Max score")]
