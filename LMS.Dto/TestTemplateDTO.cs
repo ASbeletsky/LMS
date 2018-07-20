@@ -6,15 +6,19 @@ namespace LMS.Dto
 {
     public class TestTemplateDTO
     {
-        public const int MaxScore = 100;
+        public const int MaxLevelScore = 100;
         public const int MaxTaskPerLevelCount = 30;
 
         public TestTemplateDTO()
         {
-            Levels = new List<TestTemplateLevelDTO>();
+            Levels = new List<TestTemplateLevelDTO>
+            {
+                new TestTemplateLevelDTO()
+            };
         }
 
         public int Id { get; set; }
+
         public string Title { get; set; }
         [Display(Name = "Avg. Complexity")] public int AvgComplexity { get; set; }
 
@@ -22,6 +26,6 @@ namespace LMS.Dto
 
         public string Description { get; set; }
 
-        public IReadOnlyList<TestTemplateLevelDTO> Levels { get; set; }
+        public IList<TestTemplateLevelDTO> Levels { get; set; }
     }
 }

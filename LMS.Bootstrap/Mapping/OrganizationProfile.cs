@@ -31,24 +31,22 @@ namespace LMS.Bootstrap.Mapping
                     {
                         MinComplexity = entity.MinComplexity,
                         MaxComplexity = entity.MaxComplexity,
-                        TaskTypes = context.Mapper.Map<IEnumerable<LevelTaskType>, IEnumerable<TaskTypeDTO>>(
-                            entity.TaskTypes).ToList(),
-                        Categories = context.Mapper.Map<IEnumerable<LevelCategory>, IEnumerable<CategoryDTO>>(
-                            entity.Categories).ToList()
+                        TaskTypeIds = entity.TaskTypes.Select(t => t.TaskTypeId).ToList(),
+                        CategoryIds = entity.Categories.Select(t => t.CategoryId).ToList()
                     }));
             CreateMap<TestTemplateLevelDTO, TestTemplateLevel>()
                 .ForMember(m => m.MinComplexity, m => m.MapFrom(l => l.Filter.MinComplexity))
                 .ForMember(m => m.MaxComplexity, m => m.MapFrom(l => l.Filter.MaxComplexity))
                 .ForMember(m => m.Categories, m => m.ResolveUsing(l =>
-                    l.Filter.Categories.Select(c => new LevelCategory
+                    l.Filter.CategoryIds.Select(id => new LevelCategory
                     {
-                        CategoryId = c.Id,
+                        CategoryId = id,
                         TestTemplateLevelId = l.Id
                     })))
                 .ForMember(m => m.TaskTypes, m => m.ResolveUsing(l =>
-                    l.Filter.TaskTypes.Select(c => new LevelTaskType
+                    l.Filter.TaskTypeIds.Select(id => new LevelTaskType
                     {
-                        TaskTypeId = c.Id,
+                        TaskTypeId = id,
                         TestTemplateLevelId = l.Id
                     })));
 

@@ -18,9 +18,9 @@ namespace LMS.Dto
         [Display(Name = "Avg. Complexity")]
         public double AvgComplexity { get; set; }
 
-        public IReadOnlyList<CategoryDTO> Categories { get; set; }
+        public IList<CategoryDTO> Categories { get; set; }
 
         [Display(Name = "Levels")]
-        public IReadOnlyList<TaskTemplateDTO> Tasks { get; set; }
+        public IList<TaskTemplateDTO> Tasks { get; set; }
     }
 }

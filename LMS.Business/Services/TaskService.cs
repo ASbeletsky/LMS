@@ -109,8 +109,8 @@ namespace LMS.Business.Services
                 .Where(t => t.IsActive
                     && t.Complexity >= filter.MinComplexity 
                     && t.Complexity <= filter.MaxComplexity
-                    && filter.Categories.Any(c => t.CategoryId == c.Id)
-                    && filter.TaskTypes.Any(c => t.TypeId == c.Id));
+                    && filter.CategoryIds.Contains(t.CategoryId)
+                    && filter.TaskTypeIds.Contains(t.TypeId));
             
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }

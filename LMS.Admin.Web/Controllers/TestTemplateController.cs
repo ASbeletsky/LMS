@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using LMS.Dto;
-using LMS.Business.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using LMS.Dto;
+using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -37,16 +36,7 @@ namespace LMS.Admin.Web.Controllers
                 Text = t.Title
             });
 
-            return View(new TestTemplateDTO
-            {
-                Levels = new List<TestTemplateLevelDTO>
-                {
-                    new TestTemplateLevelDTO
-                    {
-                        Filter = new TaskFilterDTO()
-                    }
-                }
-            });
+            return View(new TestTemplateDTO());
         }
 
         [HttpPost]

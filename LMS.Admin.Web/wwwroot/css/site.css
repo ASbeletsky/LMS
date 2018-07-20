@@ -3,12 +3,6 @@
     font-weight: bold;
     margin-bottom: 0;
 }
-/* Remove slider outline */
-form input[type=range]:focus {
-    box-shadow: transparent;
-    outline-color: transparent;
-    border-color: transparent;
-}
 .level{
     padding: 14px;
     border: 1px solid rgba(0, 0, 0, .1);
