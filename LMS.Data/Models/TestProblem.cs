@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LMS.Data.Models
 {
-    public class TestProblem
+    public class Task
     {
         public int Id { get; set; }
         public double Complexity { get; set; }

@@ -1,11 +1,11 @@
 ﻿@using LMS.Data.Models;
 @using System.Collections.Generic;
-@model TestInfo
+@model TaskInfo
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
     int number = Model.CurrentQuestionNumber;
-    int kolvo = Model.test.Problems.Count;
+    int kolvo = Model.TaskCount;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@
         <div style="height:500px;width:60%">
             <h3>
                 <strong>Вопрос№ @(number + 1)</strong><br />
-                <strong>@Model.test.Problems[number].Content</strong>
+                <strong>@Model.OurTask.Content</strong>
             </h3>
             <div id="editor">
                 <script src="~/lib/ace-builds-master/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>

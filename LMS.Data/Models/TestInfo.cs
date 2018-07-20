@@ -4,9 +4,10 @@ using System.Text;
 
 namespace LMS.Data.Models
 {
-    public class TestInfo
+    public class TaskInfo
     {
-        public Test test { get; set; }
+        public Task OurTask { get; set; }
         public int CurrentQuestionNumber { get; set; }
+        public int TaskCount { get; set; }
     }
 }

@@ -10,53 +10,51 @@ namespace LMS.Client.Web.Controllers
 {
     public class HomeController : Controller
     {
-        TestInfo info = new TestInfo
+        Test test = new Test
         {
-            test = new Test
-            {
                 Id = 1,
                 Title = "Тест для принятия на работу",
                 Category = new TestCategory { Id = 1, Title = ".Net" },
                 Duration = new System.TimeSpan(1, 0, 0),
-                Problems = new List<TestProblem>
+                Problems = new List<Data.Models.Task>
                 {
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 1,
                         Complexity = 2,
                         Content = "Будет true or false?",
                         Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
                         Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "True", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "False", IsRight = false, Problem = new TestProblem() } }
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "True", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "False", IsRight = false, Problem = new Data.Models.Task() } }
                     },
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 3,
                         Complexity = 2,
                         Content = "Доброе утро?",
                         Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
                         Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new TestProblem() } }
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new Data.Models.Task() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Data.Models.Task() } }
                     },
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 2,
                         Complexity = 2,
                         Content = "Как дела?",
                         Type = new ProblemType { Id = 1, Title = "Тест на выбор нескольких ответов" },
                         Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Плохо", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "Норм", IsRight = true, Problem = new TestProblem() } }
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "Плохо", IsRight = false, Problem = new Data.Models.Task() }, new Choice { Id = 3, Answer = "Норм", IsRight = true, Problem = new Data.Models.Task() } }
                     },
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 4,
                         Complexity = 2,
                         Content = "Франция чемпион?",
                         Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
                         Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new TestProblem() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new TestProblem() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new TestProblem() } }
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new Data.Models.Task() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Data.Models.Task() } }
                     },
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 5,
                         Complexity = 2,
@@ -65,7 +63,7 @@ namespace LMS.Client.Web.Controllers
                         Test = new Test(),
                         Choices = new List<Choice>()
                     },
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 6,
                         Complexity = 2,
@@ -74,7 +72,7 @@ namespace LMS.Client.Web.Controllers
                         Test = new Test(),
                         Choices = new List<Choice>()
                     },
-                    new TestProblem
+                    new Data.Models.Task
                     {
                         Id = 7,
                         Complexity = 2,
@@ -84,9 +82,8 @@ namespace LMS.Client.Web.Controllers
                         Choices = new List<Choice>()
                     }
                 }
-            },
-            CurrentQuestionNumber = 0
         };
+        TaskInfo info = new TaskInfo();
         public IActionResult Index()
         {
             return View();
@@ -111,12 +108,14 @@ namespace LMS.Client.Web.Controllers
         }
         public IActionResult Greetings()
         {
-            return View(info);
+            return View(test);
         }
         public ActionResult ShowProblem(int number)
         {
+            info.OurTask = test.Problems[number];
             info.CurrentQuestionNumber = number;
-            switch (info.test.Problems[number].Type.Id)
+            info.TaskCount = test.Problems.Count;
+            switch (info.OurTask.Type.Id)
             {
                 case 0:
                     return PartialView("_OneAnswerProblem",info);

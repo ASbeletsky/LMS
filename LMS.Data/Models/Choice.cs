@@ -12,6 +12,6 @@ namespace LMS.Data.Models
         public string Answer { get; set; }
         public bool IsRight { get; set; }
 
-        public TestProblem Problem { get; set; }
+        public Task Problem { get; set; }
     }
 }

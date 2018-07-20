@@ -1,5 +1,5 @@
 ﻿@using LMS.Data.Models;
-@model TestInfo
+@model Test
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,13 +8,13 @@
         <strong>Добрый день!</strong>
     </h3>
     <h4>
-        <strong>@Model.test.Title</strong>
+        <strong>@Model.Title</strong>
         <br><br>
-        <strong>Тема теста: @Model.test.Category.Title</strong>
+        <strong>Тема теста: @Model.Category.Title</strong>
         <br><br>
-        <strong>Время на тест: @Model.test.Duration</strong>
+        <strong>Время на тест: @Model.Duration</strong>
         <br><br>
-        <strong>Количество вопросов: @Model.test.Problems.Capacity</strong>
+        <strong>Количество вопросов: @Model.Problems.Capacity</strong>
     </h4>
     <span>
         При нажатии на кнопку "Старт" запуститься таймер, по истечению которого тест завершится. <br>

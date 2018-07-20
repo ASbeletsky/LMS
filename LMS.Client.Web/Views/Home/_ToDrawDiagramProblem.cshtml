@@ -1,11 +1,11 @@
 ﻿@using LMS.Data.Models;
 @using System.Collections.Generic;
-@model TestInfo
+@model TaskInfo
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<string> result = new List<string>();
     int number = Model.CurrentQuestionNumber;
-    int kolvo = Model.test.Problems.Count;
+    int kolvo = Model.TaskCount;
 }
 <head>
     <meta charset="utf-8">
@@ -39,7 +39,7 @@
 <body>
     <h3>
         <strong>Вопрос№ @(number + 1)</strong><br />
-        <strong>@Model.test.Problems[number].Content</strong>
+        <strong>@Model.OurTask.Content</strong>
     </h3>
     <!-- element to draw bpmn diagram in -->
     <div id="canvas" style=" height:500px"></div>
