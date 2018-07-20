@@ -52,11 +52,11 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentException("Template should contains at least one level");
             }
-            if (!testTemplate.Levels.All(l => !l.Filter.TaskTypeIds.Any()))
+            if (!testTemplate.Levels.All(l => l.Filter.TaskTypeIds.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one task type");
             }
-            if (!testTemplate.Levels.All(l => !l.Filter.CategoryIds.Any()))
+            if (!testTemplate.Levels.All(l => l.Filter.CategoryIds.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one category");
             }
@@ -78,11 +78,11 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentException("Template should contains at least one level");
             }
-            if (!testTemplate.Levels.All(l => !l.Filter.TaskTypeIds.Any()))
+            if (!testTemplate.Levels.All(l => l.Filter.TaskTypeIds.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one task type");
             }
-            if (!testTemplate.Levels.All(l => !l.Filter.CategoryIds.Any()))
+            if (!testTemplate.Levels.All(l => l.Filter.CategoryIds.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one category");
             }
