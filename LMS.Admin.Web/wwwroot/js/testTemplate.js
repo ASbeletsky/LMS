@@ -8,7 +8,14 @@
             .reduce(function (a, b) { return a + b; }, 0);
 
         if (totalMaxScore !== 100) {
-            $("#maxScoreInvalid").text("Total max score must be equal to 100");
+            var overflow = totalMaxScore - 100;
+            var message = "Total max score should be equal to 100<br/>";
+            if (overflow > 0)
+                message += "You need to add " + overflow + " points to score<br/>";
+            else
+                message += "You need to remove " + (-overflow) + " points from score<br/>";
+
+            $("#maxScoreInvalid").html(message);
         }
         else {
             $("#maxScoreInvalid").text("");
