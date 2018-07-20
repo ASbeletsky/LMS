@@ -29,6 +29,22 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public IActionResult Create()
         {
+            TestTemplateDTO template;
+            if (TempData["EditTemplate0"] is string templateStr)
+            {
+                template = JsonConvert.DeserializeObject<TestTemplateDTO>(templateStr);
+            }
+            else
+            {
+                template = new TestTemplateDTO
+                {
+                    Levels =
+                    {
+                        new TestTemplateLevelDTO()
+                    }
+                };
+            }
+            
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
             {
                 Value = t.Id.ToString(),
@@ -40,13 +56,7 @@ namespace LMS.Admin.Web.Controllers
                 Text = t.Title
             });
 
-            return View(new TestTemplateDTO()
-            {
-                Levels =
-                {
-                    new TestTemplateLevelDTO()
-                }
-            });
+            return View(template);
         }
 
         [HttpPost]
@@ -62,9 +72,15 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public IActionResult Edit(int id)
         {
-            var template = TempData["EditTemplate" + id] is string templateStr
-                ? JsonConvert.DeserializeObject<TestTemplateDTO>(templateStr)
-                : testTemplateService.GetById(id);
+            TestTemplateDTO template;
+            if (TempData["EditTemplate0"] is string templateStr)
+            {
+                template = JsonConvert.DeserializeObject<TestTemplateDTO>(templateStr);
+            }
+            else
+            {
+                template = testTemplateService.GetById(id);
+            }
 
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
             {
@@ -88,7 +104,7 @@ namespace LMS.Admin.Web.Controllers
             template.Levels.Add(new TestTemplateLevelDTO());
             TempData["EditTemplate" + template.Id] = JsonConvert.SerializeObject(template);
 
-            return RedirectToAction("Edit", new { id = template.Id });
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
         [HttpPost]
