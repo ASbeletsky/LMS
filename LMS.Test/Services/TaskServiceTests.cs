@@ -322,29 +322,13 @@ namespace LMS.Test.Services
             {
                 MinComplexity = 3,
                 MaxComplexity = 5,
-                TaskTypes = new List<TaskTypeDTO>
-                {
-                    new TaskTypeDTO
-                    {
-                        Id = 2
-                    }
-                },
-                Categories = new List<CategoryDTO>
-                {
-                    new CategoryDTO
-                    {
-                        Id = 3
-                    },
-                    new CategoryDTO
-                    {
-                        Id = 2
-                    }
-                }
+                TaskTypeIds = new List<int> { 2 },
+                CategoryIds = new List<int> { 3, 2 }
             };
             
             var service = new TaskService(unitOfWorkMock.Object, mapper);
             var tasks = service.GetByFilter(level).ToArray();
-            Assert.Equal(1, tasks.Length);
+            Assert.Single(tasks);
         }
     }
 }

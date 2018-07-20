@@ -7,7 +7,7 @@
             .toArray()
             .reduce(function (a, b) { return a + b; }, 0);
 
-        if (totalMaxScore != 100) {
+        if (totalMaxScore !== 100) {
             $("#maxScoreInvalid").text("Total max score must be equal to 100");
         }
         else {
@@ -68,12 +68,12 @@
         var index = $(level).attr("data-index");
         level.remove();
         while (true) {
-            var level = $(".level[data-index=" + (++index) + "]");
-            if (level.length == 0)
+            var nextLevel = $(".level[data-index=" + (++index) + "]");
+            if (nextLevel.length === 0)
                 break;
             var newIndex = index - 1;
-            level.find(".card-header a").text("Level #" + (newIndex + 1));
-            level.attr("data-index", newIndex);
+            nextLevel.find(".card-header a").text("Level #" + (newIndex + 1));
+            nextLevel.attr("data-index", newIndex);
             $("[name^='Levels[" + index + "]'")
                 .each(function () {
                     $(this).attr("name", $(this).attr("name").replace("Levels[" + index + "]", "Levels[" + newIndex + "]"))
