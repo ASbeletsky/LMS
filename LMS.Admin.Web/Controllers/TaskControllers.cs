@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Admin.Web.Controllers
 {
+    [Authorize(Roles = "admin, moderator, reviewer")]
     public class TaskController : Controller
     {
         private readonly TaskService taskService;
@@ -28,6 +30,7 @@ namespace LMS.Admin.Web.Controllers
             dtoMapper = mapper;
         }
 
+        [Authorize(Roles = "admin, moderator")]
         public IActionResult Create()
         {
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
@@ -38,13 +41,15 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Create([FromForm]TaskDTO task)
         {
             await taskService.CreateAsync(task);
 
             return RedirectToAction(nameof(List));
         }
-       
+
+        [Authorize(Roles = "admin, moderator")]
         public IActionResult Edit(int id)
         {
             var task = taskService.GetById(id);
@@ -56,6 +61,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit([FromForm]TaskDTO task)
         {
             await taskService.UpdateAsync(task);
@@ -79,6 +85,7 @@ namespace LMS.Admin.Web.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Delete(int id)
         {
             await taskService.MarkAsDeletedByIdAsync(id);

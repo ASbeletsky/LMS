@@ -5,6 +5,8 @@ using LMS.Admin.Web.ViewModels;
 using LMS.Identity;
 using LMS.Entities;
 using System;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -18,12 +20,21 @@ namespace LMS.Admin.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult AccessDenied(Uri ReturnUrl)
         {
             return View();
         }
 
+        [HttpGet]
+        [Authorize(Roles = "admin")]
+        public IActionResult Register()
+        {
+            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name});
+            return View();
+        }
+
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -32,8 +43,8 @@ namespace LMS.Admin.Web.Controllers
                 // add user
                 try
                 {
-                    var result = await _identityService.Register(user, model.Password);
-                    return RedirectToAction("Index", "Home");
+                    await _identityService.Register(user, model.Password, model.Role);
+                    return View(model);
                 }
                 catch(AggregateException e)
                 {
@@ -41,6 +52,7 @@ namespace LMS.Admin.Web.Controllers
                         ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
+            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
             return View(model);
         }
 
@@ -56,19 +68,18 @@ namespace LMS.Admin.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result =
-                await _identityService.LogIn(model.UserName, model.Password, model.RememberMe);
+                try
+                {
+                    await _identityService.LogIn(model.UserName, model.Password, model.RememberMe);
 
-                if (result == true)
-                {   
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
                         return RedirectToAction("Index", "Home");
                 }
-                else
+                catch (Exception e)
                 {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
+                        ModelState.AddModelError(string.Empty, e.Message);
                 }
             }
             return View(model);

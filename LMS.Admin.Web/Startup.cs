@@ -32,8 +32,8 @@ namespace LMS.Admin.Web
           
             return new AutofacServiceProvider(container);
         }
-        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -53,6 +53,7 @@ namespace LMS.Admin.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            RoleInitializer.CreateUsersRoles(serviceProvider).GetAwaiter().GetResult();
         }
     }
 }
