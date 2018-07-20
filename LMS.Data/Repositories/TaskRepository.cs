@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using LMS.Entities;
 using LMS.Interfaces;
+using System.Linq.Expressions;
 
 namespace LMS.Data.Repositories
 {
@@ -30,7 +31,7 @@ namespace LMS.Data.Repositories
             }
         }
 
-        public IEnumerable<Task> Filter(Func<Task, bool> predicate)
+        public IEnumerable<Task> Filter(Expression<Func<Task, bool>> predicate)
         {
             return set
                 .Include(t => t.Category)
@@ -38,7 +39,7 @@ namespace LMS.Data.Repositories
                 .Where(predicate);
         }
 
-        public Task Find(Func<Task, bool> predicate)
+        public Task Find(Expression<Func<Task, bool>> predicate)
         {
             return set
                 .Include(t => t.Category)

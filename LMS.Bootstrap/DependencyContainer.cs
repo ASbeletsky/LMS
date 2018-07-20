@@ -1,9 +1,12 @@
 ﻿using Autofac;
 using Autofac.Core;
+using LMS.Identity;
 using LMS.Data;
 using LMS.Data.Migrations;
 using LMS.Interfaces;
 using LMS.Business.Services;
+using LMS.Identity.Repositories;
+using LMS.Entities;
 
 namespace LMS.Bootstrap
 {
@@ -26,7 +29,16 @@ namespace LMS.Bootstrap
                     (pi, ctx) => ctx.Resolve<IConfigReader>().GetConnectionString("DefaultConnection")))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
+            builder.RegisterType<UserRepository>()
+                .As<IRepositoryAsync<User>>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<EntityFrameworkUnitOfWork>()
+                .As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<IdentityService>()
+                .AsSelf()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<TaskService>()

@@ -19,6 +19,8 @@
   <ItemGroup>
     <ProjectReference Include="..\LMS.Bootstrap\LMS.Bootstrap.csproj" />
     <ProjectReference Include="..\LMS.Business\LMS.Business.csproj" />
+    <ProjectReference Include="..\LMS.Entities\LMS.Entities.csproj" />
+    <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
     <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
   </ItemGroup>

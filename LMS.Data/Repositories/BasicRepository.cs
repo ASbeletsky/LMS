@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using LMS.Interfaces;
@@ -30,12 +31,12 @@ namespace LMS.Data.Repositories
             }
         }
 
-        public IEnumerable<T> Filter(Func<T, bool> predicate)
+        public IEnumerable<T> Filter(Expression<Func<T, bool>> predicate)
         {
             return set.Where(predicate);
         }
 
-        public T Find(Func<T, bool> predicate)
+        public T Find(Expression<Func<T, bool>> predicate)
         {
             return set.FirstOrDefault(predicate);
         }

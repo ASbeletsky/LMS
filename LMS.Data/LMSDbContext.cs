@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LMS.Entities;
 
 namespace LMS.Data
 {
-    public class LMSDbContext : DbContext
+    public class LMSDbContext : IdentityDbContext<User>
     {
         private readonly string connectionString;
 
@@ -30,7 +33,7 @@ namespace LMS.Data
             modelBuilder.Entity<Category>()
                 .Property(c => c.Title)
                 .IsRequired();
-            
+
             modelBuilder.Entity<Task>()
                 .HasKey(t => t.Id);
             modelBuilder.Entity<Task>()
@@ -92,6 +95,10 @@ namespace LMS.Data
             modelBuilder.Entity<LevelTaskType>()
                 .HasOne(c => c.TaskType)
                 .WithMany();
+
+            modelBuilder.Entity<User>();
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -2,12 +2,14 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 using LMS.Dto;
 using LMS.Business.Services;
 using Newtonsoft.Json;
 
 namespace LMS.Admin.Web.Controllers
 {
+    [Authorize(Roles = "admin, moderator, reviewer")]
     public class TestTemplateController : Controller
     {
         private readonly TestTemplateService testTemplateService;
@@ -24,6 +26,7 @@ namespace LMS.Admin.Web.Controllers
             categoryService = taskCategories;
         }
 
+        [Authorize(Roles = "admin, moderator")]
         public IActionResult Create()
         {
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
@@ -48,6 +51,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Create([FromForm] TestTemplateDTO template)
         {
             await testTemplateService.CreateAsync(template);
@@ -55,6 +59,7 @@ namespace LMS.Admin.Web.Controllers
             return RedirectToAction(nameof(List));
         }
 
+        [Authorize(Roles = "admin, moderator")]
         public IActionResult Edit(int id)
         {
             var template = TempData["EditTemplate" + id] is string templateStr
@@ -77,6 +82,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public IActionResult NewLevel([FromForm] TestTemplateDTO template)
         {
             template.Levels.Add(new TestTemplateLevelDTO());
@@ -87,6 +93,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit([FromForm] TestTemplateDTO template)
         {
             await testTemplateService.UpdateAsync(template);
@@ -103,6 +110,7 @@ namespace LMS.Admin.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Delete(int id)
         {
             await testTemplateService.DeleteByIdAsync(id);
