@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Client.Web.Models;
-using LMS.Data.Models;
+using LMS.Entities;
 namespace LMS.Client.Web.Controllers
 {
     public class HomeController : Controller
@@ -14,71 +13,64 @@ namespace LMS.Client.Web.Controllers
         {
                 Id = 1,
                 Title = "Тест для принятия на работу",
-                Category = new TestCategory { Id = 1, Title = ".Net" },
+                TestCategory = new Category { Id = 1, Title = ".Net" },
                 Duration = new System.TimeSpan(1, 0, 0),
-                Problems = new List<Data.Models.Task>
+                Problems = new List<Task>
                 {
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 1,
                         Complexity = 2,
                         Content = "Будет true or false?",
-                        Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                        Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "True", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "False", IsRight = false, Problem = new Data.Models.Task() } }
+                        Type = new TaskType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "True", IsRight = true, Problem = new Task() }, new Choice { Id = 2, Answer = "False", IsRight = false, Problem = new Task() } }
                     },
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 3,
                         Complexity = 2,
                         Content = "Доброе утро?",
-                        Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                        Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new Data.Models.Task() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Data.Models.Task() } }
+                        Type = new TaskType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new Task() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new Task() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Task() } }
                     },
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 2,
                         Complexity = 2,
                         Content = "Как дела?",
-                        Type = new ProblemType { Id = 1, Title = "Тест на выбор нескольких ответов" },
-                        Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "Плохо", IsRight = false, Problem = new Data.Models.Task() }, new Choice { Id = 3, Answer = "Норм", IsRight = true, Problem = new Data.Models.Task() } }
+                        Type = new TaskType { Id = 1, Title = "Тест на выбор нескольких ответов" },
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new Task() }, new Choice { Id = 2, Answer = "Плохо", IsRight = false, Problem = new Task() }, new Choice { Id = 3, Answer = "Норм", IsRight = true, Problem = new Task() } }
                     },
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 4,
                         Complexity = 2,
                         Content = "Франция чемпион?",
-                        Type = new ProblemType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                        Test = new Test(),
-                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new Data.Models.Task() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new Data.Models.Task() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Data.Models.Task() } }
+                        Type = new TaskType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
+                        Choices = new List<Choice> { new Choice { Id = 1, Answer = "Да", IsRight = true, Problem = new Task() }, new Choice { Id = 2, Answer = "Нет", IsRight = false, Problem = new Task() }, new Choice { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Task() } }
                     },
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 5,
                         Complexity = 2,
                         Content = "Объясните что такое полиморфизм",
-                        Type = new ProblemType { Id = 2, Title = "Тест на написание развёрнутого ответа" },
-                        Test = new Test(),
+                        Type = new TaskType { Id = 2, Title = "Тест на написание развёрнутого ответа" },
                         Choices = new List<Choice>()
                     },
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 6,
                         Complexity = 2,
                         Content = "Напишите Hello World",
-                        Type = new ProblemType { Id = 3, Title = "Тест на написание кода" },
-                        Test = new Test(),
+                        Type = new TaskType { Id = 3, Title = "Тест на написание кода" },
                         Choices = new List<Choice>()
                     },
-                    new Data.Models.Task
+                    new Task
                     {
                         Id = 7,
                         Complexity = 2,
                         Content = "Покажите схему заказа в Маке",
-                        Type = new ProblemType { Id = 4, Title = "Тест на диаграмму" },
-                        Test = new Test(),
+                        Type = new TaskType { Id = 4, Title = "Тест на диаграмму" },
                         Choices = new List<Choice>()
                     }
                 }
@@ -115,7 +107,7 @@ namespace LMS.Client.Web.Controllers
             info.OurTask = test.Problems[number];
             info.CurrentQuestionNumber = number;
             info.TaskCount = test.Problems.Count;
-            info.Category = test.Category.Title;
+            info.Category = test.TestCategory.Title;
             switch (info.OurTask.Type.Id)
             {
                 case 0:

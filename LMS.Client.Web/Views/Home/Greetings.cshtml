@@ -1,4 +1,4 @@
-﻿@using LMS.Data.Models;
+﻿@using LMS.Entities;
 @model Test
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,11 +10,11 @@
     <h4>
         <strong>@Model.Title</strong>
         <br><br>
-        <strong>Тема теста: @Model.Category.Title</strong>
+        <strong>Тема теста: @Model.TestCategory.Title</strong>
         <br><br>
         <strong>Время на тест: @Model.Duration</strong>
         <br><br>
-        <strong>Количество вопросов: @Model.Problems.Capacity</strong>
+        <strong>Количество вопросов: @Model.Problems.Count</strong>
     </h4>
     <span>
         При нажатии на кнопку "Старт" запуститься таймер, по истечению которого тест завершится. <br>

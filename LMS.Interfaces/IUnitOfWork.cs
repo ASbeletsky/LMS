@@ -1,9 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using LMS.Entities;
 
 namespace LMS.Interfaces
 {
     public interface IUnitOfWork
     {
-        Task SaveAsync();
+        IRepositoryAsync<User> UserRepository { get;}
+        IRepository<Category> Categories { get; }
+        IRepository<Task> Tasks { get; }
+        IRepository<TaskType> TaskTypes { get; }
+
+        System.Threading.Tasks.Task SaveAsync();
     }
 }
