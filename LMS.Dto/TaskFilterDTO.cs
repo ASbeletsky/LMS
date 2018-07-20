@@ -18,6 +18,7 @@ namespace LMS.Dto
         public int MaxComplexity { get; set; } = TaskDTO.MaxComplexity;
 
         [Display(Name = "Complexity range")]
+        [Required(ErrorMessage = "ComplexityRange must be defined")]
         public string ComplexityRange
         {
             get => $"{MinComplexity},{MaxComplexity}";
@@ -30,9 +31,11 @@ namespace LMS.Dto
         }
         
         [Display(Name = "Task types")]
+        [Required(ErrorMessage = "TaskTypeIds cannot be empty")]
         public IList<int> TaskTypeIds { get; set; }
 
         [Display(Name = "Categories")]
+        [Required(ErrorMessage = "CategoryIds cannot be empty")]
         public IList<int> CategoryIds { get; set; }
     }
 }
