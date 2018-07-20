@@ -9,5 +9,6 @@ namespace LMS.Data.Models
         public Task OurTask { get; set; }
         public int CurrentQuestionNumber { get; set; }
         public int TaskCount { get; set; }
+        public string Category { get; set; }
     }
 }
