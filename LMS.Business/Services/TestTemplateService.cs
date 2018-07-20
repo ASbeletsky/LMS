@@ -48,6 +48,18 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(testTemplate));
             }
+            if (!testTemplate.Levels.Any())
+            {
+                throw new ArgumentException("Template should contains at least one level");
+            }
+            if (!testTemplate.Levels.All(l => !l.Filter.TaskTypeIds.Any()))
+            {
+                throw new ArgumentException("Every level should contains at least one task type");
+            }
+            if (!testTemplate.Levels.All(l => !l.Filter.CategoryIds.Any()))
+            {
+                throw new ArgumentException("Every level should contains at least one category");
+            }
 
             var updatedTest = mapper.Map<TestTemplateDTO, TestTemplate>(testTemplate);
 
@@ -61,6 +73,18 @@ namespace LMS.Business.Services
             if (testTemplate == null)
             {
                 throw new ArgumentNullException(nameof(testTemplate));
+            }
+            if (!testTemplate.Levels.Any())
+            {
+                throw new ArgumentException("Template should contains at least one level");
+            }
+            if (!testTemplate.Levels.All(l => !l.Filter.TaskTypeIds.Any()))
+            {
+                throw new ArgumentException("Every level should contains at least one task type");
+            }
+            if (!testTemplate.Levels.All(l => !l.Filter.CategoryIds.Any()))
+            {
+                throw new ArgumentException("Every level should contains at least one category");
             }
 
             var updatedTest = mapper.Map<TestTemplateDTO, TestTemplate>(testTemplate);
