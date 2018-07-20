@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using LMS.Entities;
@@ -10,41 +11,33 @@ namespace LMS.Data.Repositories
     public class TestTemplateRepository : IRepository<TestTemplate>
     {
         private readonly DbSet<TestTemplate> set;
-        private readonly LMSDbContext dbContext;
-                
-        
+
         public TestTemplateRepository(LMSDbContext context)
         {
-            dbContext = context;
             set = context.Set<TestTemplate>();
         }
 
         public IEnumerable<TestTemplate> GetAll()
         {
-            return set
-                .Include(t => t.Levels)
-                .ThenInclude(l => l.Categories)
-                .ThenInclude(c => c.Category)
-                .Include(t => t.Levels)
-                .ThenInclude(l => l.TaskTypes)
-                .ThenInclude(t => t.TaskType);
+            return GetAllQuery();
         }
 
-        public IEnumerable<TestTemplate> Filter(Func<TestTemplate, bool> predicate)
+        public IEnumerable<TestTemplate> Filter(Expression<Func<TestTemplate, bool>> predicate)
         {
-            return GetAll()
+            return GetAllQuery()
                 .Where(predicate);
         }
 
         public TestTemplate Get(int id)
         {
-            return Filter(t => t.Id == id)
-                .FirstOrDefault();
+            return GetAllQuery()
+                .FirstOrDefault(t => t.Id == id);
         }
 
-        public TestTemplate Find(Func<TestTemplate, bool> predicate)
+        public TestTemplate Find(Expression<Func<TestTemplate, bool>> predicate)
         {
-            return Filter(predicate)
+            return GetAllQuery()
+                .Where(predicate)
                 .FirstOrDefault();
         }
 
@@ -65,6 +58,17 @@ namespace LMS.Data.Repositories
             {
                 set.Remove(item);
             }
+        }
+
+        private IQueryable<TestTemplate> GetAllQuery()
+        {
+            return set
+                .Include(t => t.Levels)
+                .ThenInclude(l => l.Categories)
+                .ThenInclude(c => c.Category)
+                .Include(t => t.Levels)
+                .ThenInclude(l => l.TaskTypes)
+                .ThenInclude(t => t.TaskType);
         }
     }
 }
