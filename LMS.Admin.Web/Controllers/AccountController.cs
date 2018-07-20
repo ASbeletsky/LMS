@@ -43,7 +43,7 @@ namespace LMS.Admin.Web.Controllers
                 // add user
                 try
                 {
-                    var result = await _identityService.Register(user, model.Password, model.Role);
+                    await _identityService.Register(user, model.Password, model.Role);
                     return View(model);
                 }
                 catch(AggregateException e)
@@ -70,8 +70,7 @@ namespace LMS.Admin.Web.Controllers
             {
                 try
                 {
-                    var result =
-                await _identityService.LogIn(model.UserName, model.Password, model.RememberMe);
+                    await _identityService.LogIn(model.UserName, model.Password, model.RememberMe);
 
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);

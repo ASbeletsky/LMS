@@ -15,21 +15,21 @@ namespace LMS.Identity
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 
-            if (!await roleManager.RoleExistsAsync("admin"))
+            if (!await roleManager.RoleExistsAsync(Roles.Admin))
             {
-                await roleManager.CreateAsync(new IdentityRole("admin"));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
             }
-            if (!await roleManager.RoleExistsAsync("moderator"))
+            if (!await roleManager.RoleExistsAsync(Roles.Moderator))
             {
-                await roleManager.CreateAsync(new IdentityRole("moderator"));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Moderator));
             }
-            if (!await roleManager.RoleExistsAsync("reviewer"))
+            if (!await roleManager.RoleExistsAsync(Roles.Reviewer))
             {
-                await roleManager.CreateAsync(new IdentityRole("reviewer"));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Reviewer));
             }
-            if (!await roleManager.RoleExistsAsync("examinee"))
+            if (!await roleManager.RoleExistsAsync(Roles.Examinee))
             {
-                await roleManager.CreateAsync(new IdentityRole("examinee"));
+                await roleManager.CreateAsync(new IdentityRole(Roles.Examinee));
             }
 
             if (await userManager.FindByNameAsync(adminUserName) == null)
@@ -37,7 +37,7 @@ namespace LMS.Identity
                 var admin = new User {UserName = adminUserName };
                 var result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
-                    await userManager.AddToRoleAsync(admin, "admin");
+                    await userManager.AddToRoleAsync(admin, Roles.Admin);
             }
         }
     }

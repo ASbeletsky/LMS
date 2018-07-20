@@ -16,7 +16,13 @@ namespace LMS.Identity
                 opts.Password.RequireUppercase = false;
                 opts.Password.RequiredLength = 3;
             })
-             .AddEntityFrameworkStores<LMSDbContext>();
+            .AddEntityFrameworkStores<LMSDbContext>()
+            .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Account/Login";
+            });
         }
     }
 }
