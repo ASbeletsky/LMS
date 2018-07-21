@@ -103,13 +103,19 @@ namespace LMS.Business.Services
                 .Select(tuple =>
                 {
                     var (dto, entity) = tuple;
+                    if (entity.Levels.Count == 0)
+                    {
+                        return dto;
+                    }
+
                     dto.AvgComplexity = entity.Levels.Average(l => (l.MaxComplexity + l.MinComplexity) / 2);
                     dto.Tasks = entity.Levels
                         .Select(level =>
                         {
                             var filter = mapper.Map<TestTemplateLevel, TestTemplateLevelDTO>(level).Filter;
                             var types = mapper
-                                .Map<IEnumerable<LevelTaskType>, IEnumerable<TaskTypeDTO>>(level.TaskTypes).ToList();
+                                .Map<IEnumerable<LevelTaskType>, IEnumerable<TaskTypeDTO>>(level.TaskTypes)
+                                .ToList();
                             return new TaskTemplateDTO
                             {
                                 Types = types,
