@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LMS.Entities
 {
-    public class TestTemplateLevel
+    public class TestTemplateLevel : IEquatable<TestTemplateLevel>
     {
         public TestTemplateLevel()
         {
@@ -23,5 +24,10 @@ namespace LMS.Entities
         public ICollection<LevelCategory> Categories { get; set; }
         
         public int TestTemplateId { get; set; }
+
+        public bool Equals(TestTemplateLevel other)
+        {
+            return Id == other?.Id;
+        }
     }
 }

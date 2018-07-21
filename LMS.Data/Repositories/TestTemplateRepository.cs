@@ -10,11 +10,11 @@ namespace LMS.Data.Repositories
 {
     public class TestTemplateRepository : IRepository<TestTemplate>
     {
-        private readonly DbSet<TestTemplate> set;
+        private readonly DbContext dbContext;
 
-        public TestTemplateRepository(LMSDbContext context)
+        public TestTemplateRepository(DbContext context)
         {
-            set = context.Set<TestTemplate>();
+            dbContext = context;
         }
 
         public IEnumerable<TestTemplate> GetAll()
@@ -43,26 +43,49 @@ namespace LMS.Data.Repositories
 
         public void Create(TestTemplate item)
         {
-            set.Add(item);
+            dbContext.Set<TestTemplate>().Add(item);
         }
 
         public void Update(TestTemplate item)
         {
-            set.Update(item);
+            var levelsSet = dbContext.Set<TestTemplateLevel>();
+            var categoriesSet = dbContext.Set<LevelCategory>();
+            var typesSet = dbContext.Set<LevelTaskType>();
+
+            var entry = dbContext.Set<TestTemplate>().Update(item);
+
+            foreach (var level in item.Levels)
+            {
+                level.TestTemplateId = item.Id;
+
+                var newLevelTypes = level.TaskTypes.ToArray();
+                var oldLevelTypes = typesSet.Where(t => t.TestTemplateLevelId == level.Id).ToArray();
+                typesSet.RemoveRange(oldLevelTypes.Except(newLevelTypes));
+                typesSet.AddRange(newLevelTypes.Except(oldLevelTypes));
+
+                var newLevelCategories = level.Categories.ToArray();
+                var oldLevelCategories = categoriesSet.Where(t => t.TestTemplateLevelId == level.Id).ToArray();
+                categoriesSet.RemoveRange(oldLevelCategories.Except(newLevelCategories));
+                categoriesSet.AddRange(newLevelCategories.Except(oldLevelCategories));
+            }
+
+            var newLevels = item.Levels.ToArray();
+            var toRemoveLevels = levelsSet.Where(l => l.TestTemplateId == item.Id).Except(newLevels);
+            levelsSet.RemoveRange(toRemoveLevels);
         }
 
         public void Delete(int id)
         {
-            var item = set.Find(id);
+            var item = dbContext.Set<TestTemplate>().Find(id);
             if (item != null)
             {
-                set.Remove(item);
+                dbContext.Set<TestTemplate>().Remove(item);
             }
         }
 
         private IQueryable<TestTemplate> GetAllQuery()
         {
-            return set
+            return dbContext.Set<TestTemplate>()
                 .Include(t => t.Levels)
                 .ThenInclude(l => l.Categories)
                 .ThenInclude(c => c.Category)
