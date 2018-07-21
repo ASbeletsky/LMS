@@ -4,11 +4,11 @@
     string AppendItems(ICollection<MenuItemViewModel> items, int layer = 1)
     {
         var result = "";
+        layer++;
         foreach (var item in items)
         {
             if (item.Any())
             {
-                layer++;
                 var collapseId = "collapseComponents" + idGenerator.Next();
 
                 result += $"<li class='nav-item' data-toggle='tooltip' data-placement='right' title='{item.Title}'>";
