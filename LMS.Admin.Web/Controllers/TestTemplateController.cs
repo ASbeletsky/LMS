@@ -73,7 +73,7 @@ namespace LMS.Admin.Web.Controllers
         public IActionResult Edit(int id)
         {
             TestTemplateDTO template;
-            if (TempData["EditTemplate0"] is string templateStr)
+            if (TempData["EditTemplate" + id] is string templateStr)
             {
                 template = JsonConvert.DeserializeObject<TestTemplateDTO>(templateStr);
             }
