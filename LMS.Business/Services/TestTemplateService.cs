@@ -10,12 +10,12 @@ namespace LMS.Business.Services
 {
     public class TestTemplateService : BaseService
     {
-        private readonly TaskService taskService;
+        private readonly ITaskSource taskSource;
 
-        public TestTemplateService(TaskService taskService, IUnitOfWork unitOfWork, IMapper mapper)
+        public TestTemplateService(ITaskSource taskSource, IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)
         {
-            this.taskService = taskService;
+            this.taskSource = taskSource;
         }
 
         public TestTemplateDTO GetById(int id)
@@ -30,7 +30,7 @@ namespace LMS.Business.Services
 
             foreach (var level in templateDto.Levels)
             {
-                level.ValidTaskCount = taskService.GetByFilter(level.Filter).Count();
+                level.ValidTaskCount = taskSource.GetByFilter(level.Filter).Count();
             }
 
             return templateDto;
@@ -119,7 +119,7 @@ namespace LMS.Business.Services
                             return new TaskTemplateDTO
                             {
                                 Types = types,
-                                ValidTaskCount = taskService.GetByFilter(filter).Count()
+                                ValidTaskCount = taskSource.GetByFilter(filter).Count()
                             };
                         })
                         .ToList();

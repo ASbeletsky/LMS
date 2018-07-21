@@ -7,7 +7,7 @@ using LMS.Interfaces;
 
 namespace LMS.Business.Services
 {
-    public class TaskService : BaseService
+    public class TaskService : BaseService, ITaskSource
     {
         public TaskService(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)
@@ -102,7 +102,7 @@ namespace LMS.Business.Services
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }
 
-        public IEnumerable<TaskDTO> GetByFilter(TaskFilterDTO filter)
+        public virtual IEnumerable<TaskDTO> GetByFilter(TaskFilterDTO filter)
         {
             var tasks = unitOfWork.Tasks
                 .GetAll()

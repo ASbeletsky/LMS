@@ -42,6 +42,7 @@ namespace LMS.Bootstrap
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<TaskService>()
+                .As<ITaskSource>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
