@@ -6,14 +6,14 @@
             .map(function () { return parseInt($(this).val()) })
             .toArray()
             .reduce(function (a, b) { return a + b; }, 0);
-
+        
         if (totalMaxScore !== 100) {
             var overflow = totalMaxScore - 100;
             var message = "Total max score should be equal to 100<br/>";
             if (overflow > 0)
-                message += "You need to add " + overflow + " points to score<br/>";
+                message += "You need to remove " + overflow + " points from score<br/>";
             else
-                message += "You need to remove " + (-overflow) + " points from score<br/>";
+                message += "You need to add " + (-overflow) + " points to score<br/>";
 
             $("#maxScoreInvalid").html(message);
         }

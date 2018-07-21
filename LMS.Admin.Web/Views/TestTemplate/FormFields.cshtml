@@ -88,11 +88,12 @@
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].Filter.CategoryIds" class="control-label"></label>
-                                <select onchange="testTemplate.refreshLevel(@index)" multiple asp-for="Levels[index].Filter.CategoryIds" asp-items="@categories" data-live-search="true" class="form-control selectpicker"></select>
+                                <select required onchange="testTemplate.refreshLevel(@index)" multiple asp-for="Levels[index].Filter.CategoryIds" asp-items="@categories" data-live-search="true" class="form-control selectpicker"></select>
+                                <span asp-validation-for="Levels[index].Filter.CategoryIds" class="text-danger"></span>
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].Filter.TaskTypeIds" class="control-label"></label>
-                                <select onchange="testTemplate.refreshLevel(@index)" multiple asp-for="Levels[index].Filter.TaskTypeIds" asp-items="@types" class="form-control selectpicker"></select>
+                                <select required onchange="testTemplate.refreshLevel(@index)" multiple asp-for="Levels[index].Filter.TaskTypeIds" asp-items="@types" class="form-control selectpicker"></select>
                                 <span asp-validation-for="Levels[index].Filter.TaskTypeIds" class="text-danger"></span>
                             </div>
                         </div>

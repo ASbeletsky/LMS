@@ -31,11 +31,11 @@ namespace LMS.Dto
         }
         
         [Display(Name = "Task types")]
-        [Required(ErrorMessage = "TaskTypeIds cannot be empty")]
+        [Required(ErrorMessage = "TaskTypes cannot be empty")]
         public IList<int> TaskTypeIds { get; set; }
 
         [Display(Name = "Categories")]
-        [Required(ErrorMessage = "CategoryIds cannot be empty")]
+        [Required(ErrorMessage = "Categories cannot be empty")]
         public IList<int> CategoryIds { get; set; }
     }
 }
