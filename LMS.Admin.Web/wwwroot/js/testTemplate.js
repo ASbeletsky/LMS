@@ -1,12 +1,12 @@
 ﻿var testTemplate = (function () {
     this.refreshByIdTimers = [];
 
-    this.maxScoreChanged = function() {
+    this.maxScoreChanged = function () {
         var totalMaxScore = $(".level input[name$='.MaxScore']")
             .map(function () { return parseInt($(this).val()) })
             .toArray()
             .reduce(function (a, b) { return a + b; }, 0);
-        
+
         if (totalMaxScore !== 100) {
             var overflow = totalMaxScore - 100;
             var message = "Total max score should be equal to 100<br/>";
@@ -22,8 +22,8 @@
         }
     }
 
-    this.updateScorePerTask = function(index) {
-        maxScoreChanged();
+    this.updateScorePerTask = function (index) {
+        this.maxScoreChanged();
 
         var maxScore = $("input[name='Levels[" + index + "].MaxScore']").val();
         var count = $("input[name='Levels[" + index + "].Count']").val();
@@ -33,18 +33,18 @@
         $("input[name='Levels[" + index + "].ScorePerTask']").val(scorePerTask);
     }
 
-    this.complexityChanged = function(index) {
-        refreshLevel(index);
+    this.complexityChanged = function (index) {
+        this.refreshLevel(index);
 
         var complexity = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").val().replace(',', '-');
         $("#levelComplexityLabel" + index).text(complexity);
     }
 
-    this.refreshLevel = function(index) {
-        if (refreshByIdTimers[index]) {
-            clearTimeout(refreshByIdTimers[index]);
+    this.refreshLevel = function (index) {
+        if (this.refreshByIdTimers[index]) {
+            clearTimeout(this.refreshByIdTimers[index]);
         }
-        refreshByIdTimers[index] = setTimeout(function () {
+        this.refreshByIdTimers[index] = setTimeout(function () {
             var complexityRange = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").attr("value");
             var selectedCategories = $("select[name='Levels[" + index + "].Filter.CategoryIds']")
                 .val()
@@ -71,7 +71,7 @@
             500);
     }
 
-    this.removeLevel = function(level) {
+    this.removeLevel = function (level) {
         var index = $(level).attr("data-index");
         level.remove();
         while (true) {
@@ -85,6 +85,12 @@
                 .each(function () {
                     $(this).attr("name", $(this).attr("name").replace("Levels[" + index + "]", "Levels[" + newIndex + "]"))
                 });
+        }
+        this.maxScoreChanged();
+
+        var levels = $(".level");
+        if (levels.length == 1) {
+            levels.find(".level-remove").remove();
         }
     }
 

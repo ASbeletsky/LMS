@@ -13,7 +13,7 @@ namespace LMS.Dto
 
         public const int MaxLevelScore = 100;
         public const int MaxTaskPerLevelCount = 30;
-        
+
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Title must be defined")]
@@ -22,6 +22,7 @@ namespace LMS.Dto
         [Display(Name = "Avg. Complexity")]
         public int AvgComplexity { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:h\\:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan Duration { get; set; }
 
         [Required(ErrorMessage = "Description must be defined")]
