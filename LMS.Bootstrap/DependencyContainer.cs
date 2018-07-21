@@ -37,24 +37,13 @@ namespace LMS.Bootstrap
                 .As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterAssemblyTypes(typeof(BaseService).Assembly)
+                .Where(type => type.Name.EndsWith("Service"))
+                .AsSelf()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<IdentityService>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<TaskService>()
-                .As<ITaskSource>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<CategoryService>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<TaskTypeService>()
-                .AsSelf()
-                .InstancePerLifetimeScope();
-            
-            builder.RegisterType<TestTemplateService>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
