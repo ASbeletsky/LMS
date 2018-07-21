@@ -35,7 +35,7 @@ namespace LMS.Bootstrap.Mapping
                         CategoryIds = entity.Categories.Select(t => t.CategoryId).ToList()
                     }));
             CreateMap<TestTemplateLevelDTO, TestTemplateLevel>()
-                .ForMember(m => m.TestTemplateLevelId, m => m.Ignore())
+                .ForMember(m => m.TestTemplateId, m => m.Ignore())
                 .ForMember(m => m.MinComplexity, m => m.MapFrom(l => l.Filter.MinComplexity))
                 .ForMember(m => m.MaxComplexity, m => m.MapFrom(l => l.Filter.MaxComplexity))
                 .ForMember(m => m.Categories, m => m.ResolveUsing(l =>

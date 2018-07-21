@@ -22,6 +22,6 @@ namespace LMS.Entities
         public ICollection<LevelTaskType> TaskTypes { get; set; }
         public ICollection<LevelCategory> Categories { get; set; }
         
-        public int TestTemplateLevelId { get; set; }
+        public int TestTemplateId { get; set; }
     }
 }

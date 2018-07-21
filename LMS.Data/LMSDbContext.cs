@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LMS.Entities;
 
@@ -63,7 +61,7 @@ namespace LMS.Data
             modelBuilder.Entity<TestTemplate>()
                 .HasMany(t => t.Levels)
                 .WithOne()
-                .HasForeignKey(l => l.TestTemplateLevelId);
+                .HasForeignKey(l => l.TestTemplateId);
             
             modelBuilder.Entity<TestTemplateLevel>()
                 .HasKey(l => l.Id);
