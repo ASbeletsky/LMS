@@ -72,11 +72,11 @@
                                 <input onchange="testTemplate.updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].MaxScore" data-slider-value="@Model.Levels[index].MaxScore" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxLevelScore" />
                             </div>
                             <div class="form-group col-12 col-md-6">
-                                <label asp-for="Levels[index].Count" class="control-label"></label>
-                                <label id="@("levelCountLabel" + index)">@Model.Levels[index].Count</label>
+                                <label asp-for="Levels[index].TasksCount" class="control-label"></label>
+                                <label id="@("levelCountLabel" + index)">@Model.Levels[index].TasksCount</label>
                                 <label>/ @TestTemplateDTO.MaxTaskPerLevelCount</label>
                                 <br />
-                                <input onchange="testTemplate.updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].Count" data-slider-value="@Model.Levels[index].Count" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxTaskPerLevelCount" />
+                                <input onchange="testTemplate.updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].TasksCount" data-slider-value="@Model.Levels[index].TasksCount" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxTaskPerLevelCount" />
                             </div>
                         </div>
                         <div class="form-group">

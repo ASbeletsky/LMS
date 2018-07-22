@@ -2,14 +2,17 @@
     this.refreshByIdTimers = [];
 
     this.maxScoreChanged = function () {
-        var totalMaxScore = $(".level input[name$='.MaxScore']")
+        var inputs = $(".level input[name$='.MaxScore']");
+        var totalMaxScore = inputs
             .map(function () { return parseInt($(this).val()) })
             .toArray()
             .reduce(function (a, b) { return a + b; }, 0);
 
-        if (totalMaxScore !== 100) {
-            var overflow = totalMaxScore - 100;
-            var message = "Total max score should be equal to 100<br/>";
+        var requiredValue =  inputs.data("slider-max");
+
+        if (totalMaxScore !== requiredValue) {
+            var overflow = totalMaxScore - requiredValue;
+            var message = "Total max score should be equal to " + requiredValue + "<br/>";
             if (overflow > 0)
                 message += "You need to remove " + overflow + " points from score<br/>";
             else
@@ -89,7 +92,7 @@
         this.maxScoreChanged();
 
         var levels = $(".level");
-        if (levels.length == 1) {
+        if (levels.length === 1) {
             levels.find(".level-remove").remove();
         }
     }

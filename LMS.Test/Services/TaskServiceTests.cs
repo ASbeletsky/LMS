@@ -100,7 +100,7 @@ namespace LMS.Test.Services
                 IsActive = true,
                 CategoryId = 1,
                 TypeId = 1,
-                Complexity = 1, 
+                Complexity = 1,
                 Content = "Sample"
             };
 
@@ -115,7 +115,7 @@ namespace LMS.Test.Services
             await service.UpdateAsync(newTask);
 
             repositoryMock.Verify(m => m.Get(1));
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(dto => 
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(dto =>
                 dto.IsActive
                 && dto.Content == newTask.Content
                 && dto.Complexity == newTask.Complexity
@@ -183,10 +183,10 @@ namespace LMS.Test.Services
             await service.UpdateAsync(updatedDtoItem);
 
             repositoryMock.Verify(m => m.Get(1));
-            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(t => 
+            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(t =>
                 !t.IsActive && t.Content == oldTask.Content)));
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t => 
-                t.IsActive 
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t =>
+                t.IsActive
                 && t.Content == updatedDtoItem.Content
                 && t.Complexity == updatedDtoItem.Complexity
                 && t.TypeId == updatedDtoItem.TypeId
@@ -255,7 +255,7 @@ namespace LMS.Test.Services
 
             await service.CreateAsync(newTask);
 
-            var createdTask =  service.GetById(1);
+            var createdTask = service.GetById(1);
             Assert.True(createdTask.IsActive);
             Assert.Equal(newTask.IsActive, createdTask.IsActive);
             Assert.Equal(newTask.CategoryId, createdTask.CategoryId);
@@ -314,7 +314,7 @@ namespace LMS.Test.Services
                 new Entities.Task { IsActive = true, Complexity = 9, TypeId = 2, CategoryId = 3},
                 new Entities.Task { IsActive = true, Complexity = 4, TypeId = 2, CategoryId = 3}
             });
-            
+
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
 
@@ -325,9 +325,9 @@ namespace LMS.Test.Services
                 TaskTypeIds = new List<int> { 2 },
                 CategoryIds = new List<int> { 3, 2 }
             };
-            
+
             var service = new TaskService(unitOfWorkMock.Object, mapper);
-            var tasks = service.GetByFilter(level).ToArray();
+            var tasks = service.Filter(level).ToArray();
             Assert.Single(tasks);
         }
     }

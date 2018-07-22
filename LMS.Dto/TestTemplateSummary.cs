@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
-    public class TestTemplateListItemDTO
+    public class TestTemplateSummary
     {
-        public TestTemplateListItemDTO()
+        public TestTemplateSummary()
         {
-            Categories = new List<CategoryDTO>();
+            Categories = new List<string>();
             Tasks = new List<TaskTemplateDTO>();
         }
-        
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -18,9 +18,9 @@ namespace LMS.Dto
         [Display(Name = "Avg. Complexity")]
         public double AvgComplexity { get; set; }
 
-        public IList<CategoryDTO> Categories { get; set; }
+        public ICollection<string> Categories { get; set; }
 
         [Display(Name = "Levels")]
-        public IList<TaskTemplateDTO> Tasks { get; set; }
+        public ICollection<TaskTemplateDTO> Tasks { get; set; }
     }
 }

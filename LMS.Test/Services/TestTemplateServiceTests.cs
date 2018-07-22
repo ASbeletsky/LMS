@@ -42,7 +42,7 @@ namespace LMS.Test.Services
             unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
 
             var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.GetByFilter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
+            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
 
             var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
 
@@ -51,7 +51,7 @@ namespace LMS.Test.Services
             Assert.Single(actualGet.Levels);
             Assert.Equal(3, actualGet.Levels[0].ValidTaskCount);
             Assert.Single(actualGet.Levels[0].Filter.TaskTypeIds);
-            Assert.Equal(5, actualGet.Levels[0].Filter.TaskTypeIds[0]);
+            Assert.Equal(5, actualGet.Levels[0].Filter.TaskTypeIds.Single());
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
         }
@@ -220,13 +220,13 @@ namespace LMS.Test.Services
             unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
 
             var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.GetByFilter(It.Is<TaskFilterDTO>(l => l.MinComplexity == 5)))
+            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MinComplexity == 5)))
                 .Returns(new TaskDTO[3]);
-            taskServiceMock.Setup(m => m.GetByFilter(It.Is<TaskFilterDTO>(l => l.MaxComplexity == 3)))
+            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MaxComplexity == 3)))
                 .Returns(new TaskDTO[2]);
 
             var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
-            var testTemplateListItems = service.GetListItems().ToArray();
+            var testTemplateListItems = service.GetTemplatesSummary().ToArray();
             Assert.Equal(3, testTemplateListItems.GroupBy(t => t.Id).Count());
             Assert.True(testTemplateListItems.All(t => t.Id.ToString() == t.Title));
             Assert.Empty(testTemplateListItems[0].Tasks);

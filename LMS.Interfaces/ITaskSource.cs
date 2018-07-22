@@ -6,6 +6,6 @@ namespace LMS.Interfaces
     public interface ITaskSource
     {
         IEnumerable<TaskDTO> GetAll(bool includeInactive = false);
-        IEnumerable<TaskDTO> GetByFilter(TaskFilterDTO filder);
+        IEnumerable<TaskDTO> Filter(TaskFilterDTO filter);
     }
 }

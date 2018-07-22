@@ -91,7 +91,7 @@ namespace LMS.Admin.Web.Controllers
         [HttpPost]
         public IActionResult Filter([FromForm]TaskFilterDTO filter)
         {
-            var filtered = taskService.GetByFilter(filter).ToList();
+            var filtered = taskService.Filter(filter).ToList();
             return Json(new
             {
                 tasks = filtered,

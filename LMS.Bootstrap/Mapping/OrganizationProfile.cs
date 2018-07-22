@@ -23,10 +23,10 @@ namespace LMS.Bootstrap.Mapping
                 .ConstructUsing((entity, context) => context.Mapper.Map<TaskType, TaskTypeDTO>(entity.TaskType));
             CreateMap<LevelCategory, CategoryDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<Category, CategoryDTO>(entity.Category));
-            
+
             CreateMap<TestTemplateLevel, TestTemplateLevelDTO>()
                 .ForMember(m => m.ValidTaskCount, m => m.Ignore())
-                .ForMember(m => m.Filter, m => m.ResolveUsing((entity, dto, _, context) =>
+                .ForMember(m => m.Filter, m => m.ResolveUsing(entity =>
                     new TaskFilterDTO
                     {
                         MinComplexity = entity.MinComplexity,
@@ -55,10 +55,14 @@ namespace LMS.Bootstrap.Mapping
                 .ForMember(m => m.AvgComplexity, m => m.Ignore());
             CreateMap<TestTemplateDTO, TestTemplate>();
 
-            CreateMap<TestTemplate, TestTemplateListItemDTO>()
+            CreateMap<TestTemplate, TestTemplateSummary>()
                 .ForMember(m => m.AvgComplexity, m => m.Ignore())
                 .ForMember(m => m.Categories, m => m.ResolveUsing(entity =>
-                    entity.Levels.SelectMany(l => l.Categories).GroupBy(c => c.CategoryId).Select(c => c.First())))
+                    entity.Levels
+                      .SelectMany(l => l.Categories)
+                      .Distinct()
+                      .Select(c => c.Category.Title)
+                      .ToList()))
                 .ForMember(m => m.Tasks, m => m.Ignore());
         }
     }

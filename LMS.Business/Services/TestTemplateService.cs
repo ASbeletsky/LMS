@@ -18,6 +18,17 @@ namespace LMS.Business.Services
             this.taskSource = taskSource;
         }
 
+        public TestTemplateDTO GetDefaultTemplate()
+        {
+            return new TestTemplateDTO
+            {
+                Levels =
+                {
+                    new TestTemplateLevelDTO()
+                }
+            };
+        }
+
         public TestTemplateDTO GetById(int id)
         {
             var template = unitOfWork.TestTemplates.Get(id);
@@ -30,7 +41,7 @@ namespace LMS.Business.Services
 
             foreach (var level in templateDto.Levels)
             {
-                level.ValidTaskCount = taskSource.GetByFilter(level.Filter).Count();
+                level.ValidTaskCount = taskSource.Filter(level.Filter).Count();
             }
 
             return templateDto;
@@ -94,11 +105,11 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<TestTemplateListItemDTO> GetListItems()
+        public IEnumerable<TestTemplateSummary> GetTemplatesSummary()
         {
             var templates = unitOfWork.TestTemplates.GetAll().ToArray();
             return mapper
-                .Map<IEnumerable<TestTemplate>, IEnumerable<TestTemplateListItemDTO>>(templates)
+                .Map<IEnumerable<TestTemplate>, IEnumerable<TestTemplateSummary>>(templates)
                 .Zip(templates, (m, t) => (dto: m, entity: t))
                 .Select(tuple =>
                 {
@@ -119,7 +130,7 @@ namespace LMS.Business.Services
                             return new TaskTemplateDTO
                             {
                                 Types = types,
-                                ValidTaskCount = taskSource.GetByFilter(filter).Count()
+                                ValidTaskCount = taskSource.Filter(filter).Count()
                             };
                         })
                         .ToList();

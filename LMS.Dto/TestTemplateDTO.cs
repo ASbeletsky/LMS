@@ -12,7 +12,7 @@ namespace LMS.Dto
         }
 
         public const int MaxLevelScore = 100;
-        public const int MaxTaskPerLevelCount = 30;
+        public const int MaxTaskPerLevelCount = 50;
 
         public int Id { get; set; }
 

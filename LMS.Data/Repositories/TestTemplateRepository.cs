@@ -19,13 +19,15 @@ namespace LMS.Data.Repositories
 
         public IEnumerable<TestTemplate> GetAll()
         {
-            return GetAllQuery();
+            return GetAllQuery()
+                .ToList();
         }
 
         public IEnumerable<TestTemplate> Filter(Expression<Func<TestTemplate, bool>> predicate)
         {
             return GetAllQuery()
-                .Where(predicate);
+                .Where(predicate)
+                .ToList();
         }
 
         public TestTemplate Get(int id)
@@ -48,30 +50,35 @@ namespace LMS.Data.Repositories
 
         public void Update(TestTemplate item)
         {
-            var levelsSet = dbContext.Set<TestTemplateLevel>();
-            var categoriesSet = dbContext.Set<LevelCategory>();
-            var typesSet = dbContext.Set<LevelTaskType>();
-
-            var entry = dbContext.Set<TestTemplate>().Update(item);
-
-            foreach (var level in item.Levels)
+            using (var transaction = dbContext.Database.BeginTransaction())
             {
-                level.TestTemplateId = item.Id;
+                var levelsSet = dbContext.Set<TestTemplateLevel>();
+                var categoriesSet = dbContext.Set<LevelCategory>();
+                var typesSet = dbContext.Set<LevelTaskType>();
 
-                var newLevelTypes = level.TaskTypes.ToArray();
-                var oldLevelTypes = typesSet.Where(t => t.TestTemplateLevelId == level.Id).ToArray();
-                typesSet.RemoveRange(oldLevelTypes.Except(newLevelTypes));
-                typesSet.AddRange(newLevelTypes.Except(oldLevelTypes));
+                var entry = dbContext.Set<TestTemplate>().Update(item);
 
-                var newLevelCategories = level.Categories.ToArray();
-                var oldLevelCategories = categoriesSet.Where(t => t.TestTemplateLevelId == level.Id).ToArray();
-                categoriesSet.RemoveRange(oldLevelCategories.Except(newLevelCategories));
-                categoriesSet.AddRange(newLevelCategories.Except(oldLevelCategories));
+                foreach (var level in item.Levels)
+                {
+                    level.TestTemplateId = item.Id;
+
+                    var newLevelTypes = level.TaskTypes.ToArray();
+                    var oldLevelTypes = typesSet.Where(t => t.TestTemplateLevelId == level.Id).ToArray();
+                    typesSet.RemoveRange(oldLevelTypes.Except(newLevelTypes));
+                    typesSet.AddRange(newLevelTypes.Except(oldLevelTypes));
+
+                    var newLevelCategories = level.Categories.ToArray();
+                    var oldLevelCategories = categoriesSet.Where(t => t.TestTemplateLevelId == level.Id).ToArray();
+                    categoriesSet.RemoveRange(oldLevelCategories.Except(newLevelCategories));
+                    categoriesSet.AddRange(newLevelCategories.Except(oldLevelCategories));
+                }
+
+                var newLevels = item.Levels.ToArray();
+                var toRemoveLevels = levelsSet.Where(l => l.TestTemplateId == item.Id).Except(newLevels);
+                levelsSet.RemoveRange(toRemoveLevels);
+
+                transaction.Commit();
             }
-
-            var newLevels = item.Levels.ToArray();
-            var toRemoveLevels = levelsSet.Where(l => l.TestTemplateId == item.Id).Except(newLevels);
-            levelsSet.RemoveRange(toRemoveLevels);
         }
 
         public void Delete(int id)

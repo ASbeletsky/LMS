@@ -4,7 +4,7 @@ namespace LMS.Dto
 {
     public class TaskTemplateDTO
     {
-        public IList<TaskTypeDTO> Types { get; set; }
+        public ICollection<TaskTypeDTO> Types { get; set; }
         public int ValidTaskCount { get; set; }
     }
 }

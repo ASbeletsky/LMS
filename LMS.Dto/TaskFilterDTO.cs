@@ -10,7 +10,7 @@ namespace LMS.Dto
             TaskTypeIds = new List<int>();
             CategoryIds = new List<int>();
         }
-        
+
         [Display(Name = "Min complexity")]
         public int MinComplexity { get; set; } = TaskDTO.MinComplexity;
 
@@ -29,13 +29,13 @@ namespace LMS.Dto
                 MaxComplexity = int.Parse(parts[1]);
             }
         }
-        
+
         [Display(Name = "Task types")]
         [Required(ErrorMessage = "TaskTypes cannot be empty")]
-        public IList<int> TaskTypeIds { get; set; }
+        public ICollection<int> TaskTypeIds { get; set; }
 
         [Display(Name = "Categories")]
         [Required(ErrorMessage = "Categories cannot be empty")]
-        public IList<int> CategoryIds { get; set; }
+        public ICollection<int> CategoryIds { get; set; }
     }
 }

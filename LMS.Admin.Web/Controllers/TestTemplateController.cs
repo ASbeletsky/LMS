@@ -36,15 +36,9 @@ namespace LMS.Admin.Web.Controllers
             }
             else
             {
-                template = new TestTemplateDTO
-                {
-                    Levels =
-                    {
-                        new TestTemplateLevelDTO()
-                    }
-                };
+                template = testTemplateService.GetDefaultTemplate();
             }
-            
+
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem()
             {
                 Value = t.Id.ToString(),
@@ -120,7 +114,7 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var templateListItems = testTemplateService.GetListItems();
+            var templateListItems = testTemplateService.GetTemplatesSummary();
             return View(templateListItems);
         }
 
@@ -130,7 +124,7 @@ namespace LMS.Admin.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await testTemplateService.DeleteByIdAsync(id);
-            var templateListItems = testTemplateService.GetListItems();
+            var templateListItems = testTemplateService.GetTemplatesSummary();
             return View("List", templateListItems);
         }
     }

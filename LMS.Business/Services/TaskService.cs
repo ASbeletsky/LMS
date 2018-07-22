@@ -102,16 +102,15 @@ namespace LMS.Business.Services
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }
 
-        public virtual IEnumerable<TaskDTO> GetByFilter(TaskFilterDTO filter)
+        public virtual IEnumerable<TaskDTO> Filter(TaskFilterDTO filter)
         {
             var tasks = unitOfWork.Tasks
-                .GetAll()
-                .Where(t => t.IsActive
-                    && t.Complexity >= filter.MinComplexity 
+                .Filter(t => t.IsActive
+                    && t.Complexity >= filter.MinComplexity
                     && t.Complexity <= filter.MaxComplexity
                     && filter.CategoryIds.Contains(t.CategoryId)
                     && filter.TaskTypeIds.Contains(t.TypeId));
-            
+
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }
     }
