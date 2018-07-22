@@ -81,28 +81,14 @@
         </a>
     </div>
 
-    <div id="logOutModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ready to Leave?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Select "Logout" below if you are ready to end your current session.</p>
-                </div>
-                <div class="modal-footer">
-
-                    <form method="post" asp-controller="Account" asp-action="Logout">
-                        <button type="submit" class="btn btn-primary">Logout</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("Dialog", new DialogViewModel("logOutModal")
+    {
+        Title = "Ready to Leave?",
+        Content = "Select \"Logout\" below if you are ready to end your current session",
+        SubmitCaption = "Logout",
+        SubmitAction = "Logout",
+        SubmitController = "Account",
+    })
 
     <script src="~/js/vendor.js" asp-append-version="true"></script>
     <script src="~/js/site.min.js" asp-append-version="true"></script>
