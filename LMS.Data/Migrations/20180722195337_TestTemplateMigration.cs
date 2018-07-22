@@ -34,14 +34,14 @@ namespace LMS.Data.Migrations
                     MaxScore = table.Column<double>(nullable: false),
                     MinComplexity = table.Column<int>(nullable: false),
                     MaxComplexity = table.Column<int>(nullable: false),
-                    TestTemplateLevelId = table.Column<int>(nullable: false)
+                    TestTemplateId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestTemplateLevel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TestTemplateLevel_TestTemplates_TestTemplateLevelId",
-                        column: x => x.TestTemplateLevelId,
+                        name: "FK_TestTemplateLevel_TestTemplates_TestTemplateId",
+                        column: x => x.TestTemplateId,
                         principalTable: "TestTemplates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -106,9 +106,9 @@ namespace LMS.Data.Migrations
                 column: "TestTemplateLevelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestTemplateLevel_TestTemplateLevelId",
+                name: "IX_TestTemplateLevel_TestTemplateId",
                 table: "TestTemplateLevel",
-                column: "TestTemplateLevelId");
+                column: "TestTemplateId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

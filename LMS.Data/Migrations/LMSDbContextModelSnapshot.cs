@@ -129,11 +129,11 @@ namespace LMS.Data.Migrations
 
                     b.Property<int>("MinComplexity");
 
-                    b.Property<int>("TestTemplateLevelId");
+                    b.Property<int>("TestTemplateId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TestTemplateLevelId");
+                    b.HasIndex("TestTemplateId");
 
                     b.ToTable("TestTemplateLevel");
                 });
@@ -346,7 +346,7 @@ namespace LMS.Data.Migrations
                 {
                     b.HasOne("LMS.Entities.TestTemplate")
                         .WithMany("Levels")
-                        .HasForeignKey("TestTemplateLevelId")
+                        .HasForeignKey("TestTemplateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

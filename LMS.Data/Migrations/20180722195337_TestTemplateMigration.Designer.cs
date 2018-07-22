@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180720231529_TestTemplateMigration")]
+    [Migration("20180722195337_TestTemplateMigration")]
     partial class TestTemplateMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -131,11 +131,11 @@ namespace LMS.Data.Migrations
 
                     b.Property<int>("MinComplexity");
 
-                    b.Property<int>("TestTemplateLevelId");
+                    b.Property<int>("TestTemplateId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TestTemplateLevelId");
+                    b.HasIndex("TestTemplateId");
 
                     b.ToTable("TestTemplateLevel");
                 });
@@ -348,7 +348,7 @@ namespace LMS.Data.Migrations
                 {
                     b.HasOne("LMS.Entities.TestTemplate")
                         .WithMany("Levels")
-                        .HasForeignKey("TestTemplateLevelId")
+                        .HasForeignKey("TestTemplateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
