@@ -7,7 +7,7 @@ using LMS.Interfaces;
 
 namespace LMS.Business.Services
 {
-    public class TaskService : BaseService
+    public class TaskService : BaseService, ITaskSource
     {
         public TaskService(IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)
@@ -98,6 +98,18 @@ namespace LMS.Business.Services
 
             if (!includeInactive)
                 tasks = tasks.Where(q => q.IsActive);
+
+            return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
+        }
+
+        public virtual IEnumerable<TaskDTO> Filter(TaskFilterDTO filter)
+        {
+            var tasks = unitOfWork.Tasks
+                .Filter(t => t.IsActive
+                    && t.Complexity >= filter.MinComplexity
+                    && t.Complexity <= filter.MaxComplexity
+                    && filter.CategoryIds.Contains(t.CategoryId)
+                    && filter.TaskTypeIds.Contains(t.TypeId));
 
             return mapper.Map<IEnumerable<Entities.Task>, IEnumerable<TaskDTO>>(tasks);
         }

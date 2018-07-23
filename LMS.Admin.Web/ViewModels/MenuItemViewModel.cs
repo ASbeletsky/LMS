@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LMS.Admin.Web.Models
+namespace LMS.Admin.Web.ViewModels
 {
     public class MenuItemViewModel : List<MenuItemViewModel>
     {

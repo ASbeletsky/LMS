@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LMS.Identity;
-using LMS.Socet;
-using Microsoft.AspNetCore.Http;
 
 namespace LMS.Admin.Web
 {
@@ -23,11 +21,10 @@ namespace LMS.Admin.Web
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddSocet();
             services.AddMvc();
             services.AddIdentity();
-            
 
+          
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
@@ -35,8 +32,8 @@ namespace LMS.Admin.Web
           
             return new AutofacServiceProvider(container);
         }
-        
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -48,7 +45,6 @@ namespace LMS.Admin.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.AddSocetConfig();
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvc(routes =>
@@ -57,8 +53,7 @@ namespace LMS.Admin.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
+            RoleInitializer.CreateUsersRoles(serviceProvider).GetAwaiter().GetResult();
         }
     }
 }
