@@ -16,7 +16,7 @@ namespace LMS.Admin.Web.Controllers
         private readonly CategoryService categoryService;
 
         public TaskController(
-            TaskService tasks, 
+            TaskService tasks,
             TaskTypeService taskTypes,
             CategoryService taskCategories)
         {
@@ -77,7 +77,7 @@ namespace LMS.Admin.Web.Controllers
             var task = taskService.GetById(id);
             return View(task);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, moderator")]

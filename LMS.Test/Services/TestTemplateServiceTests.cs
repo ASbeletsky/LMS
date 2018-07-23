@@ -198,7 +198,14 @@ namespace LMS.Test.Services
                     {
                         new TestTemplateLevel
                         {
-                            MaxComplexity = 3
+                            MaxComplexity = 3,
+                            TaskTypes =
+                            {
+                                new LevelTaskType
+                                {
+                                    TaskType = new TaskType()
+                                }
+                            }
                         }
                     }
                 },
@@ -210,7 +217,14 @@ namespace LMS.Test.Services
                     {
                         new TestTemplateLevel
                         {
-                            MinComplexity = 5
+                            MinComplexity = 5,
+                            TaskTypes =
+                            {
+                                new LevelTaskType
+                                {
+                                    TaskType = new TaskType()
+                                }
+                            }
                         }
                     }
                 }
@@ -220,18 +234,18 @@ namespace LMS.Test.Services
             unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
 
             var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MinComplexity == 5)))
+            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MinComplexity == 5 && l.TaskTypeIds.Any())))
                 .Returns(new TaskDTO[3]);
-            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MaxComplexity == 3)))
+            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MaxComplexity == 3 && l.TaskTypeIds.Any())))
                 .Returns(new TaskDTO[2]);
 
             var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
             var testTemplateListItems = service.GetTemplatesSummary().ToArray();
             Assert.Equal(3, testTemplateListItems.GroupBy(t => t.Id).Count());
             Assert.True(testTemplateListItems.All(t => t.Id.ToString() == t.Title));
-            Assert.Empty(testTemplateListItems[0].Tasks);
-            Assert.Equal(2, testTemplateListItems[1].Tasks.Single().ValidTaskCount);
-            Assert.Equal(3, testTemplateListItems[2].Tasks.Single().ValidTaskCount);
+            Assert.Empty(testTemplateListItems[0].Levels);
+            Assert.Equal(2, testTemplateListItems[1].Levels.Single().CountPerTypes.Sum(t => t.Count));
+            Assert.Equal(3, testTemplateListItems[2].Levels.Single().CountPerTypes.Sum(t => t.Count));
         }
     }
 }

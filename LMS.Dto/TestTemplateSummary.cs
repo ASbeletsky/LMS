@@ -8,7 +8,7 @@ namespace LMS.Dto
         public TestTemplateSummary()
         {
             Categories = new List<string>();
-            Tasks = new List<TaskTemplateDTO>();
+            Levels = new List<TestTemplateSummaryLevel>();
         }
 
         public int Id { get; set; }
@@ -20,7 +20,6 @@ namespace LMS.Dto
 
         public ICollection<string> Categories { get; set; }
 
-        [Display(Name = "Levels")]
-        public ICollection<TaskTemplateDTO> Tasks { get; set; }
+        public ICollection<TestTemplateSummaryLevel> Levels { get; set; }
     }
 }

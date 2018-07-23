@@ -63,7 +63,7 @@ namespace LMS.Bootstrap.Mapping
                       .Distinct()
                       .Select(c => c.Category.Title)
                       .ToList()))
-                .ForMember(m => m.Tasks, m => m.Ignore());
+                .ForMember(m => m.Levels, m => m.Ignore());
         }
     }
 }

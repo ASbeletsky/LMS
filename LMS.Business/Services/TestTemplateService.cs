@@ -120,17 +120,23 @@ namespace LMS.Business.Services
                     }
 
                     dto.AvgComplexity = entity.Levels.Average(l => (l.MaxComplexity + l.MinComplexity) / 2);
-                    dto.Tasks = entity.Levels
+                    dto.Levels = entity.Levels
                         .Select(level =>
                         {
                             var filter = mapper.Map<TestTemplateLevel, TestTemplateLevelDTO>(level).Filter;
                             var types = mapper
                                 .Map<IEnumerable<LevelTaskType>, IEnumerable<TaskTypeDTO>>(level.TaskTypes)
                                 .ToList();
-                            return new TaskTemplateDTO
+                            return new TestTemplateSummaryLevel
                             {
-                                Types = types,
-                                ValidTaskCount = taskSource.Filter(filter).Count()
+                                CountPerTypes = types
+                                    .Select(type =>
+                                    {
+                                        filter.TaskTypeIds = new List<int> { type.Id };
+                                        var validCount = taskSource.Filter(filter).Count();
+                                        return (type.Title, validCount);
+                                    })
+                                    .ToList()
                             };
                         })
                         .ToList();

@@ -24,7 +24,7 @@
                         @Html.DisplayNameFor(model => model.AvgComplexity)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Tasks)
+                        @Html.DisplayNameFor(model => model.Levels)
                     </th>
                     <th>
                         Actions
@@ -39,20 +39,32 @@
                             <label>@item.Title</label>
                         </td>
                         <td>
-                            <label>@string.Join(",", item.Categories.Select(c => c.Title))</label>
+                            <label>@string.Join(",", item.Categories)</label>
                         </td>
                         <td>
                             <label>@($"{item.AvgComplexity:#.##}/{@TaskDTO.MaxComplexity}")</label>
                         </td>
                         <td>
                             <ol>
-                                @foreach (var taskTemplate in item.Tasks)
+                                @foreach (var taskTemplate in item.Levels)
                                 {
                                     <li>
-                                        @string.Join(",", taskTemplate.Types.Select(c => c.Title))
-                                        -
-                                        @taskTemplate.ValidTaskCount
-                                        valid tasks
+                                        @if (taskTemplate.CountPerTypes.Count == 1
+                                           && taskTemplate.CountPerTypes.First() is var singleTask)
+                                        {
+                                            @(singleTask.Type + " - " + singleTask.Count)
+                                        }
+                                        else
+                                        {
+                                            <ul>
+                                                @foreach (var task in taskTemplate.CountPerTypes)
+                                                {
+                                                    <li>
+                                                        @(task.Type + " - " + task.Count)
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
                                     </li>
                                 }
                             </ol>
