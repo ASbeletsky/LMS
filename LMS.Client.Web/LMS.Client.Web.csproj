@@ -17,10 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LMS.Data\LMS.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\lib\Other libs\" />
+    <ProjectReference Include="..\LMS.Socet\LMS.Socet.csproj" />
   </ItemGroup>
 
 </Project>

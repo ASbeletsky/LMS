@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Http;
-using LMS.Client.Web.Hubs;
+using LMS.Socet;
 
 namespace LMS.Client.Web
 {
@@ -24,22 +24,15 @@ namespace LMS.Client.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
             services.AddMvc();
-
-            services.AddCors(options => options.AddPolicy("CorsPolicy",
-            builder =>
+            services.AddCors(options =>
             {
-                builder.AllowAnyMethod().AllowAnyHeader()
-                       .WithOrigins("http://localhost:55830")
-                       .AllowCredentials();
-            }));
-
-            services.AddSignalR();
+                options.AddPolicy("AllowAllOrigins",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,15 +56,7 @@ namespace LMS.Client.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-            app.UseCors("CorsPolicy");
-
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<TestHub>("/testHub");
-            });
+            app.UseCors("AllowAllOrigins");
         }
     }
 }

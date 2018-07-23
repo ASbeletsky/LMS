@@ -53,8 +53,8 @@ namespace LMS.Bootstrap
                 .AsSelf()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterBuildCallback(container =>
-                DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));
+            //builder.RegisterBuildCallback(container =>
+            //    DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));
         }
     }
 }
