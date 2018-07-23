@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using System.Collections.Generic;
+using AutoMapper;
 using LMS.Dto;
 using LMS.Entities;
 
@@ -16,6 +18,52 @@ namespace LMS.Bootstrap.Mapping
 
             CreateMap<TaskDTO, Task>();
             CreateMap<Task, TaskDTO>();
+
+            CreateMap<LevelTaskType, TaskTypeDTO>()
+                .ConstructUsing((entity, context) => context.Mapper.Map<TaskType, TaskTypeDTO>(entity.TaskType));
+            CreateMap<LevelCategory, CategoryDTO>()
+                .ConstructUsing((entity, context) => context.Mapper.Map<Category, CategoryDTO>(entity.Category));
+
+            CreateMap<TestTemplateLevel, TestTemplateLevelDTO>()
+                .ForMember(m => m.ValidTaskCount, m => m.Ignore())
+                .ForMember(m => m.Filter, m => m.ResolveUsing(entity =>
+                    new TaskFilterDTO
+                    {
+                        MinComplexity = entity.MinComplexity,
+                        MaxComplexity = entity.MaxComplexity,
+                        TaskTypeIds = entity.TaskTypes.Select(t => t.TaskTypeId).ToList(),
+                        CategoryIds = entity.Categories.Select(t => t.CategoryId).ToList()
+                    }));
+            CreateMap<TestTemplateLevelDTO, TestTemplateLevel>()
+                .ForMember(m => m.TestTemplateId, m => m.Ignore())
+                .ForMember(m => m.MinComplexity, m => m.MapFrom(l => l.Filter.MinComplexity))
+                .ForMember(m => m.MaxComplexity, m => m.MapFrom(l => l.Filter.MaxComplexity))
+                .ForMember(m => m.Categories, m => m.ResolveUsing(l =>
+                    l.Filter.CategoryIds.Select(id => new LevelCategory
+                    {
+                        CategoryId = id,
+                        TestTemplateLevelId = l.Id
+                    })))
+                .ForMember(m => m.TaskTypes, m => m.ResolveUsing(l =>
+                    l.Filter.TaskTypeIds.Select(id => new LevelTaskType
+                    {
+                        TaskTypeId = id,
+                        TestTemplateLevelId = l.Id
+                    })));
+
+            CreateMap<TestTemplate, TestTemplateDTO>()
+                .ForMember(m => m.AvgComplexity, m => m.Ignore());
+            CreateMap<TestTemplateDTO, TestTemplate>();
+
+            CreateMap<TestTemplate, TestTemplateSummary>()
+                .ForMember(m => m.AvgComplexity, m => m.Ignore())
+                .ForMember(m => m.Categories, m => m.ResolveUsing(entity =>
+                    entity.Levels
+                      .SelectMany(l => l.Categories)
+                      .Distinct()
+                      .Select(c => c.Category.Title)
+                      .ToList()))
+                .ForMember(m => m.Levels, m => m.Ignore());
         }
     }
 }

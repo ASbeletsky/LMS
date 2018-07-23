@@ -2,10 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using LMS.Dto;
-using LMS.Interfaces;
-using LMS.Business.Services;
 using Microsoft.AspNetCore.Authorization;
+using LMS.Dto;
+using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -16,18 +15,14 @@ namespace LMS.Admin.Web.Controllers
         private readonly TaskTypeService taskTypeService;
         private readonly CategoryService categoryService;
 
-        private readonly IMapper dtoMapper;
-
         public TaskController(
-            TaskService tasks, 
+            TaskService tasks,
             TaskTypeService taskTypes,
-            CategoryService taskCategories,
-            IMapper mapper)
+            CategoryService taskCategories)
         {
             taskService = tasks;
             taskTypeService = taskTypes;
             categoryService = taskCategories;
-            dtoMapper = mapper;
         }
 
         [Authorize(Roles = "admin, moderator")]
@@ -82,7 +77,7 @@ namespace LMS.Admin.Web.Controllers
             var task = taskService.GetById(id);
             return View(task);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, moderator")]
@@ -91,6 +86,17 @@ namespace LMS.Admin.Web.Controllers
             await taskService.MarkAsDeletedByIdAsync(id);
             var tasks = taskService.GetAll();
             return View("List", tasks);
+        }
+
+        [HttpPost]
+        public IActionResult Filter([FromForm]TaskFilterDTO filter)
+        {
+            var filtered = taskService.Filter(filter).ToList();
+            return Json(new
+            {
+                tasks = filtered,
+                count = filtered.Count
+            });
         }
     }
 }

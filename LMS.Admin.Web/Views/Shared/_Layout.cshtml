@@ -31,9 +31,13 @@
                     new MenuItemViewModel("Create new", "Create", "Task"),
                     new MenuItemViewModel("List all", "List", "Task")
                 },
-                new MenuItemViewModel("Register", "fa-user-plus", "Register", "Account"),
+                new MenuItemViewModel("Test templates", "fa-archive")
+                {
+                    new MenuItemViewModel("Create new", "Create", "TestTemplate"),
+                    new MenuItemViewModel("List all", "List", "TestTemplate")
+                },
+                new MenuItemViewModel("Register", "fa-user-plus", "Register", "Account")
             })
-
             <ul class="navbar-nav sidenav-toggler">
                 <li class="nav-item">
                     <a class="nav-link text-center" id="sidenavToggler">
@@ -77,36 +81,17 @@
         </a>
     </div>
 
-    <div id="logOutModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ready to Leave?</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Select "Logout" below if you are ready to end your current session.</p>
-                </div>
-                <div class="modal-footer">
-
-                    <form method="post" asp-controller="Account" asp-action="Logout">
-                        <button type="submit" class="btn btn-primary">Logout</button>
-                    </form>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("Dialog", new DialogViewModel("logOutModal")
+    {
+        Title = "Ready to Leave?",
+        Content = "Select \"Logout\" below if you are ready to end your current session",
+        SubmitCaption = "Logout",
+        SubmitAction = "Logout",
+        SubmitController = "Account",
+    })
 
     <script src="~/js/vendor.js" asp-append-version="true"></script>
-    <environment include="Development">
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

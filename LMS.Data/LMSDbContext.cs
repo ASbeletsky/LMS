@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using LMS.Entities;
-using Microsoft.AspNetCore.Identity;
-using System;
 
 namespace LMS.Data
 {
@@ -18,7 +16,9 @@ namespace LMS.Data
         public DbSet<Category> Categories { get; }
         public DbSet<Task> Tasks { get; }
         public DbSet<TaskType> TaskTypes { get; }
-
+        
+        public DbSet<TestTemplate> TestTemplates { get; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString);
@@ -52,6 +52,47 @@ namespace LMS.Data
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskType>()
                 .Property(t => t.Title).IsRequired();
+
+            modelBuilder.Entity<TestTemplate>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TestTemplate>()
+                .Property(t => t.Title)
+                .IsRequired();
+            modelBuilder.Entity<TestTemplate>()
+                .HasMany(t => t.Levels)
+                .WithOne()
+                .HasForeignKey(l => l.TestTemplateId);
+            
+            modelBuilder.Entity<TestTemplateLevel>()
+                .HasKey(l => l.Id);
+            modelBuilder.Entity<TestTemplateLevel>()
+                .HasMany(f => f.Categories)
+                .WithOne(c => c.TestTemplateLevel)
+                .HasForeignKey(c => c.TestTemplateLevelId);
+            modelBuilder.Entity<TestTemplateLevel>()
+                .HasMany(f => f.TaskTypes)
+                .WithOne(t => t.TestTemplateLevel)
+                .HasForeignKey(t => t.TestTemplateLevelId);
+            
+            modelBuilder.Entity<LevelCategory>()
+                .HasKey(c => new
+                {
+                    c.CategoryId,
+                    c.TestTemplateLevelId
+                });
+            modelBuilder.Entity<LevelCategory>()
+                .HasOne(c => c.Category)
+                .WithMany();
+
+            modelBuilder.Entity<LevelTaskType>()
+                .HasKey(t => new
+                {
+                    t.TaskTypeId,
+                    t.TestTemplateLevelId
+                });
+            modelBuilder.Entity<LevelTaskType>()
+                .HasOne(c => c.TaskType)
+                .WithMany();
 
             modelBuilder.Entity<User>();
 

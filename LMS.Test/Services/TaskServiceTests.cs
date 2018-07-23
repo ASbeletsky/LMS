@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
 using Moq;
 using Xunit;
+using Task = System.Threading.Tasks.Task;
 
 namespace LMS.Test.Services
 {
@@ -99,7 +99,7 @@ namespace LMS.Test.Services
                 IsActive = true,
                 CategoryId = 1,
                 TypeId = 1,
-                Complexity = 1, 
+                Complexity = 1,
                 Content = "Sample"
             };
 
@@ -114,7 +114,7 @@ namespace LMS.Test.Services
             await service.UpdateAsync(newTask);
 
             repositoryMock.Verify(m => m.Get(1));
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(dto => 
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(dto =>
                 dto.IsActive
                 && dto.Content == newTask.Content
                 && dto.Complexity == newTask.Complexity
@@ -182,10 +182,10 @@ namespace LMS.Test.Services
             await service.UpdateAsync(updatedDtoItem);
 
             repositoryMock.Verify(m => m.Get(1));
-            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(t => 
+            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(t =>
                 !t.IsActive && t.Content == oldTask.Content)));
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t => 
-                t.IsActive 
+            repositoryMock.Verify(m => m.Create(It.Is<Entities.Task>(t =>
+                t.IsActive
                 && t.Content == updatedDtoItem.Content
                 && t.Complexity == updatedDtoItem.Complexity
                 && t.TypeId == updatedDtoItem.TypeId
@@ -254,7 +254,7 @@ namespace LMS.Test.Services
 
             await service.CreateAsync(newTask);
 
-            var createdTask =  service.GetById(1);
+            var createdTask = service.GetById(1);
             Assert.True(createdTask.IsActive);
             Assert.Equal(newTask.IsActive, createdTask.IsActive);
             Assert.Equal(newTask.CategoryId, createdTask.CategoryId);
