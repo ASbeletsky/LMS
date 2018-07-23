@@ -98,9 +98,9 @@ namespace LMS.Business.Services
                 throw new ArgumentException("Every level should contains at least one category");
             }
 
-            var updatedTest = mapper.Map<TestTemplateDTO, TestTemplate>(testTemplate);
+            var createdTest = mapper.Map<TestTemplateDTO, TestTemplate>(testTemplate);
 
-            unitOfWork.TestTemplates.Create(updatedTest);
+            unitOfWork.TestTemplates.Create(createdTest);
 
             return unitOfWork.SaveAsync();
         }
