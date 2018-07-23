@@ -23,6 +23,8 @@ namespace LMS.Data
 
         public IRepositoryAsync<User> UserRepository { get; }
 
+        public IRepository<Answer> Answers => throw new System.NotImplementedException();
+
         public System.Threading.Tasks.Task SaveAsync()
         {
             return dbContext.SaveChangesAsync();
