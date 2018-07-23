@@ -11,13 +11,18 @@ namespace LMS.Identity
         {
             services.AddIdentity<User, IdentityRole>(opts =>
             {
-                opts.User.RequireUniqueEmail = true;
-                opts.Password.RequireDigit = true;
+                opts.Password.RequireDigit = false;
                 opts.Password.RequireNonAlphanumeric = false;
                 opts.Password.RequireUppercase = false;
                 opts.Password.RequiredLength = 3;
             })
-             .AddEntityFrameworkStores<LMSDbContext>();
+            .AddEntityFrameworkStores<LMSDbContext>()
+            .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Account/Login";
+            });
         }
     }
 }
