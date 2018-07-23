@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180722195337_TestTemplateMigration")]
+    [Migration("20180723003521_TestTemplateMigration")]
     partial class TestTemplateMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,8 +121,6 @@ namespace LMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Count");
-
                     b.Property<string>("Description");
 
                     b.Property<int>("MaxComplexity");
@@ -130,6 +128,8 @@ namespace LMS.Data.Migrations
                     b.Property<double>("MaxScore");
 
                     b.Property<int>("MinComplexity");
+
+                    b.Property<int>("TasksCount");
 
                     b.Property<int>("TestTemplateId");
 

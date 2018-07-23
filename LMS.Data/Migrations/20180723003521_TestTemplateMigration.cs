@@ -30,7 +30,7 @@ namespace LMS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Description = table.Column<string>(nullable: true),
-                    Count = table.Column<int>(nullable: false),
+                    TasksCount = table.Column<int>(nullable: false),
                     MaxScore = table.Column<double>(nullable: false),
                     MinComplexity = table.Column<int>(nullable: false),
                     MaxComplexity = table.Column<int>(nullable: false),

@@ -119,8 +119,6 @@ namespace LMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Count");
-
                     b.Property<string>("Description");
 
                     b.Property<int>("MaxComplexity");
@@ -128,6 +126,8 @@ namespace LMS.Data.Migrations
                     b.Property<double>("MaxScore");
 
                     b.Property<int>("MinComplexity");
+
+                    b.Property<int>("TasksCount");
 
                     b.Property<int>("TestTemplateId");
 
