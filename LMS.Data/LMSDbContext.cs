@@ -113,6 +113,11 @@ namespace LMS.Data
             modelBuilder.Entity<TestVariantLevel>()
                 .HasMany(l => l.Tasks)
                 .WithOne(t => t.Level);
+            modelBuilder.Entity<TestVariantLevel>()
+                .HasOne<TestTemplateLevel>()
+                .WithMany()
+                .HasForeignKey(l => l.TestTemplateLevelId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<TestVariantLevelTask>()
                 .HasKey(t => new

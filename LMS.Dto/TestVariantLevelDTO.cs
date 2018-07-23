@@ -6,8 +6,12 @@ namespace LMS.Dto
     {
         public int Id { get; set; }
         public int TestVariantId { get; set; }
+        public int? TestTemplateLevelId { get; set; }
 
-        public string Title { get; set; }
+        public string Description { get; set; }
+
+        public bool TemplateDeleted { get; set; }
+        public bool TemplateModified { get; set; }
 
         public TaskFilterDTO Filter { get; set; }
 
