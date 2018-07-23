@@ -1,5 +1,5 @@
 ﻿@using LMS.Dto
-@model TaskDTO
+@model AnswerDTO
 
 @{
     var types = ((IEnumerable<SelectListItem>)ViewData["AvailableTypes"]);
@@ -11,7 +11,7 @@
 <div class="row">
     <div class="form-group col-12 col-md-6">
         <label asp-for="Complexity" class="control-label"></label>
-        <input asp-for="Complexity" class="form-control form-control-range" type="range" min="@TaskDTO.MinComplexity" max="@TaskDTO.MaxComplexity" />
+        <input asp-for="Complexity" class="form-control form-control-range" type="range" min="@AnswerDTO.MinComplexity" max="@AnswerDTO.MaxComplexity" />
         <span asp-validation-for="Complexity" class="text-danger"></span>
     </div>
     <div class="form-group col-12 col-md-6">

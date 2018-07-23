@@ -1,0 +1,190 @@
+﻿@{
+    ViewData["Title"] = "TimerTest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>TimerTest</h2>
+<div>
+    <input type="button" value="Start Ajax" onclick="AjaxTest()">
+    <div id="results"></div>
+    <input type="button" value="Start Timer" onclick="StartTimer()">
+    <input type="number" id="timer" readonly>
+    <table border="0" cellpadding="0" cellspacing="0" bordercolor="#00000">
+        <tr><td><div class="st" id="tm"></div></td></tr>
+        <input type="button" value="mail" onclick="main()">
+        @*for MomentTimer*@
+        <table border="0" cellpadding="0" cellspacing="0" bordercolor="#00000">
+            <tr><td><div class="st" id="mtimer"></div></td></tr>
+            <input type="button" value="StartTimerM" onclick="CreatTimer('mtimer', 00, 00, 10)">
+
+            <input type="button" value="SetTimeM" onclick="SetTime(00,1,10)">
+            <input type="button" value="Pause" onclick="TimerM.pause.call(TimerM)">
+            <input type="button" value="Continue" onclick="TimerM.continue.call(TimerM)">
+</div>
+<script src="~/lib/momentjs/moment-with-locales.min.js"></script>
+<script src="~/js/Timer.js"></script>
+<script src="~/lib/signalr/signalr.js"></script>
+<script src="~/js/UserHub.js"></script>
+<script src="~/js/ReportModel.js"></script>
+
+
+
+<script type="text/javascript">
+    function AjaxTest() {
+        $.ajax({
+            url: "/Home/Greetings",
+            success: function (html) {
+                $("#results").append(html);
+            }
+        });
+    }
+
+    //window.onload = function () {
+    //    if (typeof (sessionStorage["time"]) == "undefined") {
+    //        $("#timer").attr("value", 100);
+    //        this.console.log("session " + sessionStorage["time"]);
+    //        this.console.log("value " + $("#timer").attr("value"));
+    //    } else {
+    //        $("#timer").attr("value", sessionStorage["time"]);
+    //        this.console.log("session " + sessionStorage["time"]);
+    //        this.console.log("value " + $("#timer").attr("value"));
+    //    }
+    //}
+
+    //function Timer(_time) {
+    //    var time = _time;
+    //    function Tick() {
+    //        time--;
+    //    }
+    //}
+
+    //function StartTimer() {
+    //    sessionStorage["time"] = $("#timer").attr("value");
+    //    var timer = setInterval(function () {
+    //        sessionStorage["time"]--;
+    //        $("#timer").attr("value", sessionStorage["time"]);
+    //        this.console.log("session " + sessionStorage["time"]);
+    //        this.console.log("value " + $("#timer").attr("value"));
+    //        if (sessionStorage["time"] <= 0) {
+    //            clearInterval(timer);
+    //        }
+    //    }, 1000);
+    //}
+    //not my
+    var hr = "00";
+    var ms = "10";
+    var sc = "05";
+
+    var hours = hr;
+    var minutes = ms;
+    var sec = sc;
+
+    function main() {
+        startTimer('tm');
+    }
+
+    var Timer = function (element, hours, minutes, sec) {
+        var me = this;
+        this.hours = hours;
+        this.minutes = minutes;
+        this.sec = sec;
+        this.element = element;
+        this.interval = null;
+
+        this.reduce = function () {
+            if (false) {
+                me.stop();
+                return;
+            }
+            me.sec -= 1;
+            if (me.sec < 0) me.sec = 59, me.minutes -= 1;
+            if (me.minutes < 0) me.minutes = 59, me.hours -= 1;
+            if (me.hours < 0) me.hours = 23;
+
+            sessionStorage.setItem('hours', me.hours);
+            sessionStorage.setItem('minutes', me.minutes);
+            sessionStorage.setItem('sec', me.sec);
+
+            me.sec = me.sec + "";
+            me.minutes = me.minutes + "";
+            me.hours = me.hours + "";
+            if (me.sec.length < 2) me.sec = "0" + me.sec;
+            if (me.minutes.length < 2) me.minutes = "0" + me.minutes;
+            if (me.hours.length < 2) me.hours = "0" + me.hours;
+            me.element.innerHTML = me.hours + ":" + me.minutes + ":" + me.sec;
+        }
+
+        this.start = function () {
+            me.interval = setInterval(me.reduce, 1000);
+            sessionStorage.setItem("TimerStarted", true);
+            if (sessionStorage.getItem("EndTime") == undefined) {
+                //console.log("hours " + sessionStorage.getItem('hours') + " minutes " + sessionStorage.getItem('minutes') + " sec " + sessionStorage.getItem('sec'));
+                var msec = (sessionStorage.getItem('hours') * 3600 + sessionStorage.getItem('minutes') * 60 + sessionStorage.getItem('sec')) * 10;
+                console.log("time to wait" + msec);
+                var endtime = new Date().getTime() + msec;
+                sessionStorage.setItem("EndTime", endtime);
+                //console.log(new Date().getTime());
+                //console.log(sessionStorage.getItem("EndTime"));
+            }
+            //me.element.className = "sp"
+        }
+        this.stop = function () {
+            clearInterval(me.interval);
+            sessionStorage.setItem("TimerStarted", false);
+            //me.element.className = "st"
+        }
+    }
+
+    function startTimer(obgId) {
+
+        //if (sessionStorage.getItem('sec') != NaN && sessionStorage.getItem('sec') == 0) {
+        if (sessionStorage.getItem('TimerStarted') == undefined) {
+            hours = hr;
+            minutes = ms;
+            sec = sc;
+
+            //sessionStorage.setItem('hours', hr);
+            //sessionStorage.setItem('minutes', ms);
+            //sessionStorage.setItem('sec', sc);
+
+            document.getElementById('tm').innerHTML = hours + ":" + minutes + ":" + sec;
+        };
+
+        var timer = new Timer(document.getElementById(obgId), hours, minutes, sec);
+        timer.start();
+    }
+
+    var tt = sessionStorage.getItem('sec');
+    //console.log(tt);
+
+    if (isNaN(tt) || tt == null) {
+        sessionStorage.setItem('hours', hours);
+        sessionStorage.setItem('minutes', minutes);
+        sessionStorage.setItem('sec', sec);
+    }
+
+    if (sessionStorage.getItem("EndTime")) {
+        var now = new Date().getTime();
+        //console.log("EndTime " + sessionStorage.getItem("EndTime"));
+        var timeleft = Math.floor((sessionStorage.getItem("EndTime") - now)/1000);
+        //console.log(timeleft);
+        //sessionStorage.setItem('sec', timeleft % 60);
+        //sessionStorage.setItem('minutes', Math.floor(timeleft / 60) % 60);
+        //sessionStorage.setItem('hours', Math.floor(timeleft / 3600));
+        sec = timeleft % 60;
+        //console.log("Sec set "+sec);
+        minutes = Math.floor(timeleft / 60) % 60;
+        //console.log("Minutes set"+minutes);
+        hours = Math.floor(timeleft / 3600);
+        //console.log("Set hours"+hours);
+        //sec = sec + ""
+        //if (sec.length < 2) sec = "0" + sec;
+        main();
+    }
+    //if (me.sec.length < 2) me.sec = "0" + me.sec;
+    //if (me.minutes.length < 2) me.minutes = "0" + me.minutes;
+    //if (me.hours.length < 2) me.hours = "0" + me.hours;
+    document.getElementById('tm').innerHTML = hours + ":" + minutes + ":" + sec;
+
+    // on Moment.js
+    
+</script>
