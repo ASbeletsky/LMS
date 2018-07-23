@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <Target Name="GulpTarget" BeforeTargets="Build">
+    <Exec Command="npm install" />
     <Exec Command="gulp clean" />
     <Exec Command="gulp min" />
   </Target>
