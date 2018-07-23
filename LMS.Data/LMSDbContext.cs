@@ -36,6 +36,7 @@ namespace LMS.Data
                 .HasOne(t => t.Category)
                 .WithMany()
                 .HasForeignKey(t => t.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired();
             modelBuilder.Entity<Task>()
                 .HasOne(t => t.PreviousVersion)

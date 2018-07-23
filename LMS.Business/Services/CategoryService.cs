@@ -18,15 +18,8 @@ namespace LMS.Business.Services
 
         public System.Threading.Tasks.Task DeleteAsync(int categoryId)
         {
-            unitOfWork.Categories.Delete(categoryId);            
+            unitOfWork.Categories.Delete(categoryId);   
 
-            var tasks = unitOfWork.Tasks.Filter(b => b.CategoryId == categoryId);
-
-            foreach (var task in tasks)
-            {
-                task.Category = null;
-            }
-            
             return unitOfWork.SaveAsync();
         }
 
@@ -81,10 +74,8 @@ namespace LMS.Business.Services
             var categoriesDTO = mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(categories);          
 
             foreach (var category in categoriesDTO)
-            {           
-                var tasks = unitOfWork.Tasks.Filter(b => b.CategoryId == category.Id);
-                
-                category.TasksCount = tasks.Count();
+            {
+                category.TasksCount = unitOfWork.Tasks.Filter(b => b.CategoryId == category.Id).Count();
             }
 
             return categoriesDTO;
