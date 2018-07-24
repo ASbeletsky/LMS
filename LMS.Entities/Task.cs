@@ -1,7 +1,15 @@
-﻿namespace LMS.Entities
+﻿using System.Collections.Generic;
+
+namespace LMS.Entities
 {
     public class Task
     {
+        public Task()
+        {
+            OptionTasks = new List<TaskAnswerOption>();
+        }
+        public ICollection<TaskAnswerOption> OptionTasks { get; set; }
+
         public int Id { get; set; }
         public int Complexity { get; set; }
         public string Content { get; set; }

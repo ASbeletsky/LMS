@@ -96,6 +96,19 @@ namespace LMS.Data
 
             modelBuilder.Entity<User>();
 
+            modelBuilder.Entity<TaskType>()
+                .HasData( 
+                new TaskType() {Title = "open-ended question" , Id = 1},
+                new TaskType() { Title = "question with options", Id = 2});
+
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasKey(c => c.Id);
+
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasOne<Task>()
+                .WithMany(t => t.OptionTasks)
+                .HasForeignKey(k => k.TaskId);
+
             base.OnModelCreating(modelBuilder);
         }
     }
