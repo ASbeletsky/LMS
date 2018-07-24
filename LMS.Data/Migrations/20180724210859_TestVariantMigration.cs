@@ -13,8 +13,8 @@ namespace LMS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: false),
-                    TestTemplateId = table.Column<int>(nullable: false)
+                    TestTemplateId = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,12 +33,19 @@ namespace LMS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: true),
-                    TestVariantId = table.Column<int>(nullable: false)
+                    TestVariantId = table.Column<int>(nullable: false),
+                    TestTemplateLevelId = table.Column<int>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TestVariantLevel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TestVariantLevel_TestTemplateLevel_TestTemplateLevelId",
+                        column: x => x.TestTemplateLevelId,
+                        principalTable: "TestTemplateLevel",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_TestVariantLevel_TestVariant_TestVariantId",
                         column: x => x.TestVariantId,
@@ -75,6 +82,11 @@ namespace LMS.Data.Migrations
                 name: "IX_TestVariant_TestTemplateId",
                 table: "TestVariant",
                 column: "TestTemplateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestVariantLevel_TestTemplateLevelId",
+                table: "TestVariantLevel",
+                column: "TestTemplateLevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestVariantLevel_TestVariantId",

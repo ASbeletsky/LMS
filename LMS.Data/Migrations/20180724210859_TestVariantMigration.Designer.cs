@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180723090844_TestVariantMigration")]
+    [Migration("20180724210859_TestVariantMigration")]
     partial class TestVariantMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,11 +162,15 @@ namespace LMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description");
+
+                    b.Property<int?>("TestTemplateLevelId");
+
                     b.Property<int>("TestVariantId");
 
-                    b.Property<string>("Title");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("TestTemplateLevelId");
 
                     b.HasIndex("TestVariantId");
 
@@ -400,7 +404,7 @@ namespace LMS.Data.Migrations
 
             modelBuilder.Entity("LMS.Entities.TestVariant", b =>
                 {
-                    b.HasOne("LMS.Entities.TestTemplate")
+                    b.HasOne("LMS.Entities.TestTemplate", "TestTemplate")
                         .WithMany()
                         .HasForeignKey("TestTemplateId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -408,6 +412,11 @@ namespace LMS.Data.Migrations
 
             modelBuilder.Entity("LMS.Entities.TestVariantLevel", b =>
                 {
+                    b.HasOne("LMS.Entities.TestTemplateLevel")
+                        .WithMany()
+                        .HasForeignKey("TestTemplateLevelId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("LMS.Entities.TestVariant")
                         .WithMany("Levels")
                         .HasForeignKey("TestVariantId")
