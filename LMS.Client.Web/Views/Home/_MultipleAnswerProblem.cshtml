@@ -6,6 +6,7 @@
     List<string> result = new List<string>();
     int number = Model.CurrentQuestionNumber;
     int kolvo = Model.TaskCount;
+    int counter = 0;
 }
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -21,7 +22,8 @@
         </h3>
         @foreach (var choice in Model.OurTask.Choices)
         {
-            @Html.CheckBox("result", @choice.Answer)
+            counter++;
+            <input type="checkbox" name="result" value="@choice.Answer" id="result+@counter">
             <span>@choice.Answer</span>
             <br />
         }
