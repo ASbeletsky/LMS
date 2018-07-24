@@ -84,8 +84,7 @@ namespace LMS.Admin.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await taskService.MarkAsDeletedByIdAsync(id);
-            var tasks = taskService.GetAll();
-            return View("List", tasks);
+            return RedirectToAction(nameof(List));
         }
 
         [HttpPost]
