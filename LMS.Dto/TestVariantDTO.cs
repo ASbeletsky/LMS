@@ -10,9 +10,11 @@ namespace LMS.Dto
         }
 
         public int Id { get; set; }
+
+        public TestTemplateDTO TestTemplate { get; set; }
         public int TestTemplateId { get; set; }
 
         public string Title { get; set; }
-        public ICollection<TestVariantLevelDTO> Levels { get; set; }
+        public IList<TestVariantLevelDTO> Levels { get; set; }
     }
 }

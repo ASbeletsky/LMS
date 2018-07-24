@@ -100,9 +100,8 @@ namespace LMS.Data
                 .Property(v => v.Title)
                 .IsRequired();
             modelBuilder.Entity<TestVariant>()
-                .HasOne<TestTemplate>()
-                .WithMany()
-                .HasForeignKey(v => v.TestTemplateId);
+                .HasOne(v => v.TestTemplate)
+                .WithMany();
             modelBuilder.Entity<TestVariant>()
                 .HasMany(v => v.Levels)
                 .WithOne()

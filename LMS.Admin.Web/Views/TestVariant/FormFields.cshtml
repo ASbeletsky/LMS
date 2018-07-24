@@ -1,0 +1,90 @@
+﻿@using System.Globalization;
+@using LMS.Dto;
+@model TestVariantDTO
+@{
+    var templates = ((IEnumerable<SelectListItem>)ViewData["Templates"]);
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input asp-for="Id" type="hidden" />
+<div class="form-group">
+    <label asp-for="Title" class="control-label"></label>
+    <input asp-for="Title" class="form-control" type="text" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="TestTemplateId" class="control-label"></label>
+    <br />
+    <select onchange="selectTemplate(this)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
+    <span asp-validation-for="TestTemplateId" class="text-danger"></span>
+</div>
+<br />
+<div id="levels">
+    <h4>
+        Levels
+    </h4>
+    <hr />
+    <div id="levelsAccordion">
+        @for (var index = 0; index < Model.Levels.Count; index++)
+        {
+            <div class="level card" data-index="@index">
+                <div class="card-header" id="@("levelHeader" + index)">
+                    <h5 class="mb-0">
+                        <a class="btn" data-toggle="collapse" href="@("#collapsableLevel" + index)" aria-expanded="true" aria-controls="@("levelHeader" + index)">
+                            Level #@(index + 1)
+                        </a>
+                    </h5>
+                </div>
+
+                <div id="@("collapsableLevel" + index)" class="collapse @(index == 0 ? "show" : "")" aria-labelledby="@("levelHeader" + index)" data-parent="#levelsAccordion">
+                    <div class="p-3">
+                        <input asp-for="Levels[index].Id" type="hidden" />
+                        <div class=form-group>
+                            @{ var types = @Model.Levels[index].AvailableTasks.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = t.Content }); }
+                            <select onchange="selectTemplate" required multiple asp-for="Levels[index].Tasks" asp-items="types"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <input type="submit" value="Save" class="btn btn-default" />
+</div>
+
+<script>
+    function selectTemplate(select) {
+        var templateId = parseInt($(select).find(":selected").attr("value"));
+        if (templateId > 0) {
+            location.href = buildUrlWithParam(location.href, 'templateId', templateId);
+        }
+    }
+    function buildUrlWithParam(url, param, value) {
+        var hash = {};
+        var parser = document.createElement('a');
+
+        parser.href = url;
+
+        var parameters = parser.search.split(/\?|&/);
+
+        for (var i = 0; i < parameters.length; i++) {
+            if (!parameters[i])
+                continue;
+
+            var ary = parameters[i].split('=');
+            hash[ary[0]] = ary[1];
+        }
+
+        hash[param] = value;
+
+        var list = [];
+        Object.keys(hash).forEach(function (key) {
+            list.push(key + '=' + hash[key]);
+        });
+
+        parser.search = '?' + list.join('&');
+        return parser.href;
+    }
+</script>

@@ -27,8 +27,11 @@ namespace LMS.Admin.Web.Controllers
         {
             var variant = new TestVariantDTO();
 
-            ViewData["Templates"] = testTemplateService
+            var templates = testTemplateService
                 .GetTemplatesSummary()
+                .ToArray();
+
+            ViewData["Templates"] = templates
                 .Select(template => new SelectListItem
                 {
                     Value = template.Id.ToString(),
@@ -38,6 +41,10 @@ namespace LMS.Admin.Web.Controllers
             if (templateId.HasValue)
             {
                 testVariantService.BindToTemplate(variant, templateId.Value);
+            }
+            else if (templates.Length > 0)
+            {
+                testVariantService.BindToTemplate(variant, templates[0].Id);
             }
 
             return View(variant);
