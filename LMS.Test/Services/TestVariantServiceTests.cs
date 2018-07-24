@@ -183,7 +183,7 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public void Shoul_Generate_Title_And_TemplateId_On_Bind_To_Template()
+        public void Should_Generate_Title_And_TemplateId_On_Bind_To_Template()
         {
             var templateToBind = new TestTemplate { Id = 1 };
             var variantToBeBinded = new TestVariantDTO();
@@ -207,7 +207,7 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public void Shoul_Generate_Level_On_Bind_To_Template()
+        public void Should_Generate_Level_On_Bind_To_Template()
         {
             var templateToBind = new TestTemplate
             {
@@ -250,7 +250,7 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public void Shoul_Update_Level_On_Bind_To_Template()
+        public void Should_Update_Level_On_Bind_To_Template()
         {
             var templateToBind = new TestTemplate
             {
@@ -307,7 +307,7 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public void Shoul_Delete_Level_On_Bind_To_Template()
+        public void Should_Delete_Level_On_Bind_To_Template()
         {
             var templateToBind = new TestTemplate
             {
@@ -341,6 +341,45 @@ namespace LMS.Test.Services
 
             Assert.Single(variantToBeBinded.Levels);
             Assert.True(variantToBeBinded.Levels.Single().TemplateDeleted);
+        }
+
+        [Fact]
+        public async Task Should_Delete_Level_With_Deleted_Template_On_Update()
+        {
+            var singleLevelTemplateId = 3;
+            var variantUpdate = new TestVariantDTO
+            {
+                Levels =
+                {
+                    new TestVariantLevelDTO
+                    {
+                        TestTemplateLevelId = null,
+                        TemplateDeleted = true
+                    },
+                    new TestVariantLevelDTO
+                    {
+                        TestTemplateLevelId = singleLevelTemplateId,
+                        Tasks =
+                        {
+                            new TaskDTO()
+                        }
+                    }
+                }
+            };
+
+            var repositoryMock = new Mock<IRepository<TestVariant>>();
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
+
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
+
+            await service.UpdateAsync(variantUpdate);
+
+            unitOfWorkMock.Verify(m => m.SaveAsync());
+            repositoryMock.Verify(m => m.Update(It.Is<TestVariant>(t =>
+                t.Levels.Single().TestTemplateLevelId == singleLevelTemplateId)));
+            repositoryMock.VerifyNoOtherCalls();
         }
     }
 }

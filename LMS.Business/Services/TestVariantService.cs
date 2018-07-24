@@ -45,6 +45,9 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentException("Variant should contains at least one level");
             }
+
+            testVariant.Levels = testVariant.Levels.Where(l => !l.TemplateDeleted).ToList();
+
             if (!testVariant.Levels.All(l => l.Tasks.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one task");
