@@ -31,6 +31,14 @@
                 <div class="card-header" id="@("levelHeader" + index)">
                     <h5 class="mb-0">
                         <a class="btn" data-toggle="collapse" href="@("#collapsableLevel" + index)" aria-expanded="true" aria-controls="@("levelHeader" + index)">
+                            @if (Model.Levels[index].TemplateDeleted)
+                            {
+                                <span class="badge badge-dark">Deleted</span>
+                            }
+                            else if (Model.Levels[index].TemplateModified)
+                            {
+                                <span class="badge badge-warning">Modified</span>
+                            }
                             Level #@(index + 1)
                         </a>
                     </h5>
@@ -39,10 +47,44 @@
                 <div id="@("collapsableLevel" + index)" class="collapse @(index == 0 ? "show" : "")" aria-labelledby="@("levelHeader" + index)" data-parent="#levelsAccordion">
                     <div class="p-3">
                         <input asp-for="Levels[index].Id" type="hidden" />
-                        <div class=form-group>
-                            @{ var types = @Model.Levels[index].AvailableTasks.Select(t => new SelectListItem { Value = t.Id.ToString(), Text = t.Content }); }
-                            <select onchange="selectTemplate" required multiple asp-for="Levels[index].Tasks" asp-items="types"></select>
+                        <input asp-for="Levels[index].TestTemplateLevelId" type="hidden" />
+                        <div class="form-group">
+                            <label asp-for="Levels[index].Description" class="control-label"></label>
+                            <br />
+                            <textarea required asp-for="Levels[index].Description"></textarea>
+                            <span asp-validation-for="Levels[index].Description" class="text-danger"></span>
                         </div>
+                        <table class="table">
+                            @foreach (var task in Model.Levels[index].AvailableTasks)
+                            {
+                                <tr>
+                                    <td>
+                                        <input onchange="toggleTask(@index, @task.Id)" type="checkbox" class="form-check-input position-static" />
+                                    </td>
+                                    <td>
+                                        @task.Type.Title
+                                    </td>
+                                    <td>
+                                        @task.Category.Title
+                                    </td>
+                                    <td>
+                                        @task.Complexity
+                                    </td>
+                                    <td>
+                                        @task.Content
+                                    </td>
+                                </tr>
+
+                            }
+                        </table>
+                        <select required id="tasks_@index" asp-for="Levels[index].TaskIds" class="d-none">
+                            <option value="0">blank</option>
+                            @foreach (var taskId in Model.Levels[index].TaskIds)
+                            {
+                                <option selected value="@taskId"></option>
+                            }
+                        </select>
+                        <span asp-validation-for="Levels[index].TaskIds" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -55,6 +97,16 @@
 </div>
 
 <script>
+    function toggleTask(level, id) {
+        var select = $("select#tasks_" + level);
+        var selected = select.find("option[value=" + id + "]:selected");
+        if (selected.length > 0) {
+            selected.remove();
+        }
+        else {
+            select.append("<option selected value=" + id + "></option>");
+        }
+    }
     function selectTemplate(select) {
         var templateId = parseInt($(select).find(":selected").attr("value"));
         if (templateId > 0) {

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
@@ -14,14 +16,26 @@ namespace LMS.Dto
         public int TestVariantId { get; set; }
         public int? TestTemplateLevelId { get; set; }
 
+        [Required(ErrorMessage = "Description must be defined")]
         public string Description { get; set; }
 
+        [Display(Name = "Template deleted")]
         public bool TemplateDeleted { get; set; }
+
+        [Display(Name = "Template modified")]
         public bool TemplateModified { get; set; }
 
-        public TaskFilterDTO Filter { get; set; }
+        [Display(Name = "Tasks")]
+        [Required(ErrorMessage = "Tasks cannot be empty")]
+        public ICollection<int> TaskIds
+        {
+            get => Tasks.Select(t => t.Id).ToList();
+            set => Tasks = value.Select(id => new TaskDTO() { Id = id }).ToList();
+        }
 
         public ICollection<TaskDTO> Tasks { get; set; }
+
+        [Display(Name = "Available tasks")]
         public ICollection<TaskDTO> AvailableTasks { get; set; }
     }
 }

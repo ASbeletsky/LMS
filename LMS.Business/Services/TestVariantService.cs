@@ -121,13 +121,11 @@ namespace LMS.Business.Services
                         Description = templateLevel.Description,
                         TestTemplateLevelId = templateLevel.Id,
                         TestVariantId = testVariant.Id,
-                        Filter = templateLevelDTO.Filter,
                         AvailableTasks = availableTasks.ToList()
                     });
                 }
                 else
                 {
-                    existedLevel.Filter = templateLevelDTO.Filter;
                     existedLevel.AvailableTasks = availableTasks.ToList();
                     existedLevel.TemplateModified = existedLevel.Tasks
                         .Select(t => t.Id)
@@ -140,7 +138,6 @@ namespace LMS.Business.Services
                 .Where(l => template.Levels.All(tl => tl.Id != l.TestTemplateLevelId));
             foreach (var levelToRemove in levelsToRemove)
             {
-                levelToRemove.Filter = null;
                 levelToRemove.TemplateDeleted = true;
             }
         }

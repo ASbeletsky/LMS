@@ -70,7 +70,7 @@ namespace LMS.Bootstrap.Mapping
 
             CreateMap<TestVariantLevel, TestVariantLevelDTO>()
                 .ForMember(m => m.AvailableTasks, m => m.Ignore())
-                .ForMember(m => m.Filter, m => m.Ignore());
+                .ForMember(m => m.TaskIds, m => m.Ignore());
             CreateMap<TestVariantLevelDTO, TestVariantLevel>()
                 .ForMember(m => m.Tasks, m => m.ResolveUsing(dto =>
                     dto.Tasks.Select(t => new TestVariantLevelTask

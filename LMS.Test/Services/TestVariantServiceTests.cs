@@ -247,7 +247,6 @@ namespace LMS.Test.Services
             Assert.Equal(templateToBind.Levels.Single().Id, variantToBeBinded.Levels.Single().TestTemplateLevelId);
             Assert.Equal(variantToBeBinded.Id, variantToBeBinded.Levels.Single().TestVariantId);
             Assert.Equal(3, variantToBeBinded.Levels.Single().AvailableTasks.Count);
-            Assert.NotNull(variantToBeBinded.Levels.Single().Filter);
         }
 
         [Fact]
@@ -305,7 +304,6 @@ namespace LMS.Test.Services
             Assert.True(variantToBeBinded.Levels.Single().TemplateModified);
             Assert.False(variantToBeBinded.Levels.Single().TemplateDeleted);
             Assert.Equal(2, variantToBeBinded.Levels.Single().AvailableTasks.Count);
-            Assert.NotNull(variantToBeBinded.Levels.Single().Filter);
         }
 
         [Fact]
