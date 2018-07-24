@@ -8,7 +8,7 @@
             .toArray()
             .reduce(function (a, b) { return a + b; }, 0);
 
-        var requiredValue =  inputs.data("slider-max");
+        var requiredValue = inputs.data("slider-max");
 
         if (totalMaxScore !== requiredValue) {
             var overflow = totalMaxScore - requiredValue;
@@ -25,25 +25,31 @@
         }
     }
 
-    this.updateScorePerTask = function (index) {
+    this.updateScorePerTask = function (level) {
         this.maxScoreChanged();
+
+        var index = level.attr("data-index");
 
         var maxScore = $("input[name='Levels[" + index + "].MaxScore']").val();
         var count = $("input[name='Levels[" + index + "].TasksCount']").val();
-        $("#levelMaxScoreLabel" + index).text(maxScore);
-        $("#levelCountLabel" + index).text(count);
+        level.find("label.level-max-score").text(maxScore);
+        level.find("label.level-tasks-count").text(count);
         var scorePerTask = (maxScore / count).toFixed(2);
         $("input[name='Levels[" + index + "].ScorePerTask']").val(scorePerTask);
     }
 
-    this.complexityChanged = function (index) {
-        this.refreshLevel(index);
+    this.complexityChanged = function (level) {
+        this.refreshLevel(level);
+
+        var index = level.attr("data-index");
 
         var complexity = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").val().replace(',', '-');
-        $("#levelComplexityLabel" + index).text(complexity);
+        level.find("label.level-complexity").text(complexity);
     }
 
-    this.refreshLevel = function (index) {
+    this.refreshLevel = function (level) {
+        var index = level.attr("data-index");
+
         if (this.refreshByIdTimers[index]) {
             clearTimeout(this.refreshByIdTimers[index]);
         }
@@ -71,11 +77,11 @@
                 }
             });
         },
-            500);
+        500);
     }
 
     this.removeLevel = function (level) {
-        var index = $(level).attr("data-index");
+        var index = level.attr("data-index");
         level.remove();
         while (true) {
             var nextLevel = $(".level[data-index=" + (++index) + "]");
