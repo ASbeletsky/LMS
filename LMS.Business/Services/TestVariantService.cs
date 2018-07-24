@@ -89,14 +89,23 @@ namespace LMS.Business.Services
                 .Select(v => { BindToTemplate(v, v.TestTemplateId); return v; });
         }
 
-        public void BindToTemplate(TestVariantDTO testVariant, int testTemplateId)
+        public void BindToTemplate(TestVariantDTO testVariant, int? testTemplateId)
         {
             if (testVariant == null)
             {
                 throw new ArgumentNullException(nameof(testVariant));
             }
 
-            var template = unitOfWork.TestTemplates.Get(testTemplateId);
+            if (!testTemplateId.HasValue)
+            {
+                foreach (var levelToRemove in testVariant.Levels)
+                {
+                    levelToRemove.TemplateDeleted = true;
+                }
+                return;
+            }
+
+            var template = unitOfWork.TestTemplates.Get(testTemplateId.Value);
             if (template == null)
             {
                 throw new EntityNotFoundException<TestTemplateDTO>();

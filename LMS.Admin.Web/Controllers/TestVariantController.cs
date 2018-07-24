@@ -62,15 +62,22 @@ namespace LMS.Admin.Web.Controllers
         {
             var variant = testVariantService.GetById(id);
 
-            ViewData["Templates"] = testTemplateService
+            var templates = testTemplateService
                 .GetTemplatesSummary()
+                .ToArray();
+
+            ViewData["Templates"] = templates
                 .Select(template => new SelectListItem
                 {
                     Value = template.Id.ToString(),
                     Text = template.Title
                 });
-
-            testVariantService.BindToTemplate(variant, templateId ?? variant.TestTemplateId);
+             
+            templateId = templateId ?? variant.TestTemplateId ?? templates.FirstOrDefault()?.Id;
+            if (templateId.HasValue)
+            {
+                testVariantService.BindToTemplate(variant, templateId.Value);
+            }
 
             return View(variant);
         }

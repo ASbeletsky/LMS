@@ -101,7 +101,8 @@ namespace LMS.Data
                 .IsRequired();
             modelBuilder.Entity<TestVariant>()
                 .HasOne(v => v.TestTemplate)
-                .WithMany();
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
             modelBuilder.Entity<TestVariant>()
                 .HasMany(v => v.Levels)
                 .WithOne()

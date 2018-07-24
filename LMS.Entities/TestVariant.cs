@@ -10,7 +10,7 @@ namespace LMS.Entities
         }
 
         public int Id { get; set; }
-        public int TestTemplateId { get; set; }
+        public int? TestTemplateId { get; set; }
 
         public TestTemplate TestTemplate { get; set; }
 

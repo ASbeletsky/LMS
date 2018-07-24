@@ -41,7 +41,7 @@
                 {
                     <tr class="@GetItemClass(item)">
                         <td>
-                            <label>@item.TestTemplate.Title</label>
+                            <label>@(item.TestTemplate?.Title ?? "Deleted")</label>
                         </td>
                         <td>
                             <label>@item.Title</label>
