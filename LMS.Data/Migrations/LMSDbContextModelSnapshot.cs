@@ -143,7 +143,7 @@ namespace LMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("TestTemplateId");
+                    b.Property<int?>("TestTemplateId");
 
                     b.Property<string>("Title")
                         .IsRequired();
@@ -405,7 +405,7 @@ namespace LMS.Data.Migrations
                     b.HasOne("LMS.Entities.TestTemplate", "TestTemplate")
                         .WithMany()
                         .HasForeignKey("TestTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("LMS.Entities.TestVariantLevel", b =>

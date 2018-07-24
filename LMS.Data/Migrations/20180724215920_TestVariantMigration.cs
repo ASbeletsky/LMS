@@ -13,7 +13,7 @@ namespace LMS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    TestTemplateId = table.Column<int>(nullable: false),
+                    TestTemplateId = table.Column<int>(nullable: true),
                     Title = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -24,7 +24,7 @@ namespace LMS.Data.Migrations
                         column: x => x.TestTemplateId,
                         principalTable: "TestTemplates",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
