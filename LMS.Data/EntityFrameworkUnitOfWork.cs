@@ -25,7 +25,9 @@ namespace LMS.Data
 
         public IRepositoryAsync<User> UserRepository { get; }
 
-        public IRepository<Answer> Answers => throw new System.NotImplementedException();
+        public IRepository<Answers> Answers { get; }
+
+        public IRepository<AnswerSheet> AnswerSheet { get; }
 
         public System.Threading.Tasks.Task SaveAsync()
         {

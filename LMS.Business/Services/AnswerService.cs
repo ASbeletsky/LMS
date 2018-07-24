@@ -12,17 +12,17 @@ namespace LMS.Business.Services
         public AnswerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
-        public AnswerDTO GetById(int answerId)
+        public AnswersDTO GetById(int answerId)
         {
             var answer = unitOfWork.Answers.Get(answerId);
             if (answer == null)
             {
-                throw new EntityNotFoundException<Entities.Answer>(answerId);
+                throw new EntityNotFoundException<Entities.Answers>(answerId);
             }
 
-            return mapper.Map<Entities.Answer, AnswerDTO>(answer);
+            return mapper.Map<Entities.Answers, AnswersDTO>(answer);
         }
-        public Task CreateAsync(AnswerDTO answer)
+        public Task CreateAsync(AnswersDTO answer)
         {
             if (answer == null)
             {
@@ -30,36 +30,35 @@ namespace LMS.Business.Services
             }
             if (string.IsNullOrEmpty(answer.Content))
             {
-                throw new ArgumentException($"{nameof(Entities.Answer)}.{nameof(Entities.Answer.Content)} cannot be null or empty");
+                throw new ArgumentException($"{nameof(Entities.Answers)}.{nameof(Entities.Answers.Content)} cannot be null or empty");
             }
 
-            var entry = mapper.Map<AnswerDTO, Entities.Answer>(answer);
+            var entry = mapper.Map<AnswersDTO, Entities.Answers>(answer);
 
             unitOfWork.Answers.Create(entry);
 
             return unitOfWork.SaveAsync();
         }
-        public Task UpdateAsync(AnswerDTO answerDto)
+        public Task UpdateAsync(AnswersDTO answerDto)
         {
             if (answerDto == null)
             {
                 throw new ArgumentNullException(nameof(answerDto));
             }
 
-            var newAnswer = mapper.Map<AnswerDTO, Entities.Answer>(answerDto);
+            var newAnswer = mapper.Map<AnswersDTO, Entities.Answers>(answerDto);
 
-            if (unitOfWork.Answers.Get(newAnswer.Id) is Entities.Answer oldAnswer)
+            if (unitOfWork.Answers.Get(newAnswer.Id) is Entities.Answers oldAnswer)
             {
                 if (oldAnswer.Content == newAnswer.Content
                     && oldAnswer.TaskId == newAnswer.TaskId
-                    && oldAnswer.TestId == newAnswer.TestId
-                    && oldAnswer.UserId == newAnswer.UserId)
+                    && oldAnswer.Content == newAnswer.Content
+                    && oldAnswer.AnswerSheetId != newAnswer.AnswerSheetId)
                 {
                     return Task.CompletedTask;
                 }
                 if (oldAnswer.TaskId != newAnswer.TaskId
-                    || oldAnswer.TestId != newAnswer.TestId
-                    || oldAnswer.UserId != newAnswer.UserId)
+                    || oldAnswer.AnswerSheetId != newAnswer.AnswerSheetId)
                 {
                     unitOfWork.Answers.Create(newAnswer);
                 }
@@ -74,11 +73,11 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<AnswerDTO> GetAll()
+        public IEnumerable<AnswersDTO> GetAll()
         {
             var answers = unitOfWork.Answers
                 .GetAll();
-            return mapper.Map<IEnumerable<Entities.Answer>, IEnumerable<AnswerDTO>>(answers);
+            return mapper.Map<IEnumerable<Entities.Answers>, IEnumerable<AnswersDTO>>(answers);
         }
     }
 }

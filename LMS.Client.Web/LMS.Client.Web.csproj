@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.2" />
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.4" />
@@ -17,7 +19,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LMS.Data\LMS.Data.csproj" />
-    <ProjectReference Include="..\LMS.Socet\LMS.Socet.csproj" />
+    <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
+    <ProjectReference Include="..\LMS.Entities\LMS.Entities.csproj" />
+    <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
+    <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

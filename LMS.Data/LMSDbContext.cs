@@ -18,6 +18,8 @@ namespace LMS.Data
         public DbSet<TaskType> TaskTypes { get; }
         
         public DbSet<TestTemplate> TestTemplates { get; }
+
+        public DbSet<AnswerSheet> AnswerSheets { get; }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -73,7 +75,17 @@ namespace LMS.Data
                 .HasMany(f => f.TaskTypes)
                 .WithOne(t => t.TestTemplateLevel)
                 .HasForeignKey(t => t.TestTemplateLevelId);
-            
+
+            modelBuilder.Entity<AnswerSheet>()
+                .HasKey(t=>t.Id);
+            modelBuilder.Entity<AnswerSheet>()
+                .HasMany(t => t.Answers)
+                .WithOne()
+                .HasForeignKey(t => t.AnswerSheetId);
+
+            modelBuilder.Entity<Answers>()
+                .HasKey(t => t.Id);
+
             modelBuilder.Entity<LevelCategory>()
                 .HasKey(c => new
                 {

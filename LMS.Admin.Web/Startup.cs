@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LMS.Identity;
+using LMS.Socet;
 
 namespace LMS.Admin.Web
 {
@@ -23,7 +24,7 @@ namespace LMS.Admin.Web
         {
             services.AddMvc();
             services.AddIdentity();
-
+            services.AddSocet();
           
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -53,6 +54,7 @@ namespace LMS.Admin.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.AddSocetConfig();
             RoleInitializer.CreateUsersRoles(serviceProvider).GetAwaiter().GetResult();
         }
     }

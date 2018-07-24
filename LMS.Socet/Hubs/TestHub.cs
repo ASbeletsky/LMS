@@ -9,30 +9,23 @@ namespace LMS.Socet
 {
     public class TestHub : Hub
     {
-        //for admin
+        [Authorize(Roles = "admin, moderator, reviewer")]
         public async Task SendComand(string user, string comand, string message)
         {
             await Clients.User(user).SendAsync("Task", comand, message);
         }
 
-        //for admin
         // Comands List
         // comand setTimer, message time in ms
         // comand Banne, message none
         // comand stopTimer
         // comand contTimer
+        [Authorize(Roles = "admin, moderator, reviewer")]
         public Task SendComandToGroups(string comand, string message)
         {
             List<string> groups = new List<string>() { "Users" };
             return Clients.Groups(groups).SendAsync("Task", comand, message);
         }
-
-        //public Task UsersInNet()
-        //{
-        //    List<string> Users;
-        //    Clients.Groups("Users")
-
-        //}
 
         public Task SendReportToGroups(string report)
         {
@@ -42,29 +35,22 @@ namespace LMS.Socet
 
         public override async Task OnConnectedAsync()
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, "Users");
-            await base.OnConnectedAsync();
+            if (Context.User.IsInRole("admin") || Context.User.IsInRole("moderator") || Context.User.IsInRole("reviewer"))
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, "Admins");
+                await base.OnConnectedAsync();
+            }
+            else
+            {
+                await Groups.AddToGroupAsync(Context.ConnectionId, "Users");
+                await base.OnConnectedAsync();
+            }
         }
 
-        //[Authorize]
         public Task AdminCheck(string comand)
         {
-            var str = "User ";
-            foreach (var item in Context.User.Identities)
-            {
-                str += item.RoleClaimType;
-            }
-            str += "Items";
-            foreach (var item in Context.Items)
-            {
-                str += item.Key +" "+ item.Value;
-            }
-            str += "Featurs";
-            foreach (var item in Context.Features)
-            {
-                str += item.Key + " " + item.Value;
-            }
-            return Clients.Caller.SendAsync("Check",str);
+            
+            return Clients.Caller.SendAsync("Check",comand);
         }
 
         public override async Task OnDisconnectedAsync(Exception exception)
