@@ -15,7 +15,7 @@
 <div class="form-group">
     <label asp-for="TestTemplateId" class="control-label"></label>
     <br />
-    <select onchange="selectTemplate(this)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
+    <select onchange="testVariant.selectTemplate(this)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
     <span asp-validation-for="TestTemplateId" class="text-danger"></span>
 </div>
 <br />
@@ -70,7 +70,7 @@
                                     {
                                         <tr>
                                             <td class="align-middle text-center">
-                                                <input onchange="toggleTask(@index, @task.Id)" type="checkbox" @(Model.Levels[index].TaskIds.Contains(task.Id) ? "checked" : "") />
+                                                <input onchange="testVariant.toggleTask(@index, @task.Id)" type="checkbox" @(Model.Levels[index].TaskIds.Contains(task.Id) ? "checked" : "") />
                                             </td>
                                             <td class="align-middle text-center">
                                                 @task.Type.Title
@@ -114,48 +114,3 @@
 <div class="form-group">
     <input type="submit" value="Save" class="btn btn-default" />
 </div>
-
-<script>
-    function toggleTask(level, id) {
-        var select = $("select#tasks_" + level);
-        var selected = select.find("option[value=" + id + "]:selected");
-        if (selected.length > 0) {
-            selected.remove();
-        }
-        else {
-            select.append("<option selected value=" + id + "></option>");
-        }
-    }
-    function selectTemplate(select) {
-        var templateId = parseInt($(select).find(":selected").attr("value"));
-        if (templateId > 0) {
-            location.href = buildUrlWithParam(location.href, 'templateId', templateId);
-        }
-    }
-    function buildUrlWithParam(url, param, value) {
-        var hash = {};
-        var parser = document.createElement('a');
-
-        parser.href = url;
-
-        var parameters = parser.search.split(/\?|&/);
-
-        for (var i = 0; i < parameters.length; i++) {
-            if (!parameters[i])
-                continue;
-
-            var ary = parameters[i].split('=');
-            hash[ary[0]] = ary[1];
-        }
-
-        hash[param] = value;
-
-        var list = [];
-        Object.keys(hash).forEach(function (key) {
-            list.push(key + '=' + hash[key]);
-        });
-
-        parser.search = '?' + list.join('&');
-        return parser.href;
-    }
-</script>
