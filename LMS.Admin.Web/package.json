@@ -6,6 +6,7 @@
     "bootstrap": "^4.1.1",
     "bootstrap-select": "^1.13.1",
     "bootstrap-slider": "^10.0.2",
+    "bootstrap-timepicker": "^0.5.2",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "jquery": "^3.3.1",
