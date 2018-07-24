@@ -4,6 +4,11 @@ namespace LMS.Entities
 {
     public class TestVariantLevel
     {
+        public TestVariantLevel()
+        {
+            Tasks = new List<TestVariantLevelTask>();
+        }
+
         public int Id { get; set; }
         public int TestVariantId { get; set; }
         public int? TestTemplateLevelId { get; set; }

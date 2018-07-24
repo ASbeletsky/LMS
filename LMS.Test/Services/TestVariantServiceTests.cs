@@ -10,48 +10,48 @@ using Xunit;
 
 namespace LMS.Test.Services
 {
-    public class TestTemplateServiceTests
+    public class TestVariantServiceTests
     {
         private readonly Bootstrap.Mapping.AutoMapper mapper = new Bootstrap.Mapping.AutoMapper();
 
         [Fact]
         public void Should_Get_Item()
         {
-            var templateGet = new TestTemplate
+            var templateGet = new TestVariant
             {
                 Id = 1,
                 Levels =
                 {
-                    new TestTemplateLevel
+                    new TestVariantLevel
                     {
-                        TaskTypes =
+                        TestTemplateLevelId = 3,
+                        Tasks =
                         {
-                            new LevelTaskType
+                            new TestVariantLevelTask
                             {
-                                TaskTypeId = 5
+                                TaskId = 6
                             }
                         }
                     }
                 }
             };
 
-            var repositoryMock = new Mock<IRepository<TestTemplate>>();
+            var repositoryMock = new Mock<IRepository<TestVariant>>();
             repositoryMock.Setup(u => u.Get(1)).Returns(templateGet);
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
 
             var taskServiceMock = new Mock<ITaskSource>();
             taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
 
-            var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
+            var service = new TestVariantService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
 
             var actualGet = service.GetById(1);
             Assert.NotNull(actualGet);
-            Assert.Single(actualGet.Levels);
-            Assert.Equal(3, actualGet.Levels[0].ValidTaskCount);
-            Assert.Single(actualGet.Levels[0].Filter.TaskTypeIds);
-            Assert.Equal(5, actualGet.Levels[0].Filter.TaskTypeIds.Single());
+            Assert.Equal(3, actualGet.Levels.Single().TestTemplateLevelId);
+            Assert.Single(actualGet.Levels.Single().Tasks);
+            Assert.Equal(6, actualGet.Levels.Single().Tasks.Single().Id);
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
         }
@@ -59,13 +59,13 @@ namespace LMS.Test.Services
         [Fact]
         public void Should_Throw_NotFound_On_Get()
         {
-            var repositoryMock = new Mock<IRepository<TestTemplate>>();
-            repositoryMock.Setup(u => u.Get(1)).Returns<TestTemplate>(null);
+            var repositoryMock = new Mock<IRepository<TestVariant>>();
+            repositoryMock.Setup(u => u.Get(1)).Returns<TestVariant>(null);
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
 
-            var service = new TestTemplateService(null, unitOfWorkMock.Object, mapper);
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
 
             Assert.Throws<EntityNotFoundException<TestTemplate>>(() => service.GetById(1));
 
@@ -76,17 +76,17 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Delete()
         {
-            var templateDelete = new TestTemplate
+            var templateDelete = new TestVariant
             {
                 Id = 1
             };
 
-            var repositoryMock = new Mock<IRepository<TestTemplate>>();
+            var repositoryMock = new Mock<IRepository<TestVariant>>();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
 
-            var service = new TestTemplateService(null, unitOfWorkMock.Object, mapper);
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
 
             await service.DeleteByIdAsync(1);
 
@@ -100,19 +100,18 @@ namespace LMS.Test.Services
         {
             var singleLevelTypeId = 5;
             var singleCategoryId = 2;
-            var templateUpdate = new TestTemplateDTO
+            var templateUpdate = new TestVariantDTO
             {
                 Id = 1,
                 Title = "Sample",
                 Levels =
                 {
-                    new TestTemplateLevelDTO
+                    new TestVariantLevelDTO
                     {
                         Description = "Level desc",
-                        Filter = new TaskFilterDTO
+                        Tasks =
                         {
-                            TaskTypeIds = { singleLevelTypeId },
-                            CategoryIds = { singleCategoryId }
+
                         }
                     }
                 }
@@ -176,76 +175,6 @@ namespace LMS.Test.Services
                 && t.Levels.Single().Categories.Single().CategoryId == singleCategoryId
                 && t.Levels.Single().TaskTypes.Single().TaskTypeId == singleLevelTypeId)));
             repositoryMock.VerifyNoOtherCalls();
-        }
-
-        [Fact]
-        public void Should_Get_All_Active()
-        {
-            var templatesRepositoryMock = new Mock<IRepository<TestTemplate>>();
-            templatesRepositoryMock.Setup(m => m.GetAll()).Returns(() => new[]
-            {
-                new TestTemplate
-                {
-                    Id = 1,
-                    Title = "1",
-                    Levels = new List<TestTemplateLevel>()
-                },
-                new TestTemplate
-                {
-                    Id = 2,
-                    Title = "2",
-                    Levels = new List<TestTemplateLevel>
-                    {
-                        new TestTemplateLevel
-                        {
-                            MaxComplexity = 3,
-                            TaskTypes =
-                            {
-                                new LevelTaskType
-                                {
-                                    TaskType = new TaskType()
-                                }
-                            }
-                        }
-                    }
-                },
-                new TestTemplate
-                {
-                    Id = 3,
-                    Title = "3",
-                    Levels = new List<TestTemplateLevel>
-                    {
-                        new TestTemplateLevel
-                        {
-                            MinComplexity = 5,
-                            TaskTypes =
-                            {
-                                new LevelTaskType
-                                {
-                                    TaskType = new TaskType()
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
-
-            var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MinComplexity == 5 && l.TaskTypeIds.Any())))
-                .Returns(new TaskDTO[3]);
-            taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MaxComplexity == 3 && l.TaskTypeIds.Any())))
-                .Returns(new TaskDTO[2]);
-
-            var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
-            var testTemplateListItems = service.GetTemplatesSummary().ToArray();
-            Assert.Equal(3, testTemplateListItems.GroupBy(t => t.Id).Count());
-            Assert.True(testTemplateListItems.All(t => t.Id.ToString() == t.Title));
-            Assert.Empty(testTemplateListItems[0].Levels);
-            Assert.Equal(2, testTemplateListItems[1].Levels.Single().CountPerTypes.Sum(t => t.Count));
-            Assert.Equal(3, testTemplateListItems[2].Levels.Single().CountPerTypes.Sum(t => t.Count));
         }
     }
 }

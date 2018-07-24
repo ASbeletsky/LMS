@@ -20,7 +20,7 @@ namespace LMS.Business.Services
 
         public TestVariantDTO GetById(int id)
         {
-            var variant = unitOfWork.TestVariantes.Get(id);
+            var variant = unitOfWork.TestVariants.Get(id);
             if (variant == null)
             {
                 throw new EntityNotFoundException<TestVariantDTO>(id);
@@ -31,7 +31,7 @@ namespace LMS.Business.Services
 
         public Task DeleteByIdAsync(int id)
         {
-            unitOfWork.TestVariantes.Delete(id);
+            unitOfWork.TestVariants.Delete(id);
             return unitOfWork.SaveAsync();
         }
 
@@ -52,7 +52,7 @@ namespace LMS.Business.Services
 
             var updatedTest = mapper.Map<TestVariantDTO, TestVariant>(testVariant);
 
-            unitOfWork.TestVariantes.Update(updatedTest);
+            unitOfWork.TestVariants.Update(updatedTest);
 
             return unitOfWork.SaveAsync();
         }
@@ -74,7 +74,7 @@ namespace LMS.Business.Services
 
             var createdTest = mapper.Map<TestVariantDTO, TestVariant>(testVariant);
 
-            unitOfWork.TestVariantes.Create(createdTest);
+            unitOfWork.TestVariants.Create(createdTest);
 
             return unitOfWork.SaveAsync();
         }
@@ -82,7 +82,7 @@ namespace LMS.Business.Services
         public IEnumerable<TestVariantDTO> GetAll()
         {
             return mapper.Map<IEnumerable<TestVariant>, IEnumerable<TestVariantDTO>>(
-                unitOfWork.TestVariantes.GetAll());
+                unitOfWork.TestVariants.GetAll());
         }
 
         public void BindToTemplate(TestVariantDTO testVariant, int testTemplateId)
@@ -100,7 +100,7 @@ namespace LMS.Business.Services
 
             if (string.IsNullOrEmpty(testVariant.Title))
             {
-                var prevVariantsCount = unitOfWork.TestVariantes
+                var prevVariantsCount = unitOfWork.TestVariants
                     .Filter(v => v.TestTemplateId == testTemplateId)
                     .Count();
                 testVariant.Title = "Variant #" + prevVariantsCount;

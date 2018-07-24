@@ -4,6 +4,12 @@ namespace LMS.Dto
 {
     public class TestVariantLevelDTO
     {
+        public TestVariantLevelDTO()
+        {
+            Tasks = new List<TaskDTO>();
+            AvailableTasks = new List<TaskDTO>();
+        }
+
         public int Id { get; set; }
         public int TestVariantId { get; set; }
         public int? TestTemplateLevelId { get; set; }

@@ -52,7 +52,7 @@ namespace LMS.Test.Services
         public void Should_Throw_NotFound_On_Get()
         {
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
-            repositoryMock.Setup(u => u.Get(1)).Throws<EntityNotFoundException<Entities.Task>>();
+            repositoryMock.Setup(u => u.Get(1)).Returns<Entities.Task>(null);
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);

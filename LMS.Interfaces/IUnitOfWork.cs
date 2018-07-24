@@ -9,7 +9,7 @@ namespace LMS.Interfaces
         IRepository<Task> Tasks { get; }
         IRepository<TaskType> TaskTypes { get; }
         IRepository<TestTemplate> TestTemplates { get; }
-        IRepository<TestVariant> TestVariantes { get; }
+        IRepository<TestVariant> TestVariants { get; }
 
         System.Threading.Tasks.Task SaveAsync();
     }
