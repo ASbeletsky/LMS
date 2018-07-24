@@ -105,6 +105,21 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
+        public IEnumerable<TestTemplateDTO> GetAll()
+        {
+            return mapper
+                .Map<IEnumerable<TestTemplate>, IEnumerable<TestTemplateDTO>>(
+                    unitOfWork.TestTemplates.GetAll())
+                .Select(t =>
+                {
+                    foreach (var level in t.Levels)
+                    {
+                        level.ValidTaskCount = taskSource.Filter(level.Filter).Count();
+                    }
+                    return t;
+                });
+        }
+
         public IEnumerable<TestTemplateSummary> GetTemplatesSummary()
         {
             var templates = unitOfWork.TestTemplates.GetAll().ToArray();
