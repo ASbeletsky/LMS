@@ -8,6 +8,7 @@
     int kolvo = Model.TaskCount;
 }
 <div class="well">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
@@ -36,4 +37,8 @@
             <button onclick="changeGot('@i')"> @(i + 1)</button>
         }
     }
+    <script>
+        $(":radio").click(showValues);
+        showValues();
+    </script>
 </div>
