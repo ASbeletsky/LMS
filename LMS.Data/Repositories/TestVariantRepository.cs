@@ -87,8 +87,10 @@ namespace LMS.Data.Repositories
         private IQueryable<TestVariant> GetAllQuery()
         {
             return dbContext.Set<TestVariant>()
-                .Include(t => t.Levels)
-                .ThenInclude(l => l.Tasks);
+                .Include(v => v.TestTemplate)
+                .Include(v => v.Levels)
+                .ThenInclude(l => l.Tasks)
+                .ThenInclude(t => t.Task);
         }
     }
 }

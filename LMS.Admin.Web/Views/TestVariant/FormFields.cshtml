@@ -27,66 +27,85 @@
     <div id="levelsAccordion">
         @for (var index = 0; index < Model.Levels.Count; index++)
         {
+            <input asp-for="Levels[index].Id" type="hidden" />
+            <input asp-for="Levels[index].TestTemplateLevelId" type="hidden" />
+            <input asp-for="Levels[index].TemplateDeleted" type="hidden" />
             <div class="level card" data-index="@index">
                 <div class="card-header" id="@("levelHeader" + index)">
                     <h5 class="mb-0">
                         <a class="btn" data-toggle="collapse" href="@("#collapsableLevel" + index)" aria-expanded="true" aria-controls="@("levelHeader" + index)">
-                            @if (Model.Levels[index].TemplateDeleted)
-                            {
-                                <span class="badge badge-dark">Deleted</span>
-                            }
-                            else if (Model.Levels[index].TemplateModified)
-                            {
-                                <span class="badge badge-warning">Modified</span>
-                            }
                             Level #@(index + 1)
                         </a>
+                        @if (Model.Levels[index].TemplateDeleted)
+                        {
+                            <span class="badge badge-dark pull-right">Deleted</span>
+                        }
+                        else if (Model.Levels[index].TemplateModified)
+                        {
+                            <span class="badge badge-warning pull-right">Modified</span>
+                        }
                     </h5>
                 </div>
-
-                <div id="@("collapsableLevel" + index)" class="collapse @(index == 0 ? "show" : "")" aria-labelledby="@("levelHeader" + index)" data-parent="#levelsAccordion">
-                    <div class="p-3">
-                        <input asp-for="Levels[index].Id" type="hidden" />
-                        <input asp-for="Levels[index].TestTemplateLevelId" type="hidden" />
-                        <div class="form-group">
-                            <label asp-for="Levels[index].Description" class="control-label"></label>
-                            <br />
-                            <textarea required asp-for="Levels[index].Description"></textarea>
-                            <span asp-validation-for="Levels[index].Description" class="text-danger"></span>
+                @if (!Model.Levels[index].TemplateDeleted)
+                {
+                    <div id="@("collapsableLevel" + index)" class="collapse @(index == 0 ? "show" : "")" aria-labelledby="@("levelHeader" + index)" data-parent="#levelsAccordion">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <label asp-for="Levels[index].Description" class="control-label"></label>
+                                <br />
+                                <textarea required class="form-control" asp-for="Levels[index].Description"></textarea>
+                                <span asp-validation-for="Levels[index].Description" class="text-danger"></span>
+                            </div>
+                            @if (Model.Levels[index].AvailableTasks.Any())
+                            {
+                                <table class="table">
+                                    <tr>
+                                        <th>Included</th>
+                                        <th>Type</th>
+                                        <th>Category</th>
+                                        <th>Complexity</th>
+                                        <th>Content</th>
+                                    </tr>
+                                    @foreach (var task in Model.Levels[index].AvailableTasks)
+                                    {
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                <input onchange="toggleTask(@index, @task.Id)" type="checkbox" @(Model.Levels[index].TaskIds.Contains(task.Id) ? "checked" : "") />
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Type.Title
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Category.Title
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Complexity
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Content
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            }
+                            else
+                            {
+                                <p class="text-danger">No available tasks found</p>
+                            }
+                            <select required id="tasks_@index" asp-for="Levels[index].TaskIds" class="invisible" style="width:0;height:0">
+                                <option value="0">blank</option>
+                                @foreach (var taskId in Model.Levels[index].TaskIds)
+                                {
+                                    if (Model.Levels[index].AvailableTasks.Any(t => t.Id == taskId))
+                                    {
+                                        <option selected value="@taskId"></option>
+                                    }
+                                }
+                            </select>
+                            <span asp-validation-for="Levels[index].TaskIds" class="text-danger"></span>
                         </div>
-                        <table class="table">
-                            @foreach (var task in Model.Levels[index].AvailableTasks)
-                            {
-                                <tr>
-                                    <td>
-                                        <input onchange="toggleTask(@index, @task.Id)" type="checkbox" class="form-check-input position-static" />
-                                    </td>
-                                    <td>
-                                        @task.Type.Title
-                                    </td>
-                                    <td>
-                                        @task.Category.Title
-                                    </td>
-                                    <td>
-                                        @task.Complexity
-                                    </td>
-                                    <td>
-                                        @task.Content
-                                    </td>
-                                </tr>
-
-                            }
-                        </table>
-                        <select required id="tasks_@index" asp-for="Levels[index].TaskIds" class="d-none">
-                            <option value="0">blank</option>
-                            @foreach (var taskId in Model.Levels[index].TaskIds)
-                            {
-                                <option selected value="@taskId"></option>
-                            }
-                        </select>
-                        <span asp-validation-for="Levels[index].TaskIds" class="text-danger"></span>
                     </div>
-                </div>
+                }
             </div>
         }
     </div>

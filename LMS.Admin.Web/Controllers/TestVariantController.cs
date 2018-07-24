@@ -38,13 +38,10 @@ namespace LMS.Admin.Web.Controllers
                     Text = template.Title
                 });
 
+            templateId = templateId ?? templates.FirstOrDefault()?.Id;
             if (templateId.HasValue)
             {
                 testVariantService.BindToTemplate(variant, templateId.Value);
-            }
-            else if (templates.Length > 0)
-            {
-                testVariantService.BindToTemplate(variant, templates[0].Id);
             }
 
             return View(variant);
@@ -73,10 +70,7 @@ namespace LMS.Admin.Web.Controllers
                     Text = template.Title
                 });
 
-            if (templateId.HasValue)
-            {
-                testVariantService.BindToTemplate(variant, templateId.Value);
-            }
+            testVariantService.BindToTemplate(variant, templateId ?? variant.TestTemplateId);
 
             return View(variant);
         }

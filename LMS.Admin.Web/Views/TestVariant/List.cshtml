@@ -2,6 +2,15 @@
 @model IEnumerable<TestVariantDTO>
 @{
     ViewData["Title"] = "List";
+
+    string GetItemClass(TestVariantDTO item)
+    {
+        var anyLevelDeleted = item.Levels.Any(l => l.TemplateDeleted);
+        var anyLevelModified = item.Levels.Any(l => l.TemplateModified);
+        return anyLevelDeleted ? "alert alert-dark"
+            : anyLevelModified ? "alert alert-warning"
+            : "";
+    }
 }
 
 <p>
@@ -30,29 +39,29 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td>
-                        <label>@item.TestTemplate.Title</label>
-                    </td>
-                    <td>
-                        <label>@item.Title</label>
-                    </td>
-                    <td>
-                        <ol>
-                            @foreach (var level in item.Levels)
-                            {
-                                <li>
-                                    @level.Tasks.Count
-                                    Count
-                                </li>
-                            }
-                        </ol>
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                        <a href="#" data-toggle="modal" data-target="#deleteModal" data-arg-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
+                    <tr class="@GetItemClass(item)">
+                        <td>
+                            <label>@item.TestTemplate.Title</label>
+                        </td>
+                        <td>
+                            <label>@item.Title</label>
+                        </td>
+                        <td>
+                            <ol>
+                                @foreach (var level in item.Levels)
+                                {
+                                    <li>
+                                        @level.Tasks.Count
+                                        tasks
+                                    </li>
+                                }
+                            </ol>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteModal" data-arg-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

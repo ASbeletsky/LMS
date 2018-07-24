@@ -15,8 +15,9 @@ namespace LMS.Dto
         [Display(Name = "Test template")]
         public TestTemplateDTO TestTemplate { get; set; }
 
+        [Display(Name = "Test template")]
         public int TestTemplateId { get; set; }
-
+        
         [Required(ErrorMessage = "Title must be defined")]
         public string Title { get; set; }
 

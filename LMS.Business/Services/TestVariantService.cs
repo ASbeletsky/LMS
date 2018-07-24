@@ -85,7 +85,8 @@ namespace LMS.Business.Services
         public IEnumerable<TestVariantDTO> GetAll()
         {
             return mapper.Map<IEnumerable<TestVariant>, IEnumerable<TestVariantDTO>>(
-                unitOfWork.TestVariants.GetAll());
+                unitOfWork.TestVariants.GetAll())
+                .Select(v => { BindToTemplate(v, v.TestTemplateId); return v; });
         }
 
         public void BindToTemplate(TestVariantDTO testVariant, int testTemplateId)
