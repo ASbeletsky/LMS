@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
 using Task = System.Threading.Tasks.Task;
 using LMS.Dto;
 using LMS.Entities;
@@ -17,19 +18,24 @@ namespace LMS.Test.Services
         [Fact]
         public void Should_Get_Item()
         {
-            var templateGet = new TestVariant
+            var singleTaskId = 6;
+            var singleLevelTemplateId = 3;
+            var variantGet = new TestVariant
             {
                 Id = 1,
                 Levels =
                 {
                     new TestVariantLevel
                     {
-                        TestTemplateLevelId = 3,
+                        TestTemplateLevelId = singleLevelTemplateId,
                         Tasks =
                         {
                             new TestVariantLevelTask
                             {
-                                TaskId = 6
+                                Task = new Entities.Task
+                                {
+                                    Id = singleTaskId
+                                }
                             }
                         }
                     }
@@ -37,21 +43,18 @@ namespace LMS.Test.Services
             };
 
             var repositoryMock = new Mock<IRepository<TestVariant>>();
-            repositoryMock.Setup(u => u.Get(1)).Returns(templateGet);
+            repositoryMock.Setup(u => u.Get(1)).Returns(variantGet);
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
 
-            var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
-
-            var service = new TestVariantService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
 
             var actualGet = service.GetById(1);
             Assert.NotNull(actualGet);
-            Assert.Equal(3, actualGet.Levels.Single().TestTemplateLevelId);
+            Assert.Equal(singleLevelTemplateId, actualGet.Levels.Single().TestTemplateLevelId);
             Assert.Single(actualGet.Levels.Single().Tasks);
-            Assert.Equal(6, actualGet.Levels.Single().Tasks.Single().Id);
+            Assert.Equal(singleTaskId, actualGet.Levels.Single().Tasks.Single().Id);
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
         }
@@ -67,7 +70,7 @@ namespace LMS.Test.Services
 
             var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
 
-            Assert.Throws<EntityNotFoundException<TestTemplate>>(() => service.GetById(1));
+            Assert.Throws<EntityNotFoundException<TestVariant>>(() => service.GetById(1));
 
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
@@ -76,11 +79,6 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Delete()
         {
-            var templateDelete = new TestVariant
-            {
-                Id = 1
-            };
-
             var repositoryMock = new Mock<IRepository<TestVariant>>();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
@@ -98,9 +96,9 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Update()
         {
-            var singleLevelTypeId = 5;
-            var singleCategoryId = 2;
-            var templateUpdate = new TestVariantDTO
+            var singleTaskId = 6;
+            var singleLevelTemplateId = 3;
+            var variantUpdate = new TestVariantDTO
             {
                 Id = 1,
                 Title = "Sample",
@@ -108,73 +106,243 @@ namespace LMS.Test.Services
                 {
                     new TestVariantLevelDTO
                     {
+                        TestTemplateLevelId = singleLevelTemplateId,
                         Description = "Level desc",
                         Tasks =
                         {
-
+                            new TaskDTO
+                            {
+                                Id = singleTaskId
+                            }
                         }
                     }
                 }
             };
 
-            var repositoryMock = new Mock<IRepository<TestTemplate>>();
+            var repositoryMock = new Mock<IRepository<TestVariant>>();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
 
-            var service = new TestTemplateService(null, unitOfWorkMock.Object, mapper);
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
 
-            await service.UpdateAsync(templateUpdate);
+            await service.UpdateAsync(variantUpdate);
 
             unitOfWorkMock.Verify(m => m.SaveAsync());
-            repositoryMock.Verify(m => m.Update(It.Is<TestTemplate>(t =>
-                t.Id == templateUpdate.Id
-                && t.Title == templateUpdate.Title
-                && t.Levels.Single().Description == templateUpdate.Levels.Single().Description
-                && t.Levels.Single().TaskTypes.Single().TaskTypeId == singleLevelTypeId
-                && t.Levels.Single().Categories.Single().CategoryId == singleCategoryId)));
+            repositoryMock.Verify(m => m.Update(It.Is<TestVariant>(t =>
+                t.Id == variantUpdate.Id
+                && t.Title == variantUpdate.Title
+                && t.Levels.Single().TestTemplateLevelId == singleLevelTemplateId
+                && t.Levels.Single().Description == variantUpdate.Levels.Single().Description
+                && t.Levels.Single().Tasks.Single().TaskId == singleTaskId)));
             repositoryMock.VerifyNoOtherCalls();
         }
 
         [Fact]
         public async Task Should_Create()
         {
-            var singleLevelTypeId = 5;
-            var singleCategoryId = 2;
-            var templateCreate = new TestTemplateDTO
+            var singleTaskId = 6;
+            var singleLevelTemplateId = 3;
+            var variantCreate = new TestVariantDTO
             {
                 Id = 1,
                 Title = "Sample",
                 Levels =
                 {
-                    new TestTemplateLevelDTO
+                    new TestVariantLevelDTO
                     {
+                        TestTemplateLevelId = singleLevelTemplateId,
                         Description = "Level desc",
-                        Filter = new TaskFilterDTO
+                        Tasks =
                         {
-                            TaskTypeIds = { singleLevelTypeId },
-                            CategoryIds = { singleCategoryId }
+                            new TaskDTO
+                            {
+                                Id = singleTaskId
+                            }
                         }
                     }
                 }
             };
-            var repositoryMock = new Mock<IRepository<TestTemplate>>();
+            var repositoryMock = new Mock<IRepository<TestVariant>>();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => repositoryMock.Object);
 
-            var service = new TestTemplateService(null, unitOfWorkMock.Object, mapper);
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
 
-            await service.CreateAsync(templateCreate);
+            await service.CreateAsync(variantCreate);
 
             unitOfWorkMock.Verify(m => m.SaveAsync());
-            repositoryMock.Verify(m => m.Create(It.Is<TestTemplate>(t =>
-                t.Id == templateCreate.Id
-                && t.Title == templateCreate.Title
-                && t.Levels.Single().Description == templateCreate.Levels.Single().Description
-                && t.Levels.Single().Categories.Single().CategoryId == singleCategoryId
-                && t.Levels.Single().TaskTypes.Single().TaskTypeId == singleLevelTypeId)));
+            repositoryMock.Verify(m => m.Create(It.Is<TestVariant>(t =>
+                t.Id == variantCreate.Id
+                && t.Title == variantCreate.Title
+                && t.Levels.Single().TestTemplateLevelId == singleLevelTemplateId
+                && t.Levels.Single().Description == variantCreate.Levels.Single().Description
+                && t.Levels.Single().Tasks.Single().TaskId == singleTaskId)));
             repositoryMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public void Shoul_Generate_Title_And_TemplateId_On_Bind_To_Template()
+        {
+            var templateToBind = new TestTemplate { Id = 1 };
+            var variantToBeBinded = new TestVariantDTO();
+
+            var variantesRepositoryMock = new Mock<IRepository<TestVariant>>();
+            variantesRepositoryMock.Setup(m => m.Filter(It.IsAny<Expression<Func<TestVariant, bool>>>()))
+                .Returns(new TestVariant[3]);
+
+            var templatesRepositoryMock = new Mock<IRepository<TestTemplate>>();
+            templatesRepositoryMock.Setup(m => m.Get(1)).Returns(templateToBind);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => variantesRepositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
+
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
+            service.BindToTemplate(variantToBeBinded, 1);
+
+            Assert.Equal(templateToBind.Id, variantToBeBinded.TestTemplateId);
+            Assert.Equal("Variant #4", variantToBeBinded.Title);
+        }
+
+        [Fact]
+        public void Shoul_Generate_Level_On_Bind_To_Template()
+        {
+            var templateToBind = new TestTemplate
+            {
+                Id = 1,
+                Levels =
+                {
+                    new TestTemplateLevel
+                    {
+                        Id = 1,
+                        Description = "Desc 1"
+                    }
+                }
+            };
+            var variantToBeBinded = new TestVariantDTO();
+
+            var variantesRepositoryMock = new Mock<IRepository<TestVariant>>();
+            variantesRepositoryMock.Setup(m => m.Filter(It.IsAny<Expression<Func<TestVariant, bool>>>()))
+                .Returns(new TestVariant[0]);
+
+            var templatesRepositoryMock = new Mock<IRepository<TestTemplate>>();
+            templatesRepositoryMock.Setup(m => m.Get(1)).Returns(templateToBind);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => variantesRepositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
+
+            var taskServiceMock = new Mock<ITaskSource>();
+            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
+
+            var service = new TestVariantService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
+            service.BindToTemplate(variantToBeBinded, 1);
+
+            Assert.Single(variantToBeBinded.Levels);
+            Assert.False(variantToBeBinded.Levels.Single().TemplateModified);
+            Assert.False(variantToBeBinded.Levels.Single().TemplateDeleted);
+            Assert.Equal(templateToBind.Levels.Single().Description, variantToBeBinded.Levels.Single().Description);
+            Assert.Equal(templateToBind.Levels.Single().Id, variantToBeBinded.Levels.Single().TestTemplateLevelId);
+            Assert.Equal(variantToBeBinded.Id, variantToBeBinded.Levels.Single().TestVariantId);
+            Assert.Equal(3, variantToBeBinded.Levels.Single().AvailableTasks.Count);
+            Assert.NotNull(variantToBeBinded.Levels.Single().Filter);
+        }
+
+        [Fact]
+        public void Shoul_Update_Level_On_Bind_To_Template()
+        {
+            var templateToBind = new TestTemplate
+            {
+                Id = 1,
+                Levels =
+                {
+                    new TestTemplateLevel
+                    {
+                        Id = 2
+                    }
+                }
+            };
+            var variantToBeBinded = new TestVariantDTO()
+            {
+                TestTemplateId = 1,
+                Levels =
+                {
+                    new TestVariantLevelDTO
+                    {
+                        TestTemplateLevelId = 2,
+                        Tasks =
+                        {
+                            new TaskDTO
+                            {
+                                Id = 3
+                            }
+                        }
+                    }
+                }
+            };
+
+            var variantesRepositoryMock = new Mock<IRepository<TestVariant>>();
+            variantesRepositoryMock.Setup(m => m.Filter(It.IsAny<Expression<Func<TestVariant, bool>>>()))
+                .Returns(new TestVariant[0]);
+
+            var templatesRepositoryMock = new Mock<IRepository<TestTemplate>>();
+            templatesRepositoryMock.Setup(m => m.Get(1)).Returns(templateToBind);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => variantesRepositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
+
+            var taskServiceMock = new Mock<ITaskSource>();
+            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>()))
+                .Returns(new[] { new TaskDTO { Id = 4 }, new TaskDTO { Id = 5 } });
+
+            var service = new TestVariantService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
+            service.BindToTemplate(variantToBeBinded, 1);
+
+            Assert.Single(variantToBeBinded.Levels);
+            Assert.True(variantToBeBinded.Levels.Single().TemplateModified);
+            Assert.False(variantToBeBinded.Levels.Single().TemplateDeleted);
+            Assert.Equal(2, variantToBeBinded.Levels.Single().AvailableTasks.Count);
+            Assert.NotNull(variantToBeBinded.Levels.Single().Filter);
+        }
+
+        [Fact]
+        public void Shoul_Delete_Level_On_Bind_To_Template()
+        {
+            var templateToBind = new TestTemplate
+            {
+                Id = 1
+            };
+            var variantToBeBinded = new TestVariantDTO()
+            {
+                TestTemplateId = 1,
+                Levels =
+                {
+                    new TestVariantLevelDTO
+                    {
+                        TestTemplateLevelId = 3
+                    }
+                }
+            };
+
+            var variantesRepositoryMock = new Mock<IRepository<TestVariant>>();
+            variantesRepositoryMock.Setup(m => m.Filter(It.IsAny<Expression<Func<TestVariant, bool>>>()))
+                .Returns(new TestVariant[0]);
+
+            var templatesRepositoryMock = new Mock<IRepository<TestTemplate>>();
+            templatesRepositoryMock.Setup(m => m.Get(1)).Returns(templateToBind);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.TestVariants).Returns(() => variantesRepositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
+
+            var service = new TestVariantService(null, unitOfWorkMock.Object, mapper);
+            service.BindToTemplate(variantToBeBinded, 1);
+
+            Assert.Single(variantToBeBinded.Levels);
+            Assert.True(variantToBeBinded.Levels.Single().TemplateDeleted);
         }
     }
 }
