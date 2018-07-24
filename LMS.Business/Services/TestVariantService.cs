@@ -23,7 +23,7 @@ namespace LMS.Business.Services
             var variant = unitOfWork.TestVariants.Get(id);
             if (variant == null)
             {
-                throw new EntityNotFoundException<TestVariantDTO>(id);
+                throw new EntityNotFoundException<TestVariant>(id);
             }
 
             return mapper.Map<TestVariant, TestVariantDTO>(variant);
@@ -98,12 +98,13 @@ namespace LMS.Business.Services
                 throw new EntityNotFoundException<TestTemplateDTO>();
             }
 
+            testVariant.TestTemplateId = testTemplateId;
             if (string.IsNullOrEmpty(testVariant.Title))
             {
                 var prevVariantsCount = unitOfWork.TestVariants
                     .Filter(v => v.TestTemplateId == testTemplateId)
                     .Count();
-                testVariant.Title = "Variant #" + prevVariantsCount;
+                testVariant.Title = "Variant #" + (prevVariantsCount + 1);
             }
             foreach (var templateLevel in template.Levels)
             {
@@ -136,9 +137,10 @@ namespace LMS.Business.Services
             }
 
             var levelsToRemove = testVariant.Levels
-                .Where(l => template.Levels.All(tl => tl.Id != l.Id));
+                .Where(l => template.Levels.All(tl => tl.Id != l.TestTemplateLevelId));
             foreach (var levelToRemove in levelsToRemove)
             {
+                levelToRemove.Filter = null;
                 levelToRemove.TemplateDeleted = true;
             }
         }

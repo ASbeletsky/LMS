@@ -34,7 +34,7 @@ namespace LMS.Business.Services
             var template = unitOfWork.TestTemplates.Get(id);
             if (template == null)
             {
-                throw new EntityNotFoundException<TestTemplateDTO>(id);
+                throw new EntityNotFoundException<TestTemplate>(id);
             }
 
             var templateDto = mapper.Map<TestTemplate, TestTemplateDTO>(template);

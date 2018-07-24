@@ -76,11 +76,6 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Delete()
         {
-            var templateDelete = new TestTemplate
-            {
-                Id = 1
-            };
-
             var repositoryMock = new Mock<IRepository<TestTemplate>>();
 
             var unitOfWorkMock = new Mock<IUnitOfWork>();
