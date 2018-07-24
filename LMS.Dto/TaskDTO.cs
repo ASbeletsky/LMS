@@ -15,7 +15,7 @@ namespace LMS.Dto
        
         public int Id { get; set; }
 
-        public ICollection<TaskAnswerOptionDTO> OptionAnswers { get; set; }
+        public IList<TaskAnswerOptionDTO> OptionAnswers { get; set; }
 
         [Range(MinComplexity, MaxComplexity, ErrorMessage = "Value out of range")]
         public int Complexity { get; set; }
