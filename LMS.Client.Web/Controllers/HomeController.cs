@@ -108,6 +108,7 @@ namespace LMS.Client.Web.Controllers
             info.CurrentQuestionNumber = number;
             info.TaskCount = test.Problems.Count;
             info.Category = test.TestCategory.Title;
+            info.Result = new string[]{""};
             switch (info.OurTask.Type.Id)
             {
                 case 0:

@@ -6,10 +6,18 @@
     List<string> result = new List<string>();
     int number = Model.CurrentQuestionNumber;
     int kolvo = Model.TaskCount;
+    string[] res = @Model.Result;
 }
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
+    <script>
+        $(function () {
+            var stringArray = @Html.Raw(Json.Serialize(Model.Result));
+            alert(stringArray);
+            DeserializeForm("text", stringArray);
+        });
+    </script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
@@ -35,7 +43,6 @@
         }
     }
     <script>
-        $("textarea").change(showValues);
-        showValues();
+        $("textarea").bind('input propertychange',showValues());
     </script>
 </div>

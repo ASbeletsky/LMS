@@ -7,10 +7,20 @@
     int number = Model.CurrentQuestionNumber;
     int kolvo = Model.TaskCount;
     int counter = 0;
+    string[] res=Model.Result;
 }
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
+    <script>
+        $(function () {
+
+            var stringArray = @Html.Raw(Json.Serialize(Model.Result));
+            alert(stringArray);
+            DeserializeForm("check", stringArray);
+        });
+        
+    </script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
