@@ -4,16 +4,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
-    public class TestVariantLevelDTO
+    public class TestLevelDTO
     {
-        public TestVariantLevelDTO()
+        public TestLevelDTO()
         {
             Tasks = new List<TaskDTO>();
             AvailableTasks = new List<TaskDTO>();
         }
 
         public int Id { get; set; }
-        public int TestVariantId { get; set; }
+        public int TestId { get; set; }
         public int? TestTemplateLevelId { get; set; }
 
         [Required(ErrorMessage = "Description must be defined")]

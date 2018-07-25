@@ -15,7 +15,7 @@ namespace LMS.Data
             Categories = new BasicRepository<Category>(context);
             Tasks = new TaskRepository(context);
             TestTemplates = new TestTemplateRepository(context);
-            TestVariants = new TestVariantRepository(context);
+            Tests = new TestRepository(context);
 
             UserRepository = usersRepo;
         }
@@ -24,7 +24,7 @@ namespace LMS.Data
         public IRepository<Task> Tasks { get; }
         public IRepository<TaskType> TaskTypes { get; }
         public IRepository<TestTemplate> TestTemplates { get; }
-        public IRepository<TestVariant> TestVariants { get; }
+        public IRepository<Test> Tests { get; }
 
         public IRepositoryAsync<User> UserRepository { get; }
 

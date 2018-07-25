@@ -8,58 +8,58 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Data.Repositories
 {
-    public class TestVariantRepository : IRepository<TestVariant>
+    public class TestRepository : IRepository<Test>
     {
         private readonly DbContext dbContext;
 
-        public TestVariantRepository(DbContext context)
+        public TestRepository(DbContext context)
         {
             dbContext = context;
         }
 
-        public IEnumerable<TestVariant> GetAll()
+        public IEnumerable<Test> GetAll()
         {
             return GetAllQuery()
                 .ToList();
         }
 
-        public IEnumerable<TestVariant> Filter(Expression<Func<TestVariant, bool>> predicate)
+        public IEnumerable<Test> Filter(Expression<Func<Test, bool>> predicate)
         {
             return GetAllQuery()
                 .Where(predicate)
                 .ToList();
         }
 
-        public TestVariant Get(int id)
+        public Test Get(int id)
         {
             return GetAllQuery()
                 .FirstOrDefault(t => t.Id == id);
         }
 
-        public TestVariant Find(Expression<Func<TestVariant, bool>> predicate)
+        public Test Find(Expression<Func<Test, bool>> predicate)
         {
             return GetAllQuery()
                 .Where(predicate)
                 .FirstOrDefault();
         }
 
-        public void Create(TestVariant item)
+        public void Create(Test item)
         {
-            dbContext.Set<TestVariant>().Add(item);
+            dbContext.Set<Test>().Add(item);
         }
 
-        public void Update(TestVariant item)
+        public void Update(Test item)
         {
             using (var transaction = dbContext.Database.BeginTransaction())
             {
-                var levelsSet = dbContext.Set<TestVariantLevel>();
-                var tasksSet = dbContext.Set<TestVariantLevelTask>();
+                var levelsSet = dbContext.Set<TestLevel>();
+                var tasksSet = dbContext.Set<TestLevelTask>();
 
-                var entry = dbContext.Set<TestVariant>().Update(item);
+                var entry = dbContext.Set<Test>().Update(item);
 
                 foreach (var level in item.Levels)
                 {
-                    level.TestVariantId = item.Id;
+                    level.TestId = item.Id;
 
                     var newLevelTypes = level.Tasks.ToArray();
                     var oldLevelTypes = tasksSet.Where(t => t.LevelId == level.Id).ToArray();
@@ -68,7 +68,7 @@ namespace LMS.Data.Repositories
                 }
 
                 var newLevels = item.Levels.ToArray();
-                var toRemoveLevels = levelsSet.Where(l => l.TestVariantId == item.Id).Except(newLevels);
+                var toRemoveLevels = levelsSet.Where(l => l.TestId == item.Id).Except(newLevels);
                 levelsSet.RemoveRange(toRemoveLevels);
 
                 transaction.Commit();
@@ -77,16 +77,16 @@ namespace LMS.Data.Repositories
 
         public void Delete(int id)
         {
-            var item = dbContext.Set<TestVariant>().Find(id);
+            var item = dbContext.Set<Test>().Find(id);
             if (item != null)
             {
-                dbContext.Set<TestVariant>().Remove(item);
+                dbContext.Set<Test>().Remove(item);
             }
         }
 
-        private IQueryable<TestVariant> GetAllQuery()
+        private IQueryable<Test> GetAllQuery()
         {
-            return dbContext.Set<TestVariant>()
+            return dbContext.Set<Test>()
                 .Include(v => v.TestTemplate)
                 .Include(v => v.Levels)
                 .ThenInclude(l => l.Tasks)

@@ -8,97 +8,97 @@ using LMS.Interfaces;
 
 namespace LMS.Business.Services
 {
-    public class TestVariantService : BaseService
+    public class TestService : BaseService
     {
         private readonly ITaskSource taskSource;
 
-        public TestVariantService(ITaskSource taskSource, IUnitOfWork unitOfWork, IMapper mapper)
+        public TestService(ITaskSource taskSource, IUnitOfWork unitOfWork, IMapper mapper)
             : base(unitOfWork, mapper)
         {
             this.taskSource = taskSource;
         }
 
-        public TestVariantDTO GetById(int id)
+        public TestDTO GetById(int id)
         {
-            var variant = unitOfWork.TestVariants.Get(id);
-            if (variant == null)
+            var test = unitOfWork.Tests.Get(id);
+            if (test == null)
             {
-                throw new EntityNotFoundException<TestVariant>(id);
+                throw new EntityNotFoundException<Test>(id);
             }
 
-            return mapper.Map<TestVariant, TestVariantDTO>(variant);
+            return mapper.Map<Test, TestDTO>(test);
         }
 
         public Task DeleteByIdAsync(int id)
         {
-            unitOfWork.TestVariants.Delete(id);
+            unitOfWork.Tests.Delete(id);
             return unitOfWork.SaveAsync();
         }
 
-        public Task UpdateAsync(TestVariantDTO testVariant)
+        public Task UpdateAsync(TestDTO test)
         {
-            if (testVariant == null)
+            if (test == null)
             {
-                throw new ArgumentNullException(nameof(testVariant));
+                throw new ArgumentNullException(nameof(test));
             }
-            if (!testVariant.Levels.Any())
+            if (!test.Levels.Any())
             {
-                throw new ArgumentException("Variant should contains at least one level");
+                throw new ArgumentException("Test should contains at least one level");
             }
 
-            testVariant.Levels = testVariant.Levels.Where(l => !l.TemplateDeleted).ToList();
+            test.Levels = test.Levels.Where(l => !l.TemplateDeleted).ToList();
 
-            if (!testVariant.Levels.All(l => l.Tasks.Any()))
+            if (!test.Levels.All(l => l.Tasks.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one task");
             }
 
-            var updatedTest = mapper.Map<TestVariantDTO, TestVariant>(testVariant);
+            var updatedTest = mapper.Map<TestDTO, Test>(test);
 
-            unitOfWork.TestVariants.Update(updatedTest);
+            unitOfWork.Tests.Update(updatedTest);
 
             return unitOfWork.SaveAsync();
         }
 
-        public Task CreateAsync(TestVariantDTO testVariant)
+        public Task CreateAsync(TestDTO test)
         {
-            if (testVariant == null)
+            if (test == null)
             {
-                throw new ArgumentNullException(nameof(testVariant));
+                throw new ArgumentNullException(nameof(test));
             }
-            if (!testVariant.Levels.Any())
+            if (!test.Levels.Any())
             {
-                throw new ArgumentException("Variant should contains at least one level");
+                throw new ArgumentException("Test should contains at least one level");
             }
-            if (!testVariant.Levels.All(l => l.Tasks.Any()))
+            if (!test.Levels.All(l => l.Tasks.Any()))
             {
                 throw new ArgumentException("Every level should contains at least one task");
             }
 
-            var createdTest = mapper.Map<TestVariantDTO, TestVariant>(testVariant);
+            var createdTest = mapper.Map<TestDTO, Test>(test);
 
-            unitOfWork.TestVariants.Create(createdTest);
+            unitOfWork.Tests.Create(createdTest);
 
             return unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<TestVariantDTO> GetAll()
+        public IEnumerable<TestDTO> GetAll()
         {
-            return mapper.Map<IEnumerable<TestVariant>, IEnumerable<TestVariantDTO>>(
-                unitOfWork.TestVariants.GetAll())
+            return mapper.Map<IEnumerable<Test>, IEnumerable<TestDTO>>(
+                unitOfWork.Tests.GetAll())
                 .Select(v => { BindToTemplate(v, v.TestTemplateId); return v; });
         }
 
-        public void BindToTemplate(TestVariantDTO testVariant, int? testTemplateId)
+        public void BindToTemplate(TestDTO test, int? testTemplateId)
         {
-            if (testVariant == null)
+            if (test == null)
             {
-                throw new ArgumentNullException(nameof(testVariant));
+                throw new ArgumentNullException(nameof(test));
             }
 
             if (!testTemplateId.HasValue)
             {
-                foreach (var levelToRemove in testVariant.Levels)
+                foreach (var levelToRemove in test.Levels)
                 {
                     levelToRemove.TemplateDeleted = true;
                 }
@@ -111,29 +111,29 @@ namespace LMS.Business.Services
                 throw new EntityNotFoundException<TestTemplateDTO>();
             }
 
-            testVariant.TestTemplateId = testTemplateId;
-            if (string.IsNullOrEmpty(testVariant.Title))
+            test.TestTemplateId = testTemplateId;
+            if (string.IsNullOrEmpty(test.Title))
             {
-                var prevVariantsCount = unitOfWork.TestVariants
+                var prevTestsCount = unitOfWork.Tests
                     .Filter(v => v.TestTemplateId == testTemplateId)
                     .Count();
-                testVariant.Title = "Variant #" + (prevVariantsCount + 1);
+                test.Title = "Test #" + (prevTestsCount + 1);
             }
             foreach (var templateLevel in template.Levels)
             {
                 var templateLevelDTO = mapper.Map<TestTemplateLevel, TestTemplateLevelDTO>(templateLevel);
                 var availableTasks = taskSource.Filter(templateLevelDTO.Filter);
 
-                var existedLevel = testVariant.Levels
+                var existedLevel = test.Levels
                     .FirstOrDefault(l => l.TestTemplateLevelId == templateLevel.Id);
 
                 if (existedLevel == null)
                 {
-                    testVariant.Levels.Add(new TestVariantLevelDTO()
+                    test.Levels.Add(new TestLevelDTO()
                     {
                         Description = templateLevel.Description,
                         TestTemplateLevelId = templateLevel.Id,
-                        TestVariantId = testVariant.Id,
+                        TestId = test.Id,
                         AvailableTasks = availableTasks.ToList()
                     });
                 }
@@ -147,7 +147,7 @@ namespace LMS.Business.Services
                 }
             }
 
-            var levelsToRemove = testVariant.Levels
+            var levelsToRemove = test.Levels
                 .Where(l => template.Levels.All(tl => tl.Id != l.TestTemplateLevelId));
             foreach (var levelToRemove in levelsToRemove)
             {

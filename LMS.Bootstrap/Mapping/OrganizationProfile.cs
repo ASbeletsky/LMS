@@ -65,22 +65,22 @@ namespace LMS.Bootstrap.Mapping
                       .ToList()))
                 .ForMember(m => m.Levels, m => m.Ignore());
 
-            CreateMap<TestVariantLevelTask, TaskDTO>()
+            CreateMap<TestLevelTask, TaskDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<Task, TaskDTO>(entity.Task));
 
-            CreateMap<TestVariantLevel, TestVariantLevelDTO>()
+            CreateMap<TestLevel, TestLevelDTO>()
                 .ForMember(m => m.AvailableTasks, m => m.Ignore())
                 .ForMember(m => m.TaskIds, m => m.Ignore());
-            CreateMap<TestVariantLevelDTO, TestVariantLevel>()
+            CreateMap<TestLevelDTO, TestLevel>()
                 .ForMember(m => m.Tasks, m => m.ResolveUsing(dto =>
-                    dto.Tasks.Select(t => new TestVariantLevelTask
+                    dto.Tasks.Select(t => new TestLevelTask
                     {
                         LevelId = dto.Id,
                         TaskId = t.Id
                     })));
 
-            CreateMap<TestVariant, TestVariantDTO>();
-            CreateMap<TestVariantDTO, TestVariant>();
+            CreateMap<Test, TestDTO>();
+            CreateMap<TestDTO, Test>();
         }
     }
 }

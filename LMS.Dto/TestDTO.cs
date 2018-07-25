@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
-    public class TestVariantDTO
+    public class TestDTO
     {
-        public TestVariantDTO()
+        public TestDTO()
         {
-            Levels = new List<TestVariantLevelDTO>();
+            Levels = new List<TestLevelDTO>();
         }
 
         public int Id { get; set; }
@@ -21,6 +21,6 @@ namespace LMS.Dto
         [Required(ErrorMessage = "Title must be defined")]
         public string Title { get; set; }
 
-        public IList<TestVariantLevelDTO> Levels { get; set; }
+        public IList<TestLevelDTO> Levels { get; set; }
     }
 }

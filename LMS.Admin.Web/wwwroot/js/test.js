@@ -1,4 +1,4 @@
-﻿var testVariant = (function () {
+﻿var test = (function () {
 
     this.toggleTask = function (level, id) {
         var select = $("select#tasks_" + level);

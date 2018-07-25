@@ -1,13 +1,13 @@
-﻿@model LMS.Dto.TestVariantDTO
+﻿@model LMS.Dto.TestDTO
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
 }
 
-<h4>Test variant</h4>
+<h4>Tests</h4>
 <hr />
 <div class="row">
     <div class="col-md-9 col-lg-8 col-xl-6">
-        <form asp-action="Edit">
+        <form asp-action="Create">
             @Html.Partial("FormFields", Model)
         </form>
     </div>
@@ -17,3 +17,4 @@
     <a asp-action="List">Back to List</a>
 </div>
 <br />
+

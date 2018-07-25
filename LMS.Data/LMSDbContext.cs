@@ -95,38 +95,38 @@ namespace LMS.Data
                 .HasOne(c => c.TaskType)
                 .WithMany();
 
-            modelBuilder.Entity<TestVariant>()
+            modelBuilder.Entity<Test>()
                 .HasKey(v => v.Id);
-            modelBuilder.Entity<TestVariant>()
+            modelBuilder.Entity<Test>()
                 .Property(v => v.Title)
                 .IsRequired();
-            modelBuilder.Entity<TestVariant>()
+            modelBuilder.Entity<Test>()
                 .HasOne(v => v.TestTemplate)
                 .WithMany()
                 .OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<TestVariant>()
+            modelBuilder.Entity<Test>()
                 .HasMany(v => v.Levels)
                 .WithOne()
-                .HasForeignKey(l => l.TestVariantId);
+                .HasForeignKey(l => l.TestId);
 
-            modelBuilder.Entity<TestVariantLevel>()
+            modelBuilder.Entity<TestLevel>()
                 .HasKey(l => l.Id);
-            modelBuilder.Entity<TestVariantLevel>()
+            modelBuilder.Entity<TestLevel>()
                 .HasMany(l => l.Tasks)
                 .WithOne(t => t.Level);
-            modelBuilder.Entity<TestVariantLevel>()
+            modelBuilder.Entity<TestLevel>()
                 .HasOne<TestTemplateLevel>()
                 .WithMany()
                 .HasForeignKey(l => l.TestTemplateLevelId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<TestVariantLevelTask>()
+            modelBuilder.Entity<TestLevelTask>()
                 .HasKey(t => new
                 {
                     t.LevelId,
                     t.TaskId
                 });
-            modelBuilder.Entity<TestVariantLevelTask>()
+            modelBuilder.Entity<TestLevelTask>()
                 .HasOne(t => t.Task)
                 .WithMany();
 

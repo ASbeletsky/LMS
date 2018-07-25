@@ -1,8 +1,8 @@
 ﻿namespace LMS.Entities
 {
-    public class TestVariantLevelTask
+    public class TestLevelTask
     {
-        public TestVariantLevel Level { get; set; }
+        public TestLevel Level { get; set; }
         public int LevelId { get; set; }
 
         public Task Task { get; set; }

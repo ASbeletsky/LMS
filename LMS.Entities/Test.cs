@@ -2,11 +2,11 @@
 
 namespace LMS.Entities
 {
-    public class TestVariant
+    public class Test
     {
-        public TestVariant()
+        public Test()
         {
-            Levels = new List<TestVariantLevel>();
+            Levels = new List<TestLevel>();
         }
 
         public int Id { get; set; }
@@ -15,6 +15,6 @@ namespace LMS.Entities
         public TestTemplate TestTemplate { get; set; }
 
         public string Title { get; set; }
-        public ICollection<TestVariantLevel> Levels { get; set; }
+        public ICollection<TestLevel> Levels { get; set; }
     }
 }

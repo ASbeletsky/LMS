@@ -9,23 +9,23 @@ using LMS.Business.Services;
 namespace LMS.Admin.Web.Controllers
 {
     [Authorize(Roles = "admin, moderator, reviewer")]
-    public class TestVariantController : Controller
+    public class TestController : Controller
     {
-        private readonly TestVariantService testVariantService;
+        private readonly TestService testService;
         private readonly TestTemplateService testTemplateService;
 
-        public TestVariantController(
-            TestVariantService testVariants,
+        public TestController(
+            TestService tests,
             TestTemplateService testTemplates)
         {
-            testVariantService = testVariants;
+            testService = tests;
             testTemplateService = testTemplates;
         }
 
         [Authorize(Roles = "admin, moderator")]
         public IActionResult Create(int? templateId = null)
         {
-            var variant = new TestVariantDTO();
+            var test = new TestDTO();
 
             var templates = testTemplateService
                 .GetTemplatesSummary()
@@ -41,18 +41,18 @@ namespace LMS.Admin.Web.Controllers
             templateId = templateId ?? templates.FirstOrDefault()?.Id;
             if (templateId.HasValue)
             {
-                testVariantService.BindToTemplate(variant, templateId.Value);
+                testService.BindToTemplate(test, templateId.Value);
             }
 
-            return View(variant);
+            return View(test);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, moderator")]
-        public async Task<IActionResult> Create([FromForm] TestVariantDTO variant)
+        public async Task<IActionResult> Create([FromForm] TestDTO test)
         {
-            await testVariantService.CreateAsync(variant);
+            await testService.CreateAsync(test);
 
             return RedirectToAction(nameof(List));
         }
@@ -60,7 +60,7 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public IActionResult Edit(int id, int? templateId = null)
         {
-            var variant = testVariantService.GetById(id);
+            var test = testService.GetById(id);
 
             var templates = testTemplateService
                 .GetTemplatesSummary()
@@ -73,21 +73,21 @@ namespace LMS.Admin.Web.Controllers
                     Text = template.Title
                 });
              
-            templateId = templateId ?? variant.TestTemplateId ?? templates.FirstOrDefault()?.Id;
+            templateId = templateId ?? test.TestTemplateId ?? templates.FirstOrDefault()?.Id;
             if (templateId.HasValue)
             {
-                testVariantService.BindToTemplate(variant, templateId.Value);
+                testService.BindToTemplate(test, templateId.Value);
             }
 
-            return View(variant);
+            return View(test);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, moderator")]
-        public async Task<IActionResult> Edit([FromForm] TestVariantDTO variant)
+        public async Task<IActionResult> Edit([FromForm] TestDTO test)
         {
-            await testVariantService.UpdateAsync(variant);
+            await testService.UpdateAsync(test);
 
             return RedirectToAction(nameof(List));
         }
@@ -95,8 +95,8 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult List()
         {
-            var variants = testVariantService.GetAll();
-            return View(variants);
+            var tests = testService.GetAll();
+            return View(tests);
         }
 
         [HttpPost]
@@ -104,7 +104,7 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Delete(int id)
         {
-            await testVariantService.DeleteByIdAsync(id);
+            await testService.DeleteByIdAsync(id);
 
             return RedirectToAction(nameof(List));
         }

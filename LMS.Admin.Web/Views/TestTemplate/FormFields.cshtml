@@ -60,7 +60,7 @@
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].ScorePerTask" class="control-label"></label>
                                 <br />
-                                <input value="@string.Format(CultureInfo.InvariantCulture, "{0:0.##}", Model.Levels[index].ScorePerTask)" name="@($"Levels[{index}].ScorePerTask")" class="form-control" type="text" readonly />
+                                <input value="@string.Format(CultureInfo.IntestCulture, "{0:0.##}", Model.Levels[index].ScorePerTask)" name="@($"Levels[{index}].ScorePerTask")" class="form-control" type="text" readonly />
                             </div>
                         </div>
                         <div class="row">

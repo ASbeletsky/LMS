@@ -1,9 +1,9 @@
 ﻿@using LMS.Dto
-@model IEnumerable<TestVariantDTO>
+@model IEnumerable<TestDTO>
 @{
     ViewData["Title"] = "List";
 
-    string GetItemClass(TestVariantDTO item)
+    string GetItemClass(TestDTO item)
     {
         var anyLevelDeleted = item.Levels.Any(l => l.TemplateDeleted);
         var anyLevelModified = item.Levels.Any(l => l.TemplateModified);
@@ -76,5 +76,5 @@ else
 {
     Content = "Are you sure that you want to delete this template?",
     SubmitAction = "Delete",
-    SubmitController = "TestVariant"
+    SubmitController = "Test"
 })
