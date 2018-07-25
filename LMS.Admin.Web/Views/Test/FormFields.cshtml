@@ -92,7 +92,7 @@
                             {
                                 <p class="text-danger">No available tasks found</p>
                             }
-                            <select required id="tasks_@index" asp-for="Levels[index].TaskIds" class="invisible" style="width:0;height:0">
+                            <select hidden required id="tasks_@index" asp-for="Levels[index].TaskIds">
                                 <option value="0">blank</option>
                                 @foreach (var taskId in Model.Levels[index].TaskIds)
                                 {
