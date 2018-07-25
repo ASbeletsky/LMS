@@ -1,0 +1,60 @@
+﻿@using LMS.Dto
+@model IEnumerable<CategoryDTO>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Amount tasks
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <label>@item.Title</label>
+                        </td>
+                        <td>
+                            <label>@item.TasksCount</label>
+                        </td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteModal" data-arg-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <center>No items found</center>
+}
+@Html.Partial("Dialog", new DialogViewModel("deleteModal")
+{
+    Content = "Are you sure that you want to delete this сategory?",
+    SubmitAction = "Delete",
+    SubmitController = "Category"
+})
