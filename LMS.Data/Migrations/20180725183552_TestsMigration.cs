@@ -3,12 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LMS.Data.Migrations
 {
-    public partial class TestVariantMigration : Migration
+    public partial class TestsMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Tasks_Categories_CategoryId",
+                table: "Tasks");
+
             migrationBuilder.CreateTable(
-                name: "TestVariant",
+                name: "Test",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -18,9 +22,9 @@ namespace LMS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestVariant", x => x.Id);
+                    table.PrimaryKey("PK_Test", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TestVariant_TestTemplates_TestTemplateId",
+                        name: "FK_Test_TestTemplates_TestTemplateId",
                         column: x => x.TestTemplateId,
                         principalTable: "TestTemplates",
                         principalColumn: "Id",
@@ -28,34 +32,34 @@ namespace LMS.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestVariantLevel",
+                name: "TestLevel",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    TestVariantId = table.Column<int>(nullable: false),
+                    TestId = table.Column<int>(nullable: false),
                     TestTemplateLevelId = table.Column<int>(nullable: true),
                     Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestVariantLevel", x => x.Id);
+                    table.PrimaryKey("PK_TestLevel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TestVariantLevel_TestTemplateLevel_TestTemplateLevelId",
+                        name: "FK_TestLevel_Test_TestId",
+                        column: x => x.TestId,
+                        principalTable: "Test",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TestLevel_TestTemplateLevel_TestTemplateLevelId",
                         column: x => x.TestTemplateLevelId,
                         principalTable: "TestTemplateLevel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_TestVariantLevel_TestVariant_TestVariantId",
-                        column: x => x.TestVariantId,
-                        principalTable: "TestVariant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TestVariantLevelTask",
+                name: "TestLevelTask",
                 columns: table => new
                 {
                     LevelId = table.Column<int>(nullable: false),
@@ -63,15 +67,15 @@ namespace LMS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestVariantLevelTask", x => new { x.LevelId, x.TaskId });
+                    table.PrimaryKey("PK_TestLevelTask", x => new { x.LevelId, x.TaskId });
                     table.ForeignKey(
-                        name: "FK_TestVariantLevelTask_TestVariantLevel_LevelId",
+                        name: "FK_TestLevelTask_TestLevel_LevelId",
                         column: x => x.LevelId,
-                        principalTable: "TestVariantLevel",
+                        principalTable: "TestLevel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TestVariantLevelTask_Tasks_TaskId",
+                        name: "FK_TestLevelTask_Tasks_TaskId",
                         column: x => x.TaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
@@ -79,36 +83,56 @@ namespace LMS.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestVariant_TestTemplateId",
-                table: "TestVariant",
+                name: "IX_Test_TestTemplateId",
+                table: "Test",
                 column: "TestTemplateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestVariantLevel_TestTemplateLevelId",
-                table: "TestVariantLevel",
+                name: "IX_TestLevel_TestId",
+                table: "TestLevel",
+                column: "TestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestLevel_TestTemplateLevelId",
+                table: "TestLevel",
                 column: "TestTemplateLevelId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TestVariantLevel_TestVariantId",
-                table: "TestVariantLevel",
-                column: "TestVariantId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TestVariantLevelTask_TaskId",
-                table: "TestVariantLevelTask",
+                name: "IX_TestLevelTask_TaskId",
+                table: "TestLevelTask",
                 column: "TaskId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Tasks_Categories_CategoryId",
+                table: "Tasks",
+                column: "CategoryId",
+                principalTable: "Categories",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "TestVariantLevelTask");
+            migrationBuilder.DropForeignKey(
+                name: "FK_Tasks_Categories_CategoryId",
+                table: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "TestVariantLevel");
+                name: "TestLevelTask");
 
             migrationBuilder.DropTable(
-                name: "TestVariant");
+                name: "TestLevel");
+
+            migrationBuilder.DropTable(
+                name: "Test");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Tasks_Categories_CategoryId",
+                table: "Tasks",
+                column: "CategoryId",
+                principalTable: "Categories",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

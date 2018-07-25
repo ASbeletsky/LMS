@@ -97,6 +97,56 @@ namespace LMS.Data.Migrations
                     b.ToTable("TaskTypes");
                 });
 
+            modelBuilder.Entity("LMS.Entities.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("TestTemplateId");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestTemplateId");
+
+                    b.ToTable("Test");
+                });
+
+            modelBuilder.Entity("LMS.Entities.TestLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("TestId");
+
+                    b.Property<int?>("TestTemplateLevelId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.HasIndex("TestTemplateLevelId");
+
+                    b.ToTable("TestLevel");
+                });
+
+            modelBuilder.Entity("LMS.Entities.TestLevelTask", b =>
+                {
+                    b.Property<int>("LevelId");
+
+                    b.Property<int>("TaskId");
+
+                    b.HasKey("LevelId", "TaskId");
+
+                    b.HasIndex("TaskId");
+
+                    b.ToTable("TestLevelTask");
+                });
+
             modelBuilder.Entity("LMS.Entities.TestTemplate", b =>
                 {
                     b.Property<int>("Id")
@@ -136,56 +186,6 @@ namespace LMS.Data.Migrations
                     b.HasIndex("TestTemplateId");
 
                     b.ToTable("TestTemplateLevel");
-                });
-
-            modelBuilder.Entity("LMS.Entities.TestVariant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("TestTemplateId");
-
-                    b.Property<string>("Title")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TestTemplateId");
-
-                    b.ToTable("TestVariant");
-                });
-
-            modelBuilder.Entity("LMS.Entities.TestVariantLevel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<int?>("TestTemplateLevelId");
-
-                    b.Property<int>("TestVariantId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TestTemplateLevelId");
-
-                    b.HasIndex("TestVariantId");
-
-                    b.ToTable("TestVariantLevel");
-                });
-
-            modelBuilder.Entity("LMS.Entities.TestVariantLevelTask", b =>
-                {
-                    b.Property<int>("LevelId");
-
-                    b.Property<int>("TaskId");
-
-                    b.HasKey("LevelId", "TaskId");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("TestVariantLevelTask");
                 });
 
             modelBuilder.Entity("LMS.Entities.User", b =>
@@ -379,8 +379,7 @@ namespace LMS.Data.Migrations
                 {
                     b.HasOne("LMS.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("LMS.Entities.Task", "PreviousVersion")
                         .WithMany()
@@ -392,15 +391,7 @@ namespace LMS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LMS.Entities.TestTemplateLevel", b =>
-                {
-                    b.HasOne("LMS.Entities.TestTemplate")
-                        .WithMany("Levels")
-                        .HasForeignKey("TestTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("LMS.Entities.TestVariant", b =>
+            modelBuilder.Entity("LMS.Entities.Test", b =>
                 {
                     b.HasOne("LMS.Entities.TestTemplate", "TestTemplate")
                         .WithMany()
@@ -408,22 +399,22 @@ namespace LMS.Data.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
-            modelBuilder.Entity("LMS.Entities.TestVariantLevel", b =>
+            modelBuilder.Entity("LMS.Entities.TestLevel", b =>
                 {
+                    b.HasOne("LMS.Entities.Test")
+                        .WithMany("Levels")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("LMS.Entities.TestTemplateLevel")
                         .WithMany()
                         .HasForeignKey("TestTemplateLevelId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("LMS.Entities.TestVariant")
-                        .WithMany("Levels")
-                        .HasForeignKey("TestVariantId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("LMS.Entities.TestVariantLevelTask", b =>
+            modelBuilder.Entity("LMS.Entities.TestLevelTask", b =>
                 {
-                    b.HasOne("LMS.Entities.TestVariantLevel", "Level")
+                    b.HasOne("LMS.Entities.TestLevel", "Level")
                         .WithMany("Tasks")
                         .HasForeignKey("LevelId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -431,6 +422,14 @@ namespace LMS.Data.Migrations
                     b.HasOne("LMS.Entities.Task", "Task")
                         .WithMany()
                         .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LMS.Entities.TestTemplateLevel", b =>
+                {
+                    b.HasOne("LMS.Entities.TestTemplate")
+                        .WithMany("Levels")
+                        .HasForeignKey("TestTemplateId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
