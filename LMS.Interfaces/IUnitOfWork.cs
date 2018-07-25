@@ -9,7 +9,7 @@ namespace LMS.Interfaces
         IRepository<Task> Tasks { get; }
         IRepository<TaskType> TaskTypes { get; }
         IRepository<TestTemplate> TestTemplates { get; }
-        IRepository<AnswerSheet> AnswerSheet { get; }
+        IRepository<Examenee> Examenees { get; }
         IRepository<Answers> Answers { get; }
         System.Threading.Tasks.Task SaveAsync();
     }

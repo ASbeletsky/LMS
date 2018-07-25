@@ -19,7 +19,7 @@ namespace LMS.Data
         
         public DbSet<TestTemplate> TestTemplates { get; }
 
-        public DbSet<AnswerSheet> AnswerSheets { get; }
+        public DbSet<Examenee> AnswerSheets { get; }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -76,12 +76,20 @@ namespace LMS.Data
                 .WithOne(t => t.TestTemplateLevel)
                 .HasForeignKey(t => t.TestTemplateLevelId);
 
-            modelBuilder.Entity<AnswerSheet>()
+            modelBuilder.Entity<Examenee>()
                 .HasKey(t=>t.Id);
-            modelBuilder.Entity<AnswerSheet>()
+            modelBuilder.Entity<Examenee>()
                 .HasMany(t => t.Answers)
                 .WithOne()
-                .HasForeignKey(t => t.AnswerSheetId);
+                .HasForeignKey(t => t.ExameneeId);
+            modelBuilder.Entity<Examenee>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .IsRequired();
+            modelBuilder.Entity<Examenee>()
+                .HasOne(t => t.User)
+                .WithMany()
+                .IsRequired();
 
             modelBuilder.Entity<Answers>()
                 .HasKey(t => t.Id);

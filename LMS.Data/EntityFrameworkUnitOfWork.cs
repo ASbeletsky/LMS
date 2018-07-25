@@ -27,7 +27,7 @@ namespace LMS.Data
 
         public IRepository<Answers> Answers { get; }
 
-        public IRepository<AnswerSheet> AnswerSheet { get; }
+        public IRepository<Examenee> Examenees { get; }
 
         public System.Threading.Tasks.Task SaveAsync()
         {

@@ -4,14 +4,15 @@ using System.Text;
 
 namespace LMS.Entities
 {
-    public class AnswerSheet
+    public class Examenee
     {
         public int Id { get; set; }
         public User User { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         //public Test Test { get; set; }
         public int TestId { get; set; }
-        public DateTime StartTime { get; set; }// we need this to identify answers to same test wroten in deferent periods
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public List<Answers> Answers { get; set; }
     }
 }

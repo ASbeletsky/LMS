@@ -10,5 +10,6 @@ namespace LMS.Dto
         public int TaskId { get; set; }
         [Required(ErrorMessage ="Content must be defined")]
         public string Content { get; set; }
+        public double Result { get; set; }
     }
 }

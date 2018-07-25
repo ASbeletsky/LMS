@@ -53,12 +53,12 @@ namespace LMS.Business.Services
                 if (oldAnswer.Content == newAnswer.Content
                     && oldAnswer.TaskId == newAnswer.TaskId
                     && oldAnswer.Content == newAnswer.Content
-                    && oldAnswer.AnswerSheetId != newAnswer.AnswerSheetId)
+                    && oldAnswer.ExameneeId != newAnswer.ExameneeId)
                 {
                     return Task.CompletedTask;
                 }
                 if (oldAnswer.TaskId != newAnswer.TaskId
-                    || oldAnswer.AnswerSheetId != newAnswer.AnswerSheetId)
+                    || oldAnswer.ExameneeId != newAnswer.ExameneeId)
                 {
                     unitOfWork.Answers.Create(newAnswer);
                 }
