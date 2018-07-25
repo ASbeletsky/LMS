@@ -33,3 +33,8 @@ function SendReport() {
     connection.invoke("SendReportToGroups", report)
         .catch(err => console.error(err.toString()));
 }
+
+function SendAnswer(number,answer) {
+    connection.invoke("SendAnswer", answer)
+        .catch(err => console.error(err.toString()));
+}

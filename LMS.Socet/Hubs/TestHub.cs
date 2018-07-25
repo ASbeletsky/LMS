@@ -27,10 +27,32 @@ namespace LMS.Socet
             return Clients.Groups(groups).SendAsync("Task", comand, message);
         }
 
+        [Authorize(Roles = "admin, moderator, reviewer")]
+        public Task JoinListeners()
+        {
+            return Groups.AddToGroupAsync(Context.ConnectionId, "Listeners");
+        }
+
+        [Authorize(Roles = "admin, moderator, reviewer")]
+        public Task OutListeners()
+        {
+            return Groups.RemoveFromGroupAsync(Context.ConnectionId, "Listeners");
+        }
+
+        public void SendAnswer(string answer)
+        {
+            
+        }
+
         public Task SendReportToGroups(string report)
         {
             List<string> groups = new List<string>() { "Users" };
             return Clients.Groups(groups).SendAsync("Report", report);
+        }
+
+        public Task AdminCheck(string comand)
+        {
+            return Clients.Caller.SendAsync("Check", comand);
         }
 
         public override async Task OnConnectedAsync()
@@ -47,16 +69,19 @@ namespace LMS.Socet
             }
         }
 
-        public Task AdminCheck(string comand)
-        {
-            
-            return Clients.Caller.SendAsync("Check",comand);
-        }
-
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Users");
-            await base.OnDisconnectedAsync(exception);
+            if (Context.User.IsInRole("admin") || Context.User.IsInRole("moderator") || Context.User.IsInRole("reviewer"))
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Admins");
+                await OutListeners();
+                await base.OnDisconnectedAsync(exception);
+            }
+            else
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, "Users");
+                await base.OnDisconnectedAsync(exception);
+            }
         }
     }
 }
