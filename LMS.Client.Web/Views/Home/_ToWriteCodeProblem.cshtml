@@ -6,7 +6,6 @@
     List<string> result = new List<string>();
     int number = Model.CurrentQuestionNumber;
     int kolvo = Model.TaskCount;
-    //string category = Model.Category;
 }
 <head>
     <title>Ace Editor Demo</title>
@@ -38,10 +37,11 @@
                 <script>
                     var editor = ace.edit("editor"); // теперь обращаться к редактору будем через editor
                     // Далее весь экшон будет проходить тут!
-                    var category="@Model.Category";
+                    var category = "@Model.Category";
+                    var code = "@Model.Result[0]";
                     setType(category);
                     //editor.getSession().setMode("ace/mode/csharp");
-                    editor.setValue("<source code>"); // задаем
+                    editor.setValue(code); // задаем
                     function setType(category) {
                         if (category == "C#" || category == ".Net") {
                             editor.getSession().setMode("ace/mode/csharp");
