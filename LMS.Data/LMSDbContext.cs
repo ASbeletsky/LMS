@@ -15,7 +15,7 @@ namespace LMS.Data
 
         public DbSet<Category> Categories { get; }
         public DbSet<Task> Tasks { get; }
-        public DbSet<TaskType> TaskTypes { get; }
+        public DbSet<TaskType> TaskType { get; }
 
         public DbSet<TestTemplate> TestTemplates { get; }
 
@@ -53,6 +53,10 @@ namespace LMS.Data
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskType>()
                 .Property(t => t.Title).IsRequired();
+            modelBuilder.Entity<TaskType>()
+                .HasData(
+               new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
+               new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion });
 
             modelBuilder.Entity<TestTemplate>()
                 .HasKey(t => t.Id);
@@ -131,6 +135,14 @@ namespace LMS.Data
                 .WithMany();
 
             modelBuilder.Entity<User>();
+         
+
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasKey(c => c.Id);
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasOne<Task>()
+                .WithMany(t => t.AnswerOptions)
+                .HasForeignKey(k => k.TaskId);
 
             base.OnModelCreating(modelBuilder);
         }

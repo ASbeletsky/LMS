@@ -19,6 +19,9 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<TaskDTO, Task>();
             CreateMap<Task, TaskDTO>();
 
+            CreateMap<TaskAnswerOption, TaskAnswerOptionDTO>();
+            CreateMap<TaskAnswerOptionDTO, TaskAnswerOption>();
+
             CreateMap<LevelTaskType, TaskTypeDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<TaskType, TaskTypeDTO>(entity.TaskType));
             CreateMap<LevelCategory, CategoryDTO>()
