@@ -159,9 +159,6 @@ namespace LMS.Data
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(e => e.UserId);
-            modelBuilder.Entity<Examenee>()
-                .HasOne(e => e.Test)
-                .WithMany();
 
             modelBuilder.Entity<User>();
 
