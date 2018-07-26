@@ -10,12 +10,12 @@ namespace LMS.Dto
 
         public TaskDTO()
         {
-            OptionAnswers = new List<TaskAnswerOptionDTO>();
+            AnswerOptions = new List<TaskAnswerOptionDTO>();
         }
        
         public int Id { get; set; }
 
-        public IList<TaskAnswerOptionDTO> OptionAnswers { get; set; }
+        public IList<TaskAnswerOptionDTO> AnswerOptions { get; set; }
 
         [Range(MinComplexity, MaxComplexity, ErrorMessage = "Value out of range")]
         public int Complexity { get; set; }

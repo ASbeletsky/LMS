@@ -4,6 +4,7 @@
 @{
     var types = ((IEnumerable<SelectListItem>)ViewData["AvailableTypes"]);
     var categories = ((IEnumerable<SelectListItem>)ViewData["AvailableCategories"]);
+    var ASCIICode = 97;
 }
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -32,7 +33,7 @@
 </div>
 <div id="OptionCount" class="form-group @(Model?.Type?.Id == 2 ? "" : "collapse")">
     <label class="control-label">Options Count</label>
-    <input type="number" min="0" class="form-control" onchange="displayTable(this)" value="@(Model?.OptionAnswers?.Count ?? 0)" />
+    <input type="number" min="0" class="form-control" onchange="displayTable(this)" value="@(Model?.AnswerOptions?.Count ?? 0)" />
 </div>
 
 <div class="form-group">
@@ -70,9 +71,9 @@
             var tr = $("<tr class='answer'>");
 
             if (i != 0)
-                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(97 + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='OptionAnswers[" + i + "].State' id = '" + i + "'>").appendTo(tr);
+                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(@ASCIICode + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='OptionAnswers[" + i + "].State' id = '" + i + "'>").appendTo(tr);
             else
-                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(97 + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='OptionAnswers[" + i + "].State' checked=true id = '" + i + "'>").appendTo(tr);
+                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(@ASCIICode + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='OptionAnswers[" + i + "].State' checked=true id = '" + i + "'>").appendTo(tr);
             $("<td><textarea required name='OptionAnswers[" + i + "].Content' type='text' class='form-control' ></textarea>").appendTo(tr);
 
             tr.appendTo("#tableBody");
@@ -92,13 +93,13 @@
 @if (Model?.Type?.Id == 2)
 {
     <script>
-        var arr = @Html.Raw(Json.Serialize(Model.OptionAnswers));
+        var arr = @Html.Raw(Json.Serialize(Model.AnswerOptions));
 
         window.addEventListener("load", function () {
             for (var i = 0; i < arr.length; i++) {
                 var tr = $("<tr class='answer'>");
 
-                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(97 + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='OptionAnswers[" + i + "].State' id = '" + i +  "'" + (arr[i]["isCorrect"] ? "checked" : "") + ">").appendTo(tr);
+                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(@ASCIICode + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='OptionAnswers[" + i + "].State' id = '" + i +  "'" + (arr[i]["isCorrect"] ? "checked" : "") + ">").appendTo(tr);
                 $("<td><textarea required name='OptionAnswers[" + i + "].Content' type='text' class='form-control'>" + arr[i]["content"] + "</textarea>").appendTo(tr);
 
                 tr.appendTo("#tableBody");

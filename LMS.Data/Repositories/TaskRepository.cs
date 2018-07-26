@@ -36,7 +36,7 @@ namespace LMS.Data.Repositories
             return set
                 .Include(t => t.Category)
                 .Include(t => t.Type)
-                .Include(t => t.OptionAnswers)
+                .Include(t => t.AnswerOptions)
                 .Where(predicate);
         }
 
@@ -46,7 +46,7 @@ namespace LMS.Data.Repositories
                 .Include(t => t.Category)
                 .Include(t => t.Type)
                 .Include(t => t.PreviousVersion)
-                .Include(t => t.OptionAnswers)
+                .Include(t => t.AnswerOptions)
                 .FirstOrDefault(predicate);
         }
 
@@ -56,7 +56,7 @@ namespace LMS.Data.Repositories
                 .Include(t => t.Category)
                 .Include(t => t.Type)
                 .Include(t => t.PreviousVersion)
-                .Include(t => t.OptionAnswers)
+                .Include(t => t.AnswerOptions)
                 .FirstOrDefault(t => t.Id == id);
         }
 
@@ -65,7 +65,7 @@ namespace LMS.Data.Repositories
             return set
                 .Include(t => t.Category)
                 .Include(t => t.Type)
-                .Include(t => t.OptionAnswers);
+                .Include(t => t.AnswerOptions);
         }
 
         public void Update(Task item)

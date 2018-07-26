@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180726095720_TaskTypesMigration")]
-    partial class TaskTypesMigration
+    [Migration("20180726181106_AddTaskTypes")]
+    partial class AddTaskTypes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -114,7 +114,7 @@ namespace LMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskTypes");
+                    b.ToTable("TaskType");
 
                     b.HasData(
                         new { Id = 1, Title = "open-ended question" },
@@ -419,7 +419,7 @@ namespace LMS.Data.Migrations
             modelBuilder.Entity("LMS.Entities.TaskAnswerOption", b =>
                 {
                     b.HasOne("LMS.Entities.Task")
-                        .WithMany("OptionAnswers")
+                        .WithMany("AnswerOptions")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

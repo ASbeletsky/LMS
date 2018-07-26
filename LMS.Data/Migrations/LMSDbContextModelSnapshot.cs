@@ -112,7 +112,7 @@ namespace LMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskTypes");
+                    b.ToTable("TaskType");
 
                     b.HasData(
                         new { Id = 1, Title = "open-ended question" },
@@ -417,7 +417,7 @@ namespace LMS.Data.Migrations
             modelBuilder.Entity("LMS.Entities.TaskAnswerOption", b =>
                 {
                     b.HasOne("LMS.Entities.Task")
-                        .WithMany("OptionAnswers")
+                        .WithMany("AnswerOptions")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
