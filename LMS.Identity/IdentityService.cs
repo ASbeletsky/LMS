@@ -55,6 +55,11 @@ namespace LMS.Identity
                 throw new Exception("Your role does not allow you to enter.");
         }
 
+        public async System.Threading.Tasks.Task<IEnumerable<User>> GetAllAsync(string roleName)
+        {
+            return await _userManager.GetUsersInRoleAsync(roleName);
+        }
+
         public async Task Logout()
         {
             // delete cookies
