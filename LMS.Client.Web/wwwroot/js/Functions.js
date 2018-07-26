@@ -7,10 +7,10 @@ function changeGot(got) {
 function showValues() {
     var fields = $(":input").serializeArray();
     console.log($(":input").serializeArray());
-    $("#result").empty();
-    jQuery.each(fields, function (i, field) {
-        $("#result").append(field.value + " ");
-    });
+    //$("#result").empty();
+    //jQuery.each(fields, function (i, field) {
+    //    $("#result").append(field.value + " ");
+    //});
 }
 function DeserializeForm(type, res) {
     if (type === "check") {
@@ -26,4 +26,15 @@ function DeserializeForm(type, res) {
     else if (type === "text") {
         $("textarea").text(res);
     }
+}
+function update()
+{
+    var res = editor.getSession().getValue();
+    document.querySelector('input[name=result]').value = res;
+    console.log($(editor).serialize());
+}
+function getResults() {
+    var res = editor.getValue(); // -> String (получаем)
+    document.querySelector('input[name=result]').value = res;
+    document.querySelector('input[name=mode]').value = 'res'
 }

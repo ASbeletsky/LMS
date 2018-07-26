@@ -40,6 +40,7 @@
                     var category = "@Model.Category";
                     var code = "@Model.Result[0]";
                     setType(category);
+                    editor.on('change', function () { update() });
                     //editor.getSession().setMode("ace/mode/csharp");
                     editor.setValue(code); // задаем
                     function setType(category) {
@@ -80,11 +81,4 @@
             }
         </div>
     </div>
-    <script>
-        function getResults() {
-            var res = editor.getValue(); // -> String (получаем)
-            document.querySelector('input[name=result]').value = res;
-            document.querySelector('input[name=mode]').value = 'res'
-        }
-    </script>
 </body>
