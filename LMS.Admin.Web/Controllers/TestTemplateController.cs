@@ -124,8 +124,7 @@ namespace LMS.Admin.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await testTemplateService.DeleteByIdAsync(id);
-            var templateListItems = testTemplateService.GetTemplatesSummary();
-            return View("List", templateListItems);
+            return RedirectToAction(nameof(List));
         }
     }
 }
