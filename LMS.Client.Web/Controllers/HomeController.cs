@@ -148,5 +148,14 @@ namespace LMS.Client.Web.Controllers
             }
             return RedirectToAction("ShowProblem", new { number });
         }
+        public List<int> ConvertToIdList(List<string>result)
+        {
+            var IdList = new List<int>();
+            foreach(string s in result)
+            {
+                IdList.Add(Convert.ToInt32(s));
+            }
+            return IdList;
+        }
     }
 }
