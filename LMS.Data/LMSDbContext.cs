@@ -18,6 +18,8 @@ namespace LMS.Data
         public DbSet<TaskType> TaskTypes { get; }
 
         public DbSet<TestTemplate> TestTemplates { get; }
+        public DbSet<Test> Tests { get; }
+        public DbSet<TestSession> Sessions { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -128,6 +130,37 @@ namespace LMS.Data
                 });
             modelBuilder.Entity<TestLevelTask>()
                 .HasOne(t => t.Task)
+                .WithMany();
+
+            modelBuilder.Entity<TestSession>()
+                .HasKey(s => s.Id);
+
+            modelBuilder.Entity<TestSession>()
+                .HasMany(s => s.Examenees)
+                .WithOne(e => e.Session);
+
+            modelBuilder.Entity<TestSession>()
+                .HasMany(s => s.Tests)
+                .WithOne(e => e.Session);
+
+            modelBuilder.Entity<TestSessionTest>()
+                .HasKey(t => new
+                {
+                    t.SessionId,
+                    t.TestId
+                });
+            modelBuilder.Entity<TestSessionTest>()
+                .HasOne(t => t.Test)
+                .WithMany();
+
+            modelBuilder.Entity<Examenee>()
+                .HasKey(e => e.Id);
+            modelBuilder.Entity<Examenee>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
+            modelBuilder.Entity<Examenee>()
+                .HasOne(e => e.Test)
                 .WithMany();
 
             modelBuilder.Entity<User>();

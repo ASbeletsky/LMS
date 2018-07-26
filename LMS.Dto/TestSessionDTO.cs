@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
@@ -7,11 +9,16 @@ namespace LMS.Dto
         public int Id { get; set; }
 
         public string Title { get; set; }
+
+        [Display(Name = "Start time")]
         public DateTimeOffset StartTime { get; set; }
+
         public TimeSpan Duration { get; set; }
 
+        [Display(Name = "End time")]
         public DateTimeOffset EndTime => StartTime + Duration;
 
-        //public ICollection<Test> Variants { get; set; }
+        public ICollection<TestDTO> Tests { get; set; }
+        public ICollection<ExameneeDTO> Examenees { get; set; }
     }
 }
