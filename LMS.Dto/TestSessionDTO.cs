@@ -7,6 +7,7 @@ namespace LMS.Dto
     public class TestSessionDTO
     {
         public int Id { get; set; }
+        public int TestTemplateId { get; set; }
 
         public string Title { get; set; }
 
