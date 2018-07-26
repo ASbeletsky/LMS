@@ -34,7 +34,7 @@ namespace LMS.Business.Services
             var template = unitOfWork.TestTemplates.Get(id);
             if (template == null)
             {
-                throw new EntityNotFoundException<TestTemplateDTO>(id);
+                throw new EntityNotFoundException<TestTemplate>(id);
             }
 
             var templateDto = mapper.Map<TestTemplate, TestTemplateDTO>(template);
@@ -98,11 +98,26 @@ namespace LMS.Business.Services
                 throw new ArgumentException("Every level should contains at least one category");
             }
 
-            var updatedTest = mapper.Map<TestTemplateDTO, TestTemplate>(testTemplate);
+            var createdTest = mapper.Map<TestTemplateDTO, TestTemplate>(testTemplate);
 
-            unitOfWork.TestTemplates.Create(updatedTest);
+            unitOfWork.TestTemplates.Create(createdTest);
 
             return unitOfWork.SaveAsync();
+        }
+
+        public IEnumerable<TestTemplateDTO> GetAll()
+        {
+            return mapper
+                .Map<IEnumerable<TestTemplate>, IEnumerable<TestTemplateDTO>>(
+                    unitOfWork.TestTemplates.GetAll())
+                .Select(t =>
+                {
+                    foreach (var level in t.Levels)
+                    {
+                        level.ValidTaskCount = taskSource.Filter(level.Filter).Count();
+                    }
+                    return t;
+                });
         }
 
         public IEnumerable<TestTemplateSummary> GetTemplatesSummary()
