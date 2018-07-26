@@ -6,9 +6,9 @@ namespace LMS.Entities
     {
         public Task()
         {
-            OptionTasks = new List<TaskAnswerOption>();
+            OptionAnswers = new List<TaskAnswerOption>();
         }
-        public IList<TaskAnswerOption> OptionTasks { get; set; }
+        public IList<TaskAnswerOption> OptionAnswers { get; set; }
 
         public int Id { get; set; }
         public int Complexity { get; set; }

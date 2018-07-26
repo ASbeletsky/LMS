@@ -70,7 +70,8 @@ namespace LMS.Business.Services
                 if (oldTask.Content == newTask.Content
                     && oldTask.Complexity == newTask.Complexity
                     && oldTask.CategoryId == newTask.CategoryId
-                    && oldTask.TypeId == newTask.TypeId)
+                    && oldTask.TypeId == newTask.TypeId
+                    && oldTask.OptionAnswers.Equals(newTask.OptionAnswers))
                 {
                     return Task.CompletedTask;
                 }
