@@ -29,7 +29,7 @@
         this.maxScoreChanged();
 
         var maxScore = $("input[name='Levels[" + index + "].MaxScore']").val();
-        var count = $("input[name='Levels[" + index + "].Count']").val();
+        var count = $("input[name='Levels[" + index + "].TasksCount']").val();
         $("#levelMaxScoreLabel" + index).text(maxScore);
         $("#levelCountLabel" + index).text(count);
         var scorePerTask = (maxScore / count).toFixed(2);

@@ -6,9 +6,19 @@
     "bootstrap": "^4.1.1",
     "bootstrap-select": "^1.13.1",
     "bootstrap-slider": "^10.0.2",
+    "bootstrap-timepicker": "^0.5.2",
+    "del": "^3.0.0",
+    "gulp": "^3.9.1",
     "jquery": "^3.3.1",
     "jquery-validation": "^1.17.0",
     "jquery-validation-unobtrusive": "^3.2.10",
     "startbootstrap-sb-admin": "^4.0.0"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-uglify": "^3.0.0",
+    "merge-stream": "^1.0.1"
   }
 }
