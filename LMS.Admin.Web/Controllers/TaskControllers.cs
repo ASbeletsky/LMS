@@ -31,7 +31,7 @@ namespace LMS.Admin.Web.Controllers
             ViewData["AvailableTypes"] = taskTypeService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
             ViewData["AvailableCategories"] = categoryService.GetAll().Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
 
-            return View();
+            return View(new TaskDTO());
         }
 
         [HttpPost]

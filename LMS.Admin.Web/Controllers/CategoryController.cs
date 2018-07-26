@@ -36,7 +36,7 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(new CategoryDTO());
         }
 
 
