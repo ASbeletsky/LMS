@@ -33,7 +33,7 @@
         @foreach (var choice in Model.OurTask.Choices)
         {
             counter++;
-            <input type="checkbox" name="result" value="@choice.Answer" id="result+@counter">
+            <input type="checkbox" name="result" value="@choice.Id" id="@choice.Id">
             <span>@choice.Answer</span>
             <br />
         }

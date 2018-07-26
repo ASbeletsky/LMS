@@ -25,7 +25,7 @@
         </h3>
         @foreach (var choice in Model.OurTask.Choices)
         {
-            @Html.RadioButton("result", @choice.Answer)
+            @Html.RadioButton("result", @choice.Id)
             <span>@choice.Answer</span>
             <br />
         }

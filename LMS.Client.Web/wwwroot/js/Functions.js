@@ -16,12 +16,12 @@ function DeserializeForm(type, res) {
     if (type === "check") {
         res.forEach(function (element) {
             alert(element);
-            $("input:checkbox[value='" + element + "']").prop('checked', true);
+            $("input:checkbox[id='" + element + "']").prop('checked', true);
         });
         
     }
     else if (type === "radio") {
-        $("input:radio[value='" + res + "']").prop('checked', true);
+        $("input:radio[id='" + res + "']").prop('checked', true);
     }
     else if (type === "text") {
         $("textarea").text(res);
