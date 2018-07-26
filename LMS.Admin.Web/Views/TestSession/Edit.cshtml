@@ -1,0 +1,19 @@
+﻿@model LMS.Dto.TestSessionDTO
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Test sessions</h4>
+<hr />
+<div class="row">
+    <div class="col-md-9 col-lg-8 col-xl-6">
+        <form asp-action="Edit">
+            @Html.Partial("FormFields", Model)
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
+<br />

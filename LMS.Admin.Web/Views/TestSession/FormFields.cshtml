@@ -1,0 +1,31 @@
+﻿@using LMS.Dto;
+@model TestSessionDTO
+@{
+    var templates = ((IEnumerable<SelectListItem>)ViewData["Templates"]);
+    var users = ((IEnumerable<SelectListItem>)ViewData["Users"]);
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input asp-for="Id" type="hidden" />
+<div class="form-group">
+    <label asp-for="Title" class="control-label"></label>
+    <input asp-for="Title" class="form-control" type="text" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="TestTemplateId" class="control-label"></label>
+    <br />
+    <select onchange="test.selectTemplate(this)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
+    <span asp-validation-for="TestTemplateId" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="Examenees" class="control-label"></label>
+    <br />
+    <select required multiple asp-for="Examenees" asp-items="users" data-live-search="true" class="form-control selectpicker"></select>
+    <span asp-validation-for="Examenees" class="text-danger"></span>
+</div>
+<br />
+<br />
+<div class="form-group">
+    <input type="submit" value="Save" class="btn btn-default" />
+</div>
