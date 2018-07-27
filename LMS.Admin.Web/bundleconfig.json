@@ -47,6 +47,7 @@
       "wwwroot/js/helpers.js",
       "wwwroot/js/validationConfig.js",
       "wwwroot/js/testTemplate.js",
+      "wwwroot/js/testSession.js",
       "wwwroot/js/test.js"
     ],
     "minify": {

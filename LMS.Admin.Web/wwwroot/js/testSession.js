@@ -54,12 +54,12 @@
             testSession.selectTemplate(templateId, args.configureDurationFromTemplate);
         }
 
-        var defaultStartTime = new Data($("#sessionStartTime").data("default"));
+        var defaultStartTime = new Date($("#sessionStartTime").data("default"));
         $('#startTimePicker').datetimepicker({
             date: defaultStartTime,
             format: 'DD.MM.YYYY HH:mm'
         });
-        $("#sessionStartTime").val(defaultStartTime);
+        $("#sessionStartTime").val(defaultStartTime.toJSON());
         $('#startTimePicker').on("change.datetimepicker", function (e) {
             $("#sessionStartTime").val(e.date.toJSON());
         });

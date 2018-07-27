@@ -61,13 +61,21 @@ namespace LMS.Data.Repositories
                 var toRemoveExamenees = exameneesSet
                     .Where(l => l.SessionId == item.Id)
                     .Except(newExamenees);
+                var toAddExamenees = newExamenees
+                    .Where(l => l.SessionId == item.Id)
+                    .Except(exameneesSet);
                 exameneesSet.RemoveRange(toRemoveExamenees);
+                exameneesSet.AddRange(toAddExamenees);
 
                 var newTests = item.Tests.ToArray();
                 var toRemoveTests = testsSet
                     .Where(l => l.SessionId == item.Id)
                     .Except(newTests);
+                var toAddTests = newTests
+                    .Where(l => l.SessionId == item.Id)
+                    .Except(testsSet);
                 testsSet.RemoveRange(toRemoveTests);
+                testsSet.AddRange(toAddTests);
 
                 transaction.Commit();
             }

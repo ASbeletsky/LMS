@@ -15,6 +15,7 @@ namespace LMS.Dto
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Test template")]
         public int TestTemplateId { get; set; }
 
         [Required]
