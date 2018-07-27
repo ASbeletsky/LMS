@@ -30,9 +30,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Identity", "LMS.Identit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Dto", "LMS.Dto\LMS.Dto.csproj", "{42E76766-564D-4318-8F61-7FBCEA6B2E39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Entities", "LMS.Entities\LMS.Entities.csproj", "{3A2B01B9-6ACB-4EE3-8501-D5A343EB1ED9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Entities", "LMS.Entities\LMS.Entities.csproj", "{3A2B01B9-6ACB-4EE3-8501-D5A343EB1ED9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LMS.Socet", "LMS.Socet\LMS.Socet.csproj", "{42E078B7-A888-492B-BE45-3C46D217EB9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Socet", "LMS.Socet\LMS.Socet.csproj", "{42E078B7-A888-492B-BE45-3C46D217EB9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.AnswerModels", "LMS.AnswerModels\LMS.AnswerModels.csproj", "{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,10 @@ Global
 		{42E078B7-A888-492B-BE45-3C46D217EB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42E078B7-A888-492B-BE45-3C46D217EB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42E078B7-A888-492B-BE45-3C46D217EB9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

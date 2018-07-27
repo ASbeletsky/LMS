@@ -22,6 +22,10 @@ connection.on("Task", (comand, message) => {
     }
 });
 
+connection.on("RestoreAnswer", () => {
+    //code
+});
+
 connection.start().catch(err => console.error(err.toString()));
 
 if (sessionStorage.getItem("Baned") == "true") {
@@ -31,5 +35,10 @@ if (sessionStorage.getItem("Baned") == "true") {
 function SendReport() {
     var report = Report(TimerM.StartTime, TimeToString(TimerM.EndTime.diff(moment())));
     connection.invoke("SendReportToGroups", report)
+        .catch(err => console.error(err.toString()));
+}
+
+function SendAnswer(number,answer) {
+    connection.invoke("SendAnswer",number, answer)
         .catch(err => console.error(err.toString()));
 }

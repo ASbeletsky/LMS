@@ -1,4 +1,5 @@
 ﻿var TimerM;
+var element;
 var strch = sessionStorage.getItem('Started');
 console.log(strch);
 if (strch != undefined) {
@@ -13,9 +14,12 @@ if (strch != undefined) {
     }
 }
 function SetTime(h, m, s) {
+    duration = moment.duration({ y: 0, M: 0, d: 0, h: h, m: m, s: s, ms: 0 });
+    document.getElementById(element).innerHTML = TimeToString(duration);
     TimerM.setTime.call(TimerM, h, m, s);
 }
 function CreatTimer(el, h, m, s) {
+    element = el;
     TimerM = StartTimerM(el, h, m, s);
 }
 function StartTimerM(element, hours, minutes, sec) {

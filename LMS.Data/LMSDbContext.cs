@@ -15,8 +15,8 @@ namespace LMS.Data
 
         public DbSet<Category> Categories { get; }
         public DbSet<Task> Tasks { get; }
-        public DbSet<TaskType> TaskTypes { get; }
-        
+        public DbSet<TaskType> TaskType { get; }
+
         public DbSet<TestTemplate> TestTemplates { get; }
 
         public DbSet<Examenee> AnswerSheets { get; }
@@ -40,6 +40,7 @@ namespace LMS.Data
                 .HasOne(t => t.Category)
                 .WithMany()
                 .HasForeignKey(t => t.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired();
             modelBuilder.Entity<Task>()
                 .HasOne(t => t.PreviousVersion)
@@ -54,6 +55,10 @@ namespace LMS.Data
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskType>()
                 .Property(t => t.Title).IsRequired();
+            modelBuilder.Entity<TaskType>()
+                .HasData(
+               new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
+               new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion });
 
             modelBuilder.Entity<TestTemplate>()
                 .HasKey(t => t.Id);
@@ -64,7 +69,7 @@ namespace LMS.Data
                 .HasMany(t => t.Levels)
                 .WithOne()
                 .HasForeignKey(l => l.TestTemplateId);
-            
+
             modelBuilder.Entity<TestTemplateLevel>()
                 .HasKey(l => l.Id);
             modelBuilder.Entity<TestTemplateLevel>()
@@ -75,25 +80,7 @@ namespace LMS.Data
                 .HasMany(f => f.TaskTypes)
                 .WithOne(t => t.TestTemplateLevel)
                 .HasForeignKey(t => t.TestTemplateLevelId);
-
-            modelBuilder.Entity<Examenee>()
-                .HasKey(t=>t.Id);
-            modelBuilder.Entity<Examenee>()
-                .HasMany(t => t.Answers)
-                .WithOne()
-                .HasForeignKey(t => t.ExameneeId);
-            modelBuilder.Entity<Examenee>()
-                .HasOne(t => t.User)
-                .WithMany()
-                .IsRequired();
-            modelBuilder.Entity<Examenee>()
-                .HasOne(t => t.User)
-                .WithMany()
-                .IsRequired();
-
-            modelBuilder.Entity<Answers>()
-                .HasKey(t => t.Id);
-
+            
             modelBuilder.Entity<LevelCategory>()
                 .HasKey(c => new
                 {
@@ -114,7 +101,50 @@ namespace LMS.Data
                 .HasOne(c => c.TaskType)
                 .WithMany();
 
+            modelBuilder.Entity<Test>()
+                .HasKey(v => v.Id);
+            modelBuilder.Entity<Test>()
+                .Property(v => v.Title)
+                .IsRequired();
+            modelBuilder.Entity<Test>()
+                .HasOne(v => v.TestTemplate)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Test>()
+                .HasMany(v => v.Levels)
+                .WithOne()
+                .HasForeignKey(l => l.TestId);
+
+            modelBuilder.Entity<TestLevel>()
+                .HasKey(l => l.Id);
+            modelBuilder.Entity<TestLevel>()
+                .HasMany(l => l.Tasks)
+                .WithOne(t => t.Level);
+            modelBuilder.Entity<TestLevel>()
+                .HasOne<TestTemplateLevel>()
+                .WithMany()
+                .HasForeignKey(l => l.TestTemplateLevelId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<TestLevelTask>()
+                .HasKey(t => new
+                {
+                    t.LevelId,
+                    t.TaskId
+                });
+            modelBuilder.Entity<TestLevelTask>()
+                .HasOne(t => t.Task)
+                .WithMany();
+
             modelBuilder.Entity<User>();
+         
+
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasKey(c => c.Id);
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasOne<Task>()
+                .WithMany(t => t.AnswerOptions)
+                .HasForeignKey(k => k.TaskId);
 
             base.OnModelCreating(modelBuilder);
         }

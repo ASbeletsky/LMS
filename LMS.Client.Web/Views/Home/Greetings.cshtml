@@ -1,10 +1,9 @@
-﻿@using LMS.Data.Models;
-@model Test
+﻿@using LMS.Dto;
+@model TestClientDTO
 @{
-    ViewData["Title"] = "Greetings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="well" style="text-align-last:center">
+<div class="well">
     <h3>
         <strong>Добрый день!</strong>
     </h3>
@@ -12,10 +11,10 @@
         <strong>@Model.Title</strong>
         <br><br>
         <strong>Тема теста: @Model.Category.Title</strong>
-        <br><br>
+        @*<br><br>
         <strong>Время на тест: @Model.Duration</strong>
         <br><br>
-        <strong>Количество вопросов: @Model.Problems.Capacity</strong>
+        <strong>Количество вопросов: @Model.Problems.Count</strong>*@
     </h4>
     <span>
         При нажатии на кнопку "Старт" запуститься таймер, по истечению которого тест завершится. <br>
@@ -23,7 +22,6 @@
     </span>
     @using (Html.BeginForm("Start", "Home"))
     {
-        @Html.HiddenFor(x => x.Problems)
         <input type="submit" class="btn btn-success" value="Старт" />
     }
 </div>

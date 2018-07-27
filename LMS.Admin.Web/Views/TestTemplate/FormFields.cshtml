@@ -66,37 +66,37 @@
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].MaxScore" class="control-label"></label>
-                                <label id="@("levelMaxScoreLabel" + index)">@Model.Levels[index].MaxScore</label>
+                                <label class="level-max-score">@Model.Levels[index].MaxScore</label>
                                 <label>/ @TestTemplateDTO.MaxLevelScore</label>
                                 <br />
-                                <input onchange="testTemplate.updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].MaxScore" data-slider-value="@Model.Levels[index].MaxScore" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxLevelScore" />
+                                <input onchange="testTemplate.updateScorePerTask($(this).closest('.level'))" style="width: 100%" asp-for="Levels[index].MaxScore" data-slider-value="@Model.Levels[index].MaxScore" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxLevelScore" />
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].TasksCount" class="control-label"></label>
-                                <label id="@("levelCountLabel" + index)">@Model.Levels[index].TasksCount</label>
+                                <label class="level-tasks-count">@Model.Levels[index].TasksCount</label>
                                 <label>/ @TestTemplateDTO.MaxTaskPerLevelCount</label>
                                 <br />
-                                <input onchange="testTemplate.updateScorePerTask(@index)" style="width: 100%" asp-for="Levels[index].TasksCount" data-slider-value="@Model.Levels[index].TasksCount" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxTaskPerLevelCount" />
+                                <input onchange="testTemplate.updateScorePerTask($(this).closest('.level'))" style="width: 100%" asp-for="Levels[index].TasksCount" data-slider-value="@Model.Levels[index].TasksCount" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="1" data-slider-max="@TestTemplateDTO.MaxTaskPerLevelCount" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label asp-for="Levels[index].Filter.ComplexityRange" class="control-label"></label>
-                            <label id="@("levelComplexityLabel" + index)">
+                            <label class="level-complexity">
                                 @Model.Levels[index].Filter.MinComplexity-@Model.Levels[index].Filter.MaxComplexity
                             </label>
                             <label>/ @TaskDTO.MaxComplexity</label>
                             <br />
-                            <input onchange="testTemplate.complexityChanged(@index)" style="width: 100%" asp-for="Levels[index].Filter.ComplexityRange" class="form-control" type="text" data-provide="slider" data-slider-value="[@Model.Levels[index].Filter.ComplexityRange]" data-slider-min="@TaskDTO.MinComplexity" data-slider-max="@TaskDTO.MaxComplexity" data-slider-step="1" />
+                            <input onchange="testTemplate.complexityChanged($(this).closest('.level'))" style="width: 100%" asp-for="Levels[index].Filter.ComplexityRange" class="form-control" type="text" data-provide="slider" data-slider-value="[@Model.Levels[index].Filter.ComplexityRange]" data-slider-min="@TaskDTO.MinComplexity" data-slider-max="@TaskDTO.MaxComplexity" data-slider-step="1" />
                         </div>
                         <div class="row">
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].Filter.CategoryIds" class="control-label"></label>
-                                <select required onchange="testTemplate.refreshLevel(@index)" multiple asp-for="Levels[index].Filter.CategoryIds" asp-items="@categories" data-live-search="true" class="form-control selectpicker"></select>
+                                <select required onchange="testTemplate.refreshLevel($(this).closest('.level'))" multiple asp-for="Levels[index].Filter.CategoryIds" asp-items="@categories" data-live-search="true" class="form-control selectpicker"></select>
                                 <span asp-validation-for="Levels[index].Filter.CategoryIds" class="text-danger"></span>
                             </div>
                             <div class="form-group col-12 col-md-6">
                                 <label asp-for="Levels[index].Filter.TaskTypeIds" class="control-label"></label>
-                                <select required onchange="testTemplate.refreshLevel(@index)" multiple asp-for="Levels[index].Filter.TaskTypeIds" asp-items="@types" class="form-control selectpicker"></select>
+                                <select required onchange="testTemplate.refreshLevel($(this).closest('.level'))" multiple asp-for="Levels[index].Filter.TaskTypeIds" asp-items="@types" class="form-control selectpicker"></select>
                                 <span asp-validation-for="Levels[index].Filter.TaskTypeIds" class="text-danger"></span>
                             </div>
                         </div>
