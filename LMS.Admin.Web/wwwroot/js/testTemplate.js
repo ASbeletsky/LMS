@@ -1,7 +1,8 @@
 ﻿var testTemplate = (function () {
-    this.refreshByIdTimers = [];
+    testTemplate = {};
+    testTemplate.refreshByIdTimers = [];
 
-    this.maxScoreChanged = function () {
+    testTemplate.maxScoreChanged = function () {
         var inputs = $(".level input[name$='.MaxScore']");
         var totalMaxScore = inputs
             .map(function () { return parseInt($(this).val()) })
@@ -25,8 +26,8 @@
         }
     }
 
-    this.updateScorePerTask = function (level) {
-        this.maxScoreChanged();
+    testTemplate.updateScorePerTask = function (level) {
+        testTemplate.maxScoreChanged();
 
         var index = level.attr("data-index");
 
@@ -38,8 +39,8 @@
         $("input[name='Levels[" + index + "].ScorePerTask']").val(scorePerTask);
     }
 
-    this.complexityChanged = function (level) {
-        this.refreshLevel(level);
+    testTemplate.complexityChanged = function (level) {
+        testTemplate.refreshLevel(level);
 
         var index = level.attr("data-index");
 
@@ -47,11 +48,11 @@
         level.find("label.level-complexity").text(complexity);
     }
 
-    this.refreshLevel = function (level) {
+    testTemplate.refreshLevel = function (level) {
         var index = level.attr("data-index");
 
-        if (this.refreshByIdTimers[index]) {
-            clearTimeout(this.refreshByIdTimers[index]);
+        if (testTemplate.refreshByIdTimers[index]) {
+            clearTimeout(testTemplate.refreshByIdTimers[index]);
         }
         this.refreshByIdTimers[index] = setTimeout(function () {
             var complexityRange = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").attr("value");
@@ -80,7 +81,7 @@
         500);
     }
 
-    this.removeLevel = function (level) {
+    testTemplate.removeLevel = function (level) {
         var index = level.attr("data-index");
         level.remove();
         while (true) {
@@ -103,7 +104,7 @@
         }
     }
 
-    this.maxScoreChanged();
+    testTemplate.maxScoreChanged();
 
-    return this;
+    return testTemplate;
 })();
