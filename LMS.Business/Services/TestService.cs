@@ -89,7 +89,7 @@ namespace LMS.Business.Services
                 .Select(v => { BindToTemplate(v, v.TestTemplateId); return v; });
         }
 
-        public IEnumerable<TestDTO> GetAllByTemplateId(int templateId)
+        public IEnumerable<TestDTO> FilterByTemplate(int templateId)
         {
             return mapper.Map<IEnumerable<Test>, IEnumerable<TestDTO>>(
                 unitOfWork.Tests.Filter(t => t.TestTemplateId == templateId));
