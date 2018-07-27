@@ -30,11 +30,11 @@
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
         </h3>
-        @foreach (var choice in Model.OurTask.Choices)
+        @foreach (var Task in Model.OurTask.Choices)
         {
             counter++;
-            <input type="checkbox" name="result" value="@choice.Id" id="@choice.Id">
-            <span>@choice.Answer</span>
+            <input type="checkbox" name="result" value="@Task.Id" id="@Task.Id">
+            <span>@Task.Answer</span>
             <br />
         }
         if (number > 0)

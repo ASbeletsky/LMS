@@ -22,6 +22,10 @@ connection.on("Task", (comand, message) => {
     }
 });
 
+connection.on("RestoreAnswer", () => {
+    //code
+});
+
 connection.start().catch(err => console.error(err.toString()));
 
 if (sessionStorage.getItem("Baned") == "true") {
@@ -35,6 +39,6 @@ function SendReport() {
 }
 
 function SendAnswer(number,answer) {
-    connection.invoke("SendAnswer", answer)
+    connection.invoke("SendAnswer",number, answer)
         .catch(err => console.error(err.toString()));
 }

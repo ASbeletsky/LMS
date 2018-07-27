@@ -1,4 +1,4 @@
-﻿@using LMS.Entities;
+﻿@using LMS.Dto;
 @using System.Collections.Generic;
 @model TaskInfo
 @{
@@ -23,10 +23,10 @@
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
         </h3>
-        @foreach (var choice in Model.OurTask.Choices)
+        @foreach (var Task in Model.OurTask.AnswerOptions)
         {
-            @Html.RadioButton("result", @choice.Id)
-            <span>@choice.Answer</span>
+            @Html.RadioButton("result", @Task.Id)
+            <span>@Task.Content</span>
             <br />
         }
         if (number > 0)

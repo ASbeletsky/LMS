@@ -39,14 +39,19 @@ namespace LMS.Socet
             return Groups.RemoveFromGroupAsync(Context.ConnectionId, "Listeners");
         }
 
-        public void SendAnswer(string answer)
+        public void SendAnswer(int number,string answer)
         {
-            
+            //отправка результата в бд с ид вопроса number
+        }
+
+        protected void RestoreAnswer()
+        {
+            //отправка результата из бд пользователю
         }
 
         public Task SendReportToGroups(string report)
         {
-            List<string> groups = new List<string>() { "Users" };
+            var groups = new List<string>() { "Listeners" };
             return Clients.Groups(groups).SendAsync("Report", report);
         }
 
