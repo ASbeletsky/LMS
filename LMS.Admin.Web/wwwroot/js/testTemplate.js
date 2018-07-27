@@ -104,6 +104,19 @@
         }
     }
 
+    testTemplate.configureDurationPicker = function (duration) {
+        var date = moment(duration, "HH:mm:ss").toDate();
+        $('#durationPicker').datetimepicker({
+            date: date,
+            format: 'HH:mm'
+        });
+        $("#templateDuration").val(date.getHours() + ":" + date.getMinutes() + ":00");
+        $('#durationPicker').on("change.datetimepicker", function (e) {
+            var date = e.date.toDate();
+            $("#templateDuration").val(date.getHours() + ":" + date.getMinutes() + ":00");
+        });
+    }
+
     testTemplate.maxScoreChanged();
 
     return testTemplate;
