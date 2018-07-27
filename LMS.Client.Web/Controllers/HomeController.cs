@@ -42,8 +42,96 @@ namespace LMS.Client.Web.Controllers
                                 Id=1,
                                 Title="Random test",
                                 TasksCount=1
+                            },
+                            AnswerOptions= new List<TaskAnswerOptionDTO>
+                            {
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=0,
+                                    Content="True",
+                                    IsCorrect = true
+                                },
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=1,
+                                    Content="False",
+                                    IsCorrect = false
+                                }
                             }
-                        }
+                        },
+                        new TaskClientDTO
+                        {
+                            Id=2,
+                            Complexity = 2,
+                            Content = "Как дела?",
+                            Type = new TaskTypeDTO { Id = 1, Title = "Тест на выбор одного правильного ответа" },
+                            Category = new CategoryDTO
+                            {
+                                Id=1,
+                                Title="Random test",
+                                TasksCount=1
+                            },
+                            AnswerOptions= new List<TaskAnswerOptionDTO>
+                            {
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=2,
+                                    Content="Хорошо",
+                                    IsCorrect = true
+                                },
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=3,
+                                    Content="Плохо",
+                                    IsCorrect = false
+                                },
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=4,
+                                    Content="ХЗ",
+                                    IsCorrect = false
+                                }
+                            }
+                        },
+                        new TaskClientDTO
+                        {
+                            Id=1,
+                            Complexity = 2,
+                            Content = "Объясните что такое полиморфизм",
+                            Type = new TaskTypeDTO { Id = 2, Title = "Тест на написание открытого ответа" },
+                            Category = new CategoryDTO
+                            {
+                                Id=1,
+                                Title="Random test",
+                                TasksCount=1
+                            }
+                        },
+                        new TaskClientDTO
+                        {
+                            Id=1,
+                            Complexity = 2,
+                            Content = "Напишите Hello World!",
+                            Type = new TaskTypeDTO { Id = 3, Title = "Тест на написание кода" },
+                            Category = new CategoryDTO
+                            {
+                                Id=1,
+                                Title=".Net",
+                                TasksCount=1
+                            }
+                        },
+                        new TaskClientDTO
+                        {
+                            Id=1,
+                            Complexity = 2,
+                            Content = "Схема считывания QR-кода",
+                            Type = new TaskTypeDTO { Id = 4, Title = "Тест на диаграмму" },
+                            Category = new CategoryDTO
+                            {
+                                Id=1,
+                                Title="Random test",
+                                TasksCount=1
+                            }
+                        },
                     }
                 }
             }

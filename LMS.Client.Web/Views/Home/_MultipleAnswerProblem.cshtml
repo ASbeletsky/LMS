@@ -1,4 +1,4 @@
-﻿@using LMS.Entities;
+﻿@using LMS.Dto;
 @using System.Collections.Generic;
 @model TaskInfo
 @{
@@ -30,11 +30,11 @@
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
         </h3>
-        @foreach (var Task in Model.OurTask.Choices)
+        @foreach (var Task in Model.OurTask.AnswerOptions)
         {
             counter++;
             <input type="checkbox" name="result" value="@Task.Id" id="@Task.Id">
-            <span>@Task.Answer</span>
+            <span>@Task.Content</span>
             <br />
         }
         if (number > 0)
