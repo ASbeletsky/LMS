@@ -7,19 +7,29 @@ namespace LMS.Dto
     public class TestSessionDTO
     {
         public int Id { get; set; }
+
+        [Required]
         public int TestTemplateId { get; set; }
 
+        [Required]
         public string Title { get; set; }
 
+        [Required]
         [Display(Name = "Start time")]
         public DateTimeOffset StartTime { get; set; }
 
+        [Required]
         public TimeSpan Duration { get; set; }
 
         [Display(Name = "End time")]
         public DateTimeOffset EndTime => StartTime + Duration;
 
-        public ICollection<TestDTO> Tests { get; set; }
-        public ICollection<ExameneeDTO> Examenees { get; set; }
+        [Required]
+        [Display(Name = "Tests")]
+        public ICollection<int> TestIds { get; set; }
+
+        [Required]
+        [Display(Name = "Members")]
+        public ICollection<string> MemberIds { get; set; }
     }
 }

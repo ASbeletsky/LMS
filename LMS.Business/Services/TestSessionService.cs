@@ -38,11 +38,11 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(testSessionDTO));
             }
-            if (!testSessionDTO.Tests.Any())
+            if (!testSessionDTO.TestIds.Any())
             {
                 throw new ArgumentException("Test session should contains at least one test");
             }
-            if (!testSessionDTO.Examenees.Any())
+            if (!testSessionDTO.MemberIds.Any())
             {
                 throw new ArgumentException("Test session shoul contains at least one examenee");
             }
@@ -60,11 +60,11 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(testSessionDTO));
             }
-            if (!testSessionDTO.Tests.Any())
+            if (!testSessionDTO.TestIds.Any())
             {
                 throw new ArgumentException("Test session should contains at least one test");
             }
-            if (!testSessionDTO.Examenees.Any())
+            if (!testSessionDTO.MemberIds.Any())
             {
                 throw new ArgumentException("Test session shoul contains at least one examenee");
             }

@@ -12,6 +12,6 @@ namespace LMS.Entities
         public TimeSpan Duration { get; set; }
 
         public ICollection<TestSessionTest> Tests { get; set; }
-        public ICollection<Examenee> Examenees { get; set; }
+        public ICollection<TestSessionUser> Members { get; set; }
     }
 }

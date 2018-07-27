@@ -52,12 +52,12 @@ namespace LMS.Data.Repositories
         {
             using (var transaction = dbContext.Database.BeginTransaction())
             {
-                var exameneesSet = dbContext.Set<Examenee>();
+                var exameneesSet = dbContext.Set<TestSessionUser>();
                 var testsSet = dbContext.Set<TestSessionTest>();
 
                 var entry = dbContext.Set<TestSession>().Update(item);
 
-                var newExamenees = item.Examenees.ToArray();
+                var newExamenees = item.Members.ToArray();
                 var toRemoveExamenees = exameneesSet
                     .Where(l => l.SessionId == item.Id)
                     .Except(newExamenees);
@@ -85,7 +85,7 @@ namespace LMS.Data.Repositories
         private IQueryable<TestSession> GetAllQuery()
         {
             return dbContext.Set<TestSession>()
-                .Include(v => v.Examenees)
+                .Include(v => v.Members)
                 .Include(v => v.Tests)
                 .ThenInclude(l => l.Test);
         }

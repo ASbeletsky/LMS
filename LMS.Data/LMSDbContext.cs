@@ -136,7 +136,7 @@ namespace LMS.Data
                 .HasKey(s => s.Id);
 
             modelBuilder.Entity<TestSession>()
-                .HasMany(s => s.Examenees)
+                .HasMany(s => s.Members)
                 .WithOne(e => e.Session);
 
             modelBuilder.Entity<TestSession>()
@@ -153,12 +153,16 @@ namespace LMS.Data
                 .HasOne(t => t.Test)
                 .WithMany();
 
-            modelBuilder.Entity<Examenee>()
-                .HasKey(e => e.Id);
-            modelBuilder.Entity<Examenee>()
+            modelBuilder.Entity<TestSessionUser>()
+                .HasKey(u => new
+                {
+                    u.SessionId,
+                    u.UserId
+                });
+            modelBuilder.Entity<TestSessionUser>()
                 .HasOne<User>()
                 .WithMany()
-                .HasForeignKey(e => e.UserId);
+                .HasForeignKey(u => u.UserId);
 
             modelBuilder.Entity<User>();
 
