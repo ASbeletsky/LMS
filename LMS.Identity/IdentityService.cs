@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using LMS.Entities;
 using Task = System.Threading.Tasks.Task;
+using System.Threading.Tasks;
 
 namespace LMS.Identity
 {
@@ -23,6 +24,11 @@ namespace LMS.Identity
         public IEnumerable<IdentityRole> GetAllRoles()
         {
             return _roleManager.Roles;
+        }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            return _userManager.Users;
         }
 
         public async Task Register(User user, string password, string role)
@@ -55,7 +61,7 @@ namespace LMS.Identity
                 throw new Exception("Your role does not allow you to enter.");
         }
 
-        public async System.Threading.Tasks.Task<IEnumerable<User>> GetAllAsync(string roleName)
+        public async Task<IEnumerable<User>> GetAllAsync(string roleName)
         {
             return await _userManager.GetUsersInRoleAsync(roleName);
         }
@@ -66,5 +72,15 @@ namespace LMS.Identity
             await _signInManager.SignOutAsync();
         }
 
+        public async Task DeleteUser(string id)
+        {
+            User user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                if(RoleInitializer.adminUserName == user.UserName)
+                    throw new Exception("Sorry, but you can`t delete admin.");
+                IdentityResult result = await _userManager.DeleteAsync(user);
+            }
+        }
     }
 }

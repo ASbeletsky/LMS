@@ -92,5 +92,26 @@ namespace LMS.Admin.Web.Controllers
             await _identityService.Logout();
             return RedirectToAction("Login", "Account");
         }
+
+        [HttpGet]
+        public IActionResult List()
+        {
+            var users = _identityService.GetAllUsers();
+            return View(users);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                await _identityService.DeleteUser(id);
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+            return RedirectToAction("List", "Account");
+        }
     }
 }
