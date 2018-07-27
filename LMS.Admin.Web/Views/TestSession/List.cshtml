@@ -22,19 +22,20 @@
                 var calendar = $('#calendar').fullCalendar({
                     header: {
                         left: 'title',
-                        center: 'agendaDay,agendaWeek,month',
+                        center: 'month,listMonth',
                         right: 'prev,next today'
                     },
+                    themeSystem: 'bootstrap4',
                     editable: false,
                     firstDay: 1, //  1(Monday)
-                    selectable: true,
+                    selectable: false,
                     allDaySlot: true,
                     selectHelper: true,
                     eventClick: function (calEvent, jsEvent, view) {
                         location.href = '@Url.Action("Edit")/' + calEvent.id;
                     },
-                    select: function (start, end, allDay) {
-                        location.href = buildUrlWithParam('@Url.Action("Create")', "startTime", start.toJSON());
+                    dayClick: function (date, jsEvent, view) {
+                        location.href = buildUrlWithParam('@Url.Action("Create")', "startTime", date.toJSON());
                     },
                     droppable: false,
                     events: [
@@ -42,7 +43,7 @@
                         {
                             @:{
                             @:    id: @session.Id,
-                            @:    title: "@session.Title",
+                            @:    title: "@Html.Raw(session.Title)",
                             @:    start: new Date(@session.StartTime.ToUnixTimeMilliseconds()),
                             @:    end: new Date(@session.EndTime.ToUnixTimeMilliseconds()),
                             @:    allDay: false,
