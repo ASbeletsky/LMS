@@ -51,7 +51,7 @@ namespace LMS.Admin.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=TestSession}/{action=List}");
+                    template: "{controller=TestSession}/{action=List}/{id?}");
             });
             RoleInitializer.CreateUsersRoles(serviceProvider).GetAwaiter().GetResult();
         }
