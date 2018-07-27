@@ -15,17 +15,61 @@
 <div class="form-group">
     <label asp-for="TestTemplateId" class="control-label"></label>
     <br />
-    <select onchange="test.selectTemplate(this)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
+    <select id="testTemplateSelect" onchange="testSession.selectTemplate($(this).val(), false)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
     <span asp-validation-for="TestTemplateId" class="text-danger"></span>
 </div>
-<div class="form-group">
-    <label asp-for="Examenees" class="control-label"></label>
-    <br />
-    <select required multiple asp-for="Examenees" asp-items="users" data-live-search="true" class="form-control selectpicker"></select>
-    <span asp-validation-for="Examenees" class="text-danger"></span>
+<div class="row">
+    <div class="form-group col-12 col-md-6">
+        <label asp-for="StartTime" class="control-label"></label>
+        <br />
+        <div class="form-group">
+            <div class="input-group date" id="startTimePicker" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#startTimePicker" />
+                <input required hidden id="sessionStartTime" asp-for="StartTime" type="text" data-default="@Model.StartTime.ToUnixTimeMilliseconds()" />
+                <div class="input-group-append" data-target="#startTimePicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                </div>
+            </div>
+        </div>
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+    <div class="form-group col-12 col-md-6">
+        <label asp-for="Duration" class="control-label"></label>
+        <br />
+        <div class="form-group">
+            <div class="input-group date" id="durationPicker" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#durationPicker" />
+                <input required hidden id="sessionDuration" asp-for="Duration" type="text" data-default="@Model.Duration.ToString()" />
+                <div class="input-group-append" data-target="#durationPicker" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-clock-o"></i></div>
+                </div>
+            </div>
+        </div>
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
 </div>
-<br />
+<div class="row">
+    <div class="form-group col-12 col-md-6">
+        <label asp-for="TestIds" class="control-label"></label>
+        <br />
+        <select id="tests" required asp-for="TestIds" data-live-search="true" class="form-control selectpicker" data-test-ids="@Html.Raw(Json.Serialize(Model.TestIds))"></select>
+        <span asp-validation-for="TestIds" class="text-danger"></span>
+    </div>
+    <div class="form-group col-12 col-md-6">
+        <label asp-for="MemberIds" class="control-label"></label>
+        <br />
+        <select required multiple asp-for="MemberIds" asp-items="users" data-live-search="true" class="form-control selectpicker"></select>
+        <span asp-validation-for="MemberIds" class="text-danger"></span>
+    </div>
+</div>
 <br />
 <div class="form-group">
     <input type="submit" value="Save" class="btn btn-default" />
 </div>
+<script>
+    window.addEventListener("load", function () {
+        testSession.init({
+            configureDurationFromTemplate: @(Model.Duration.TotalMinutes > 0 ? "false" : "true")
+        });
+    });
+</script>
