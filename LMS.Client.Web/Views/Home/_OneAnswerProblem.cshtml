@@ -1,0 +1,48 @@
+﻿@using LMS.Entities;
+@using System.Collections.Generic;
+@model TaskInfo
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> result = new List<string>();
+    int number = Model.CurrentQuestionNumber;
+    int kolvo = Model.TaskCount;
+    string res = Model.Result[0];
+}
+<div class="well">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/Functions.js"></script>
+    <script>
+        DeserializeForm("radio", @res);
+    </script>
+    @using (@Html.BeginForm("Navigate", "Home"))
+    {
+        @Html.Hidden("mode", "")
+        @Html.Hidden("number", number);
+        @Html.Hidden("got", 1);
+        <h3>
+            <strong>Вопрос№ @(number + 1)</strong><br />
+            <strong>@Model.OurTask.Content</strong>
+        </h3>
+        @foreach (var choice in Model.OurTask.Choices)
+        {
+            @Html.RadioButton("result", @choice.Id)
+            <span>@choice.Answer</span>
+            <br />
+        }
+        if (number > 0)
+        {
+            <button class="btn btn-primary" onclick="changeMode('prev')">Previous</button> }
+        <button class="btn btn-primary" onclick="changeMode('res')"> OK</button>
+        if (number < kolvo - 1)
+        {<button class="btn btn-primary" onclick="changeMode('next')"> Next</button>}
+        <br />
+        for (int i = 0; i < kolvo; i++)
+        {
+            <button onclick="changeGot('@i')"> @(i + 1)</button>
+        }
+    }
+    <script>
+        $(":radio").click(showValues);
+        showValues();
+    </script>
+</div>
