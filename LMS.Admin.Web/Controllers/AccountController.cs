@@ -97,6 +97,7 @@ namespace LMS.Admin.Web.Controllers
         public IActionResult List()
         {
             var users = _identityService.GetAllUsers();
+           
             return View(users);
         }
 

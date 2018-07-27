@@ -1,5 +1,4 @@
-﻿@using LMS.Entities
-@model IEnumerable<User>
+﻿@model IEnumerable<UsersViewModel>
 @{
     ViewData["Title"] = "List";
 }
@@ -15,10 +14,10 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.UserName)
+                        @Html.DisplayNameFor(model => model.user.UserName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Name)
+                        @Html.DisplayNameFor(model => model.user.Name)
                     </th>
                     <th>
                         Role
@@ -33,17 +32,17 @@
                 {
                     <tr>
                         <td>
-                            <label>@item.UserName</label>
+                            <label>@item.user.UserName</label>
                         </td>
                         <td>
-                            <label>@item.Name</label>
+                            <label>@item.user.Name</label>
                         </td>
                         <td>
-                            <label>testRole</label>
+                            <label>@item.role</label>
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a href="#" data-toggle="modal" data-target="#deleteUser" data-arg-id="@item.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.user.Id">Edit</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteUser" data-arg-id="@item.user.Id">Delete</a>
                         </td>
                     </tr>
                 }
