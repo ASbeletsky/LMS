@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
@@ -7,7 +8,14 @@ namespace LMS.Dto
         public const int MinComplexity = 1;
         public const int MaxComplexity = 10;
 
+        public TaskDTO()
+        {
+            AnswerOptions = new List<TaskAnswerOptionDTO>();
+        }
+       
         public int Id { get; set; }
+
+        public IList<TaskAnswerOptionDTO> AnswerOptions { get; set; }
 
         [Range(MinComplexity, MaxComplexity, ErrorMessage = "Value out of range")]
         public int Complexity { get; set; }
