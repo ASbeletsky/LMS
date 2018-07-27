@@ -5,6 +5,12 @@ namespace LMS.Entities
 {
     public class TestSession
     {
+        public TestSession()
+        {
+            Tests = new List<TestSessionTest>();
+            Members = new List<TestSessionUser>();
+        }
+
         public int Id { get; set; }
 
         public string Title { get; set; }

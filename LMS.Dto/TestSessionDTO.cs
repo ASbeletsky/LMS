@@ -6,6 +6,12 @@ namespace LMS.Dto
 {
     public class TestSessionDTO
     {
+        public TestSessionDTO()
+        {
+            TestIds = new List<int>();
+            MemberIds = new List<string>();
+        }
+
         public int Id { get; set; }
 
         [Required]

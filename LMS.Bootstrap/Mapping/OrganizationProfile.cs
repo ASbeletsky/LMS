@@ -82,9 +82,6 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<Test, TestDTO>();
             CreateMap<TestDTO, Test>();
 
-            CreateMap<TestSessionUser, TestSessionUserDTO>();
-            CreateMap<TestSessionUserDTO, TestSessionUser>();
-
             CreateMap<TestSessionTest, TestDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<Test, TestDTO>(entity.Test));
 

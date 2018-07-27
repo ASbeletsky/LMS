@@ -19,7 +19,7 @@ namespace LMS.Data
 
         public DbSet<TestTemplate> TestTemplates { get; }
         public DbSet<Test> Tests { get; }
-        public DbSet<TestSession> Sessions { get; }
+        public DbSet<TestSession> TestSessions { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
