@@ -119,8 +119,8 @@ namespace LMS.Data.Migrations
                     b.HasData(
                         new { Id = 1, Title = "open-ended question" },
                         new { Id = 2, Title = "question with options" },
-                        new { Id = 3, Title = "Coding task" },
-                        new { Id = 4, Title = "Modelling task" }
+                        new { Id = 3, Title = "coding task" },
+                        new { Id = 4, Title = "modelling task" }
                     );
                 });
 

@@ -62,12 +62,12 @@ namespace LMS.Data.Migrations
             migrationBuilder.InsertData(
                table: "TaskType",
                columns: new[] { "Id", "Title" },
-               values: new object[] { 3, "Coding task" });
+               values: new object[] { 3, "coding task" });
 
             migrationBuilder.InsertData(
                 table: "TaskType",
                 columns: new[] { "Id", "Title" },
-                values: new object[] { 4, "Modelling task" });
+                values: new object[] { 4, "modelling task" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskAnswerOption_TaskId",
