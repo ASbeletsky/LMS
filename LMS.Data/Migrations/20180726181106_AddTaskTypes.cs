@@ -59,6 +59,16 @@ namespace LMS.Data.Migrations
                 columns: new[] { "Id", "Title" },
                 values: new object[] { 2, "question with options" });
 
+            migrationBuilder.InsertData(
+               table: "TaskType",
+               columns: new[] { "Id", "Title" },
+               values: new object[] { 3, "Coding task" });
+
+            migrationBuilder.InsertData(
+                table: "TaskType",
+                columns: new[] { "Id", "Title" },
+                values: new object[] { 4, "Modelling task" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_TaskAnswerOption_TaskId",
                 table: "TaskAnswerOption",
@@ -107,6 +117,16 @@ namespace LMS.Data.Migrations
                 table: "TaskType",
                 keyColumn: "Id",
                 keyValue: 2);
+
+            migrationBuilder.DeleteData(
+               table: "TaskType",
+               keyColumn: "Id",
+               keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "TaskType",
+                keyColumn: "Id",
+                keyValue: 4);
 
             migrationBuilder.RenameTable(
                 name: "TaskType",
