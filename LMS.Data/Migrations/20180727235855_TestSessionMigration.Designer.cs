@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180726103321_TestSessionMigration")]
+    [Migration("20180727235855_TestSessionMigration")]
     partial class TestSessionMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,28 +30,6 @@ namespace LMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("LMS.Entities.Examenee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("SessionId");
-
-                    b.Property<int>("TestId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SessionId");
-
-                    b.HasIndex("TestId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Examenee");
                 });
 
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
@@ -184,7 +162,7 @@ namespace LMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sessions");
+                    b.ToTable("TestSessions");
                 });
 
             modelBuilder.Entity("LMS.Entities.TestSessionTest", b =>
@@ -198,6 +176,19 @@ namespace LMS.Data.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("TestSessionTest");
+                });
+
+            modelBuilder.Entity("LMS.Entities.TestSessionUser", b =>
+                {
+                    b.Property<int>("SessionId");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("SessionId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TestSessionUser");
                 });
 
             modelBuilder.Entity("LMS.Entities.TestTemplate", b =>
@@ -402,23 +393,6 @@ namespace LMS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("LMS.Entities.Examenee", b =>
-                {
-                    b.HasOne("LMS.Entities.TestSession", "Session")
-                        .WithMany("Examenees")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("LMS.Entities.Test", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("LMS.Entities.User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
                 {
                     b.HasOne("LMS.Entities.Category", "Category")
@@ -505,6 +479,19 @@ namespace LMS.Data.Migrations
                     b.HasOne("LMS.Entities.Test", "Test")
                         .WithMany()
                         .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("LMS.Entities.TestSessionUser", b =>
+                {
+                    b.HasOne("LMS.Entities.TestSession", "Session")
+                        .WithMany("Members")
+                        .HasForeignKey("SessionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

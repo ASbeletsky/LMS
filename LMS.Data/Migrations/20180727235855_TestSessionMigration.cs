@@ -35,7 +35,7 @@ namespace LMS.Data.Migrations
                 column: "Id");
 
             migrationBuilder.CreateTable(
-                name: "Sessions",
+                name: "TestSessions",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -46,40 +46,7 @@ namespace LMS.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Examenee",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(nullable: true),
-                    TestId = table.Column<int>(nullable: false),
-                    SessionId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Examenee", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Examenee_Sessions_SessionId",
-                        column: x => x.SessionId,
-                        principalTable: "Sessions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Examenee_Tests_TestId",
-                        column: x => x.TestId,
-                        principalTable: "Tests",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Examenee_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_TestSessions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,9 +60,9 @@ namespace LMS.Data.Migrations
                 {
                     table.PrimaryKey("PK_TestSessionTest", x => new { x.SessionId, x.TestId });
                     table.ForeignKey(
-                        name: "FK_TestSessionTest_Sessions_SessionId",
+                        name: "FK_TestSessionTest_TestSessions_SessionId",
                         column: x => x.SessionId,
-                        principalTable: "Sessions",
+                        principalTable: "TestSessions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -106,25 +73,39 @@ namespace LMS.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Examenee_SessionId",
-                table: "Examenee",
-                column: "SessionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Examenee_TestId",
-                table: "Examenee",
-                column: "TestId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Examenee_UserId",
-                table: "Examenee",
-                column: "UserId");
+            migrationBuilder.CreateTable(
+                name: "TestSessionUser",
+                columns: table => new
+                {
+                    SessionId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TestSessionUser", x => new { x.SessionId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_TestSessionUser_TestSessions_SessionId",
+                        column: x => x.SessionId,
+                        principalTable: "TestSessions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TestSessionUser_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestSessionTest_TestId",
                 table: "TestSessionTest",
                 column: "TestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TestSessionUser_UserId",
+                table: "TestSessionUser",
+                column: "UserId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TestLevel_Tests_TestId",
@@ -154,13 +135,13 @@ namespace LMS.Data.Migrations
                 table: "Tests");
 
             migrationBuilder.DropTable(
-                name: "Examenee");
-
-            migrationBuilder.DropTable(
                 name: "TestSessionTest");
 
             migrationBuilder.DropTable(
-                name: "Sessions");
+                name: "TestSessionUser");
+
+            migrationBuilder.DropTable(
+                name: "TestSessions");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Tests",
