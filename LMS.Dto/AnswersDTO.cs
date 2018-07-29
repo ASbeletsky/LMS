@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LMS.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
@@ -11,8 +12,8 @@ namespace LMS.Dto
         [Required(ErrorMessage ="Content must be defined")]
         public string Content { get; set; }
         public double Result { get; set; }
-        //[Display(Name = "User's test session")]
-        //public TestSessionUser TestSessionUser { get; set; }
+        [Display(Name = "User's test session")]
+        public TestSessionUser TestSessionUser { get; set; }
         public int TestSessionUserId { get; set; }
     }
 }

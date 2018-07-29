@@ -17,6 +17,36 @@ namespace LMS.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("LMS.Entities.Answers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<double>("Result");
+
+                    b.Property<int>("TaskId");
+
+                    b.Property<int?>("TaskId1");
+
+                    b.Property<int>("TestSessionUserId");
+
+                    b.Property<int?>("TestSessionUserId1");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("TaskId1");
+
+                    b.HasIndex("TestSessionUserId");
+
+                    b.HasIndex("TestSessionUserId1");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("LMS.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -201,15 +231,30 @@ namespace LMS.Data.Migrations
 
             modelBuilder.Entity("LMS.Entities.TestSessionUser", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<int>("SessionId");
 
-                    b.Property<string>("UserId");
+                    b.Property<int?>("TestId");
 
-                    b.HasKey("SessionId", "UserId");
+                    b.Property<int?>("TestId1");
+
+                    b.Property<string>("UserId")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("SessionId", "UserId")
+                        .HasName("AlternateKey_TestSessionUser");
+
+                    b.HasIndex("TestId");
+
+                    b.HasIndex("TestId1");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TestSessionUser");
+                    b.ToTable("TestSessionUsers");
                 });
 
             modelBuilder.Entity("LMS.Entities.TestTemplate", b =>
@@ -414,6 +459,27 @@ namespace LMS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("LMS.Entities.Answers", b =>
+                {
+                    b.HasOne("LMS.Entities.Task")
+                        .WithMany("AnswersByUsers")
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.Task", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId1");
+
+                    b.HasOne("LMS.Entities.TestSessionUser")
+                        .WithMany("Answers")
+                        .HasForeignKey("TestSessionUserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.TestSessionUser", "TestSessionUser")
+                        .WithMany()
+                        .HasForeignKey("TestSessionUserId1");
+                });
+
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
                 {
                     b.HasOne("LMS.Entities.Category", "Category")
@@ -517,6 +583,14 @@ namespace LMS.Data.Migrations
                         .WithMany("Members")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.Test")
+                        .WithMany()
+                        .HasForeignKey("TestId");
+
+                    b.HasOne("LMS.Entities.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId1");
 
                     b.HasOne("LMS.Entities.User")
                         .WithMany()

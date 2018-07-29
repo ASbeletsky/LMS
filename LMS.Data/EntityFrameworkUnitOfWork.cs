@@ -27,6 +27,7 @@ namespace LMS.Data
         public IRepository<TestTemplate> TestTemplates { get; }
         public IRepository<Test> Tests { get; }
         public IRepository<TestSession> TestSessions { get; }
+        public IRepository<TestSessionUser> TestSessionUsers { get; }
 
         public IRepositoryAsync<User> UserRepository { get; }
 
