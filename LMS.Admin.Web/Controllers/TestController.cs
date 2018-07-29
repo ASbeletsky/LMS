@@ -108,5 +108,12 @@ namespace LMS.Admin.Web.Controllers
 
             return RedirectToAction(nameof(List));
         }
+
+        [HttpGet]
+        public IActionResult Filter(int templateId)
+        {
+            var tests = testService.FilterByTemplate(templateId);
+            return Json(tests);
+        }
     }
 }
