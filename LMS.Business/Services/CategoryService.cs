@@ -52,11 +52,12 @@ namespace LMS.Business.Services
 
                 if (unitOfWork.Categories.Get(entry.Id) is Entities.Category category)
                 {
-                    if (category.Title == entry.Title)
+                    if ((category.Title == entry.Title) && (category.ParentCategoryId == entry.ParentCategoryId))
                     {
                         return System.Threading.Tasks.Task.CompletedTask;
                     }
                     category.Title = entry.Title;
+                    category.ParentCategoryId = entry.ParentCategoryId;
                     unitOfWork.Categories.Update(category);
                 }
                 else
@@ -71,7 +72,8 @@ namespace LMS.Business.Services
         public IEnumerable<CategoryDTO> GetAll()
         {
             var categories = unitOfWork.Categories.GetAll();
-            var categoriesDTO = mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(categories);          
+            var categoriesDTO = mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(categories);
+
 
             foreach (var category in categoriesDTO)
             {
