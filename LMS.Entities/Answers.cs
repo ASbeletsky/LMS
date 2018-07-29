@@ -7,7 +7,7 @@
         public int TaskId { get; set; }
         public string Content { get; set; }
         public double Result { get; set; }
-
-        public int ExameneeId { get; set; }
+        //public TestSessionUser TestSessionUser { get; set; }
+        public int TestSessionUserId { get; set; }
     }
 }

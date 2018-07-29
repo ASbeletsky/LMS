@@ -34,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Entities", "LMS.Entitie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Socet", "LMS.Socet\LMS.Socet.csproj", "{42E078B7-A888-492B-BE45-3C46D217EB9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.AnswerModels", "LMS.AnswerModels\LMS.AnswerModels.csproj", "{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LMS.Serialization", "LMS.AnswerModels\LMS.Serialization.csproj", "{918FFF0C-6CC0-492A-B7CF-2A227EB2163B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
