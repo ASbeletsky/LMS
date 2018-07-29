@@ -28,6 +28,7 @@ namespace LMS.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
+                    b.Property<int?>("ParentCategoryId");
 
                     b.HasKey("Id");
 

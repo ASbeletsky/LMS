@@ -31,6 +31,8 @@ namespace LMS.Data
             modelBuilder.Entity<Category>()
                 .Property(c => c.Title)
                 .IsRequired();
+            modelBuilder.Entity<Category>()
+                .Property(c => c.ParentCategoryId);
 
             modelBuilder.Entity<Task>()
                 .HasKey(t => t.Id);

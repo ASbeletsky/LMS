@@ -15,11 +15,18 @@ namespace LMS.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Title = table.Column<string>(nullable: false)
+                    Title = table.Column<string>(nullable: false),
+                    ParentCategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Categories_ParentCategoryId",
+                        column: x => x.ParentCategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +92,10 @@ namespace LMS.Data.Migrations
                 name: "IX_Tasks_TypeId",
                 table: "Tasks",
                 column: "TypeId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_ParentCategoryId",
+                table: "Categories",
+                column: "ParentCategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
