@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
-    public class AnswersDTO
+    public class TaskAnswerDTO
     {
         public int Id {get;set;}
         [Display(Name = "Task")]

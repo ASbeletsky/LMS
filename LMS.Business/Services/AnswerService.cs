@@ -12,7 +12,7 @@ namespace LMS.Business.Services
         public AnswerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
-        public AnswersDTO GetById(int answerId)
+        public TaskAnswerDTO GetById(int answerId)
         {
             var answer = unitOfWork.Answers.Get(answerId);
             if (answer == null)
@@ -20,9 +20,9 @@ namespace LMS.Business.Services
                 throw new EntityNotFoundException<Entities.TaskAnswer>(answerId);
             }
 
-            return mapper.Map<Entities.TaskAnswer, AnswersDTO>(answer);
+            return mapper.Map<Entities.TaskAnswer, TaskAnswerDTO>(answer);
         }
-        public Task CreateAsync(AnswersDTO answer)
+        public Task CreateAsync(TaskAnswerDTO answer)
         {
             if (answer == null)
             {
@@ -33,20 +33,20 @@ namespace LMS.Business.Services
                 throw new ArgumentException($"{nameof(Entities.TaskAnswer)}.{nameof(Entities.TaskAnswer.Content)} cannot be null or empty");
             }
 
-            var entry = mapper.Map<AnswersDTO, Entities.TaskAnswer>(answer);
+            var entry = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answer);
 
             unitOfWork.Answers.Create(entry);
 
             return unitOfWork.SaveAsync();
         }
-        public Task UpdateAsync(AnswersDTO answerDto)
+        public Task UpdateAsync(TaskAnswerDTO answerDto)
         {
             if (answerDto == null)
             {
                 throw new ArgumentNullException(nameof(answerDto));
             }
 
-            var newAnswer = mapper.Map<AnswersDTO, Entities.TaskAnswer>(answerDto);
+            var newAnswer = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answerDto);
 
             if (unitOfWork.Answers.Get(newAnswer.Id) is Entities.TaskAnswer oldAnswer)
             {
@@ -73,11 +73,11 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<AnswersDTO> GetAll()
+        public IEnumerable<TaskAnswerDTO> GetAll()
         {
             var answers = unitOfWork.Answers
                 .GetAll();
-            return mapper.Map<IEnumerable<Entities.TaskAnswer>, IEnumerable<AnswersDTO>>(answers);
+            return mapper.Map<IEnumerable<Entities.TaskAnswer>, IEnumerable<TaskAnswerDTO>>(answers);
         }
     }
 }
