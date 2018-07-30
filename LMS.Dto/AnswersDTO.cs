@@ -7,7 +7,7 @@ namespace LMS.Dto
     {
         public int Id {get;set;}
         [Display(Name = "Task")]
-        public TaskClientDTO Task { get; set; }
+        public TaskDTO Task { get; set; }
         public int TaskId { get; set; }
         [Required(ErrorMessage ="Content must be defined")]
         public string Content { get; set; }

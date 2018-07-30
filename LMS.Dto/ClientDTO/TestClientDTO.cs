@@ -7,7 +7,7 @@ namespace LMS.Dto
     {
         public TestClientDTO()
         {
-            Tasks = new List<TaskClientDTO>();
+            Tasks = new List<TaskDTO>();
             Categories = new List<CategoryDTO>();
         }
 
@@ -18,6 +18,6 @@ namespace LMS.Dto
 
         public IList<CategoryDTO> Categories { get; set; }
 
-        public IList<TaskClientDTO> Tasks { get; set; }
+        public IList<TaskDTO> Tasks { get; set; }
     }
 }
