@@ -169,9 +169,10 @@ namespace LMS.Data
                 .WithMany()
                 .HasForeignKey(u => u.UserId);
             modelBuilder.Entity<TestSessionUser>()
-                .HasOne<Test>()
+                .HasOne(t => t.Test)
                 .WithMany()
-                .HasForeignKey(t=>t.TestId);
+                .HasForeignKey(t=>t.TestId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>();
          
@@ -186,7 +187,7 @@ namespace LMS.Data
             modelBuilder.Entity<TaskAnswer>()
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskAnswer>()
-                .HasOne<TestSessionUser>()
+                .HasOne(t => t.TestSessionUser)
                 .WithMany(t => t.Answers);
 
             base.OnModelCreating(modelBuilder);
