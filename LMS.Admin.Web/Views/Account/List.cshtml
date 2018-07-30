@@ -1,6 +1,8 @@
-﻿@model IEnumerable<UsersViewModel>
+﻿@using LMS.Dto;
+@model IEnumerable<UserDTO>
 @{
     ViewData["Title"] = "List";
+    var roles = ((IEnumerable<SelectListItem>)ViewData["AllRoles"]);
 }
 
 <p>
@@ -14,10 +16,10 @@
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.user.UserName)
+                        @Html.DisplayNameFor(model => model.UserName)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.user.Name)
+                        @Html.DisplayNameFor(model => model.Name)
                     </th>
                     <th>
                         Role
@@ -32,17 +34,17 @@
                 {
                     <tr>
                         <td>
-                            <label>@item.user.UserName</label>
+                            <label>@item.UserName</label>
                         </td>
                         <td>
-                            <label>@item.user.Name</label>
+                            <label>@item.Name</label>
                         </td>
                         <td>
-                            <label>@item.role</label>
+                            <label>@String.Join(", ",item.Roles)</label>
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.user.Id">Edit</a>
-                            <a href="#" data-toggle="modal" data-target="#deleteUser" data-arg-id="@item.user.Id">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteUser" data-arg-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }

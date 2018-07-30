@@ -1,0 +1,20 @@
+﻿@model LMS.Admin.Web.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            @Html.Partial("FormFields", Model)
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
+<br />

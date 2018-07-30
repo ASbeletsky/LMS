@@ -94,14 +94,35 @@ namespace LMS.Admin.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult List()
+        [Authorize(Roles = "admin, moderator")]
+        public async Task<IActionResult> List()
         {
-            var users = _identityService.GetAllUsers();
+            var users = await _identityService.GetAllUsers();
            
             return View(users);
         }
 
+        [Authorize(Roles = "admin, moderator")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var user = await _identityService.GetById(id);
+            var rvm = new RegisterViewModel() { UserName = user.UserName, FirstName = user.FirstName, LastName  = user.LastName };
+            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
+            return View(rvm);
+        }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
+        public async Task<IActionResult> Edit([FromForm]User user)
+        {
+            await _identityService.UpdateAsync(user);
+
+            return RedirectToAction(nameof(List));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(string id)
         {
             try

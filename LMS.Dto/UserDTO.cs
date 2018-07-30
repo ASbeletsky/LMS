@@ -1,8 +1,19 @@
 ﻿
+using System.Collections.Generic;
+
 namespace LMS.Dto
 {
     public class UserDTO
     {
+        public UserDTO()
+        {
+            Roles = new List<string>();
+        }
+
+        public ExamineeDTO Examinee { get; set; }
+
+        public ICollection<string> Roles { get; set; }
+
         public string Name => $"{FirstName} {LastName}";
 
         public string Id { get; set; }
@@ -26,7 +37,5 @@ namespace LMS.Dto
         public  string NormalizedUserName { get; set; }
 
         public  string UserName { get; set; }
-
-        
     }
 }

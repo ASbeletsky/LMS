@@ -5,20 +5,24 @@ using System;
 using LMS.Entities;
 using Task = System.Threading.Tasks.Task;
 using System.Threading.Tasks;
+using LMS.Dto;
+using LMS.Business.Services;
+using LMS.Interfaces;
 
 namespace LMS.Identity
 {
-   public class IdentityService 
+   public class IdentityService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager; // allows  to authenticate a user and install or delete his cookies
         private RoleManager<IdentityRole> _roleManager;
-
-        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager)
+        private readonly IMapper _mapper;
+        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            _mapper = mapper;
         }
 
         public IEnumerable<IdentityRole> GetAllRoles()
@@ -26,9 +30,17 @@ namespace LMS.Identity
             return _roleManager.Roles;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public async Task<IEnumerable<UserDTO>> GetAllUsers()
         {
-            return _userManager.Users;
+            var users = _userManager.Users.ToArray();
+            var roles = await Task.WhenAll(users.Select(u => _userManager.GetRolesAsync(u)));
+            var usersDTO = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users).ToArray();
+
+            for(var i = 0; i < usersDTO.Length; i ++)
+            {
+                usersDTO[i].Roles = roles[i];
+            }
+            return usersDTO;
         }
 
         public async Task Register(User user, string password, string role)
@@ -81,6 +93,16 @@ namespace LMS.Identity
                     throw new Exception("Sorry, but you can`t delete admin.");
                 IdentityResult result = await _userManager.DeleteAsync(user);
             }
+        }
+
+        public Task<User> GetById(string id)
+        {
+            return _userManager.FindByIdAsync(id);
+        }
+
+        public Task UpdateAsync(User user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

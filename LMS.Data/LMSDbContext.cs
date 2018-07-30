@@ -168,8 +168,9 @@ namespace LMS.Data
                 .WithMany()
                 .HasForeignKey(u => u.UserId);
 
-            modelBuilder.Entity<User>();
-         
+            modelBuilder.Entity<User>()
+                 .HasOne<Examinee>()
+                 .WithOne(e => e.User);
 
             modelBuilder.Entity<TaskAnswerOption>()
                 .HasKey(c => c.Id);
@@ -178,7 +179,9 @@ namespace LMS.Data
                 .WithMany(t => t.AnswerOptions)
                 .HasForeignKey(k => k.TaskId);
 
-          
+            modelBuilder.Entity<Examinee>()
+                .HasKey(k => k.Id);
+
 
             base.OnModelCreating(modelBuilder);
         }

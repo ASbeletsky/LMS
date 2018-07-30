@@ -108,6 +108,15 @@ namespace LMS.Bootstrap.Mapping
                         SessionId = dto.Id,
                         UserId = id
                     })));
+
+            CreateMap<UserDTO, User>();
+            CreateMap<User, UserDTO>()
+                .ForMember(m => m.Roles, m => m.Ignore())
+                .ForMember(m=> m.Examinee, m => m.Ignore());
+
+            CreateMap<ExamineeDTO, Examinee>();
+            CreateMap<Examinee, ExamineeDTO>();
+
         }
     }
 }
