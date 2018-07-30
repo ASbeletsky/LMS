@@ -112,5 +112,19 @@ namespace LMS.Admin.Web.Controllers
             var testSessions = testSessionService.GetAll();
             return View(testSessions);
         }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var testSessionResult = testSessionService.GetResults(id);
+            return View(testSessionResult);
+        }
+
+        [HttpGet]
+        public IActionResult ResultDetails(int sessionId, string id)
+        {
+            var testSessionResult = testSessionService.GetExameneeResult(sessionId, id);
+            return View(testSessionResult);
+        }
     }
 }
