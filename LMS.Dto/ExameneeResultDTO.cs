@@ -8,7 +8,7 @@ namespace LMS.Dto
     {
         public ExameneeResultDTO()
         {
-            Answers = new List<AnswersDTO>();
+            Answers = new List<TaskAnswerDTO>();
         }
 
         [Display(Name = "Test title")]
@@ -25,6 +25,6 @@ namespace LMS.Dto
 
         public int? TestId { get; set; }
 
-        public ICollection<AnswersDTO> Answers { get; set; }
+        public ICollection<TaskAnswerDTO> Answers { get; set; }
     }
 }

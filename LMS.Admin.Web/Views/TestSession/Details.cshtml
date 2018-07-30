@@ -1,5 +1,4 @@
 ﻿@using LMS.Dto
-@using LMS.Entities
 @model TestSessionResultsDTO
 
 @{
@@ -10,9 +9,55 @@
     <h4>Test session results</h4>
     <hr />
     <div class="col-md-6">
-        <div >
-
-        </div>
+        @Model.Title
+        <br />
+        @Model.StartTime
+        <br />
+        @Model.EndTime
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Examinee
+                    </th>
+                    <th>
+                        Test title
+                    </th>
+                    <th>
+                        Test duration
+                    </th>
+                    <th>
+                        Score
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var exameneeResult in Model.ExameneeResults)
+                {
+                    <tr>
+                        <th>
+                            @exameneeResult.UserName
+                        </th>
+                        <th>
+                            @exameneeResult.TestTitle
+                        </th>
+                        <th>
+                            @exameneeResult.Duration
+                        </th>
+                        <th>
+                            @exameneeResult.TotalScore
+                        </th>
+                        <th>
+                            <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 <br />

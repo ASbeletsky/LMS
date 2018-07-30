@@ -11,6 +11,8 @@ namespace LMS.Dto
             ExameneeResults = new List<ExameneeResultDTO>();
         }
 
+        public int Id { get; set; }
+
         public string Title { get; set; }
 
         [Display(Name = "Start time")]

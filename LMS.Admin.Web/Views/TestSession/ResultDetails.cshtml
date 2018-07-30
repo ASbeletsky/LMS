@@ -1,5 +1,4 @@
 ﻿@using LMS.Dto
-@using LMS.Entities
 @model ExameneeResultDTO
 
 @{
@@ -10,7 +9,39 @@
     <h4>Examenee result</h4>
     <hr />
     <div class="col-md-6">
-
+        @Model.TestTitle
+        <br />
+        @Model.UserName
+        <br />
+        @Model.Duration
+        <br />
+        @Model.TotalScore
+        <br />
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Score
+                    </th>
+                    <th>
+                        Content
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var answer in Model.Answers)
+                {
+                    <tr>
+                        <th>
+                            @answer.Content
+                        </th>
+                        <th>
+                            @answer.Score
+                        </th>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
 <br />
