@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Admin.Web.ViewModels
 {
     public class RegisterViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         [Display(Name = "FirstName")]
         public string FirstName { get; set; }
@@ -29,6 +32,6 @@ namespace LMS.Admin.Web.ViewModels
 
         [Required]
         [Display(Name = "AllRoles")]
-        public string Role { get; set; }
+        public ICollection<string> Roles { get; set; }
     }
 }

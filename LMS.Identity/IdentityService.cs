@@ -43,12 +43,12 @@ namespace LMS.Identity
             return usersDTO;
         }
 
-        public async Task Register(User user, string password, string role)
+        public async Task Register(User user, string password, ICollection<string> roles)
         {
             var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, role); // add role
+                await _userManager.AddToRolesAsync(user, roles); // add role
             }
             else
                 throw new AggregateException(result.Errors.Select(error => new Exception(error.Description)));
@@ -100,9 +100,31 @@ namespace LMS.Identity
             return _userManager.FindByIdAsync(id);
         }
 
-        public Task UpdateAsync(User user)
+        public async Task<ICollection<string>> GetUserRoles(string id)
         {
-            throw new NotImplementedException();
+            User user = await _userManager.FindByIdAsync(id);
+            return await _userManager.GetRolesAsync(user);
+        }
+
+        public async Task UpdateAsync( User userNew, string password, ICollection<string> roles)
+        {
+            User userOld = await _userManager.FindByIdAsync(userNew.Id);
+            if (userOld == null)
+                throw new ArgumentNullException(nameof(userOld));
+            if (!roles.Any())
+                throw new ArgumentException("User should have at least one role");
+
+            userOld.UserName = userNew.UserName;
+            userOld.FirstName = userNew.FirstName;
+            userOld.LastName = userNew.LastName;
+            await _userManager.UpdateAsync(userOld);
+
+            var oldUserRoles  = await GetUserRoles(userOld.Id);
+            await _userManager.RemoveFromRolesAsync(userOld, oldUserRoles);
+            await _userManager.AddToRolesAsync(userOld, roles);
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(userOld);
+            await _userManager.ResetPasswordAsync(userOld, token, password);
         }
     }
 }

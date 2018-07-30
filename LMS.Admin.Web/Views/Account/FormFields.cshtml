@@ -4,8 +4,8 @@
 }
 
 <div class="card-body">
-    <form method="post" asp-controller="Account" asp-action="Register">
         <div asp-validation-summary="ModelOnly"></div>
+        <input asp-for="Id" type="hidden" />
         <div class="form-group">
             <div class="form-row">
                 <div class="col-md-6">
@@ -41,11 +41,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Role" class="control-label">Select role</label>
-            <select asp-for="Role" asp-items="@roles" class="form-control custom-select"></select>
-            <span asp-validation-for="Role" class="text-danger"></span>
+            <label asp-for="Roles" class="control-label">Select roles</label>
+            <select required multiple asp-for="Roles" asp-items="@roles" class="form-control selectpicker"></select>
+            <span asp-validation-for="Roles" class="text-danger"></span>
         </div>
         <input type="submit" class="btn btn-primary btn-block" value="Register" />
-
-    </form>
 </div>

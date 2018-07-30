@@ -43,7 +43,7 @@ namespace LMS.Admin.Web.Controllers
                 // add user
                 try
                 {
-                    await _identityService.Register(user, model.Password, model.Role);
+                    await _identityService.Register(user, model.Password, model.Roles);
                     return View(model);
                 }
                 catch(AggregateException e)
@@ -106,7 +106,7 @@ namespace LMS.Admin.Web.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var user = await _identityService.GetById(id);
-            var rvm = new RegisterViewModel() { UserName = user.UserName, FirstName = user.FirstName, LastName  = user.LastName };
+            var rvm = new RegisterViewModel() { UserName = user.UserName, FirstName = user.FirstName, LastName  = user.LastName, Roles = await _identityService.GetUserRoles(id), Id = user.Id};
             ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
             return View(rvm);
         }
@@ -114,9 +114,10 @@ namespace LMS.Admin.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, moderator")]
-        public async Task<IActionResult> Edit([FromForm]User user)
+        public async Task<IActionResult> Edit(RegisterViewModel model)
         {
-            await _identityService.UpdateAsync(user);
+            var user = new User { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName, Id = model.Id };
+            await _identityService.UpdateAsync(user, model.Password, model.Roles);
 
             return RedirectToAction(nameof(List));
         }
