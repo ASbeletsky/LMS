@@ -84,6 +84,30 @@ namespace LMS.Bootstrap.Mapping
 
             CreateMap<Test, TestDTO>();
             CreateMap<TestDTO, Test>();
+
+            CreateMap<TestSessionTest, TestDTO>()
+                .ConstructUsing((entity, context) => context.Mapper.Map<Test, TestDTO>(entity.Test));
+
+            CreateMap<TestSession, TestSessionDTO>()
+                .ForMember(m => m.TestTemplateId, m => m.ResolveUsing(entity => 
+                    entity.Tests.FirstOrDefault()?.Test?.TestTemplateId ?? 0))
+                .ForMember(m => m.TestIds, m => m.ResolveUsing(entity =>
+                    entity.Tests.Select(t => t.TestId).ToList()))
+                .ForMember(m => m.MemberIds, m => m.ResolveUsing(entity =>
+                    entity.Members.Select(t => t.UserId).ToList()));
+            CreateMap<TestSessionDTO, TestSession>()
+                .ForMember(m => m.Tests, m => m.ResolveUsing(dto =>
+                    dto.TestIds.Select(id => new TestSessionTest
+                    {
+                        SessionId = dto.Id,
+                        TestId = id
+                    })))
+                .ForMember(m => m.Members, m => m.ResolveUsing(dto =>
+                    dto.MemberIds.Select(id => new TestSessionUser
+                    {
+                        SessionId = dto.Id,
+                        UserId = id
+                    })));
         }
     }
 }
