@@ -12,6 +12,27 @@ function showValues() {
     //    $("#result").append(field.value + " ");
     //});
 }
+function StoreToSession(number,res) {
+    sessionStorage.setItem(number, res);
+    showValues();
+}
+function DeserializeFormFromSession(type, number) {
+    var res = sessionStorage.getItem(number);
+    if (res !== undefined || res!==null) {
+        if (type === "check") {
+            res.forEach(function (element) {
+                alert(element);
+                $("input:checkbox[id='" + element + "']").prop('checked', true);
+            });
+        }
+        else if (type === "radio") {
+            $("input:radio[id='" + res + "']").prop('checked', true);
+        }
+        else if (type === "text") {
+            $("textarea").text(res);
+        }
+    }
+}
 function DeserializeForm(type, res) {
     if (type === "check") {
         res.forEach(function (element) {

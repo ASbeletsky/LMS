@@ -32,7 +32,6 @@
         </h3>
         @foreach (var Task in Model.OurTask.AnswerOptions)
         {
-            counter++;
             <input type="checkbox" name="result" value="@Task.Id" id="@Task.Id">
             <span>@Task.Content</span>
             <br />

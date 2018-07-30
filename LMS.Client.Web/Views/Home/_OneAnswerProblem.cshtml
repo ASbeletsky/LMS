@@ -3,17 +3,17 @@
 @model TaskInfo
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    List<string> result = new List<string>();
+    List<string> result =new List<string>();
     int number = Model.CurrentQuestionNumber;
     int kolvo = Model.TaskCount;
-    string res = Model.Result[0];
+    //string res = Model.Result[0];
 }
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
-    <script>
-        DeserializeForm("radio", @res);
-    </script>
+    @*<script>
+        DeserializeFormFromSession("radio", "@number");
+    </script>*@
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
@@ -25,7 +25,7 @@
         </h3>
         @foreach (var Task in Model.OurTask.AnswerOptions)
         {
-            @Html.RadioButton("result", @Task.Id)
+        <input type="radio" name="result" value="@Task.Id" id="@Task.Id">
             <span>@Task.Content</span>
             <br />
         }
@@ -42,7 +42,9 @@
         }
     }
     <script>
-        $(":radio").click(showValues);
-        showValues();
+        DeserializeFormFromSession("radio", "@number");
+        var res = document.querySelector('input[name=result]').value;
+        $(":radio").click(StoreToSession("@number",res));
+        StoreToSession("@number",res);
     </script>
 </div>

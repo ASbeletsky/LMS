@@ -59,40 +59,40 @@ namespace LMS.Client.Web.Controllers
                                 }
                             }
                         },
-                        new TaskClientDTO
-                        {
-                            Id=2,
-                            Complexity = 2,
-                            Content = "Как дела?",
-                            Type = new TaskTypeDTO { Id = 1, Title = "Тест на выбор одного правильного ответа" },
-                            Category = new CategoryDTO
-                            {
-                                Id=1,
-                                Title="Random test",
-                                TasksCount=1
-                            },
-                            AnswerOptions= new List<TaskAnswerOptionDTO>
-                            {
-                                new TaskAnswerOptionDTO
-                                {
-                                    Id=2,
-                                    Content="Хорошо",
-                                    IsCorrect = true
-                                },
-                                new TaskAnswerOptionDTO
-                                {
-                                    Id=3,
-                                    Content="Плохо",
-                                    IsCorrect = false
-                                },
-                                new TaskAnswerOptionDTO
-                                {
-                                    Id=4,
-                                    Content="ХЗ",
-                                    IsCorrect = false
-                                }
-                            }
-                        },
+                        //new TaskClientDTO
+                        //{
+                        //    Id=2,
+                        //    Complexity = 2,
+                        //    Content = "Как дела?",
+                        //    Type = new TaskTypeDTO { Id = 1, Title = "Тест на выбор одного правильного ответа" },
+                        //    Category = new CategoryDTO
+                        //    {
+                        //        Id=1,
+                        //        Title="Random test",
+                        //        TasksCount=1
+                        //    },
+                        //    AnswerOptions= new List<TaskAnswerOptionDTO>
+                        //    {
+                        //        new TaskAnswerOptionDTO
+                        //        {
+                        //            Id=2,
+                        //            Content="Хорошо",
+                        //            IsCorrect = true
+                        //        },
+                        //        new TaskAnswerOptionDTO
+                        //        {
+                        //            Id=3,
+                        //            Content="Плохо",
+                        //            IsCorrect = false
+                        //        },
+                        //        new TaskAnswerOptionDTO
+                        //        {
+                        //            Id=4,
+                        //            Content="ХЗ",
+                        //            IsCorrect = false
+                        //        }
+                        //    }
+                        //},
                         new TaskClientDTO
                         {
                             Id=1,
