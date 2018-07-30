@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LMS.Entities
 {
     public class TestSessionUser
     {
-        public int Id { get; set; }
         public TestSessionUser() {
             Answers = new List<TaskAnswer>();
         }
@@ -15,6 +15,8 @@ namespace LMS.Entities
 
         public Test Test { get; set; }
         public int? TestId { get; set; }
+
+        public TimeSpan Duration { get; set; }
 
         public ICollection<TaskAnswer> Answers { get; set; }
     }

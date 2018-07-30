@@ -20,7 +20,6 @@ namespace LMS.Data
         public DbSet<TestTemplate> TestTemplates { get; }
         public DbSet<Test> Tests { get; }
         public DbSet<TestSession> TestSessions { get; }
-        public DbSet<TestSessionUser> TestSessionUsers { get; }
         public DbSet<TaskAnswer> Answers { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -160,13 +159,11 @@ namespace LMS.Data
                 .WithMany();
 
             modelBuilder.Entity<TestSessionUser>()
-                .HasKey(t => t.Id);
-            modelBuilder.Entity<TestSessionUser>()
-                .HasAlternateKey(u => new
+                .HasKey(u => new
                 {
                     u.SessionId,
                     u.UserId
-                }).HasName("AlternateKey_TestSessionUser");
+                });
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne<User>()
                 .WithMany()
@@ -189,13 +186,8 @@ namespace LMS.Data
             modelBuilder.Entity<TaskAnswer>()
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskAnswer>()
-                .HasOne<Task>()
-                .WithMany(t => t.AnswersByUsers)
-                .HasForeignKey(k => k.TaskId);
-            modelBuilder.Entity<TaskAnswer>()
                 .HasOne<TestSessionUser>()
-                .WithMany(t => t.Answers)
-                .HasForeignKey(k => k.TestSessionUserId);
+                .WithMany(t => t.Answers);
 
             base.OnModelCreating(modelBuilder);
         }
