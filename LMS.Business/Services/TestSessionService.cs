@@ -26,6 +26,34 @@ namespace LMS.Business.Services
             return mapper.Map<TestSession, TestSessionDTO>(template);
         }
 
+        public TestSessionResultsDTO GetResults(int id)
+        {
+            var template = unitOfWork.TestSessions.Get(id);
+            if (template == null)
+            {
+                throw new EntityNotFoundException<TestSession>(id);
+            }
+
+            return mapper.Map<TestSession, TestSessionResultsDTO>(template);
+        }
+
+        public ExameneeResultDTO GetExameneeResult(int sessionId, string exameneeId)
+        {
+            var template = unitOfWork.TestSessions.Get(sessionId);
+            if (template == null)
+            {
+                throw new EntityNotFoundException<TestSession>(sessionId);
+            }
+
+            var user = template.Members.FirstOrDefault(m => m.UserId == exameneeId);
+            if (user == null)
+            {
+                throw new EntityNotFoundException<TestSessionUser>();
+            }
+
+            return mapper.Map<TestSessionUser, ExameneeResultDTO>(user);
+        }
+
         public Task DeleteByIdAsync(int id)
         {
             unitOfWork.TestSessions.Delete(id);
