@@ -31,7 +31,7 @@ namespace LMS.Data
 
         public IRepositoryAsync<User> UserRepository { get; }
 
-        public IRepository<Answers> Answers { get; }
+        public IRepository<TaskAnswer> Answers { get; }
 
         public System.Threading.Tasks.Task SaveAsync()
         {

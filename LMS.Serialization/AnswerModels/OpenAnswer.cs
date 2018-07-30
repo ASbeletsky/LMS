@@ -9,10 +9,10 @@ namespace LMS.AnswerModels
     public class OpenAnswer
     {
         [DataMember]
-        public string Answer { get; set; }
+        public string Content { get; set; }
         public OpenAnswer(string newAnswers)
         {
-            Answer = newAnswers;
+            Content = newAnswers;
         }
     }
 }

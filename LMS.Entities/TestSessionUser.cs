@@ -6,7 +6,7 @@ namespace LMS.Entities
     {
         public int Id { get; set; }
         public TestSessionUser() {
-            Answers = new List<Answers>();
+            Answers = new List<TaskAnswer>();
         }
         public TestSession Session { get; set; }
         public int SessionId { get; set; }
@@ -16,6 +16,6 @@ namespace LMS.Entities
         public Test Test { get; set; }
         public int? TestId { get; set; }
 
-        public ICollection<Answers> Answers { get; set; }
+        public ICollection<TaskAnswer> Answers { get; set; }
     }
 }

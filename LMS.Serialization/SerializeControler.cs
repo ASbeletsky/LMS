@@ -22,21 +22,15 @@ namespace LMS.AnswerModels
             try
             {
                 var des = JsonConvert.DeserializeObject<IDictionary<string, object>>(obj);
+                var som = des.GetEnumerator();
                 if (des.Count == 1)
                 {
-                    switch (des["Answer"])
+                    switch (som.Current.Key)
                     {
-                        case long singl:
-                            return new SinglAnswer(Convert.ToInt32(singl));
-                        case JArray multy:
-                            List<int> result = new List<int>();
-                            foreach (var item in multy.Children())
-                            {
-                                result.Add(int.Parse(item.ToString()));
-                            }
-                            return new MultyAnswer(result);
-                        case string open:
-                            return new OpenAnswer(open);
+                        case "AnswerOptionId":
+                            return new SingleAnswer(Convert.ToInt32(som.Current.Value));
+                        case "Content":
+                            return new OpenAnswer(som.Current.Value as string);
                         default:
                             return null;
                     }
@@ -46,6 +40,31 @@ namespace LMS.AnswerModels
             catch (System.Exception ex)
             {
                 return null;
+            }
+        }
+        public static bool CheckSerialization(string obj)
+        {
+            try
+            {
+                var des = JsonConvert.DeserializeObject<IDictionary<string, object>>(obj);
+                var som = des.GetEnumerator();
+                if (des.Count == 1)
+                {
+                    switch (som.Current.Key)
+                    {
+                        case "AnswerOptionId":
+                            return som.Current.Value is int;
+                        case "Content":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+                return false;
+            }
+            catch (System.Exception ex)
+            {
+                return false;
             }
         }
     }

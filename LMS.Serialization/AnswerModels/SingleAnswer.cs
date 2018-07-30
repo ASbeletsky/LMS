@@ -6,13 +6,13 @@ using System.Text;
 namespace LMS.AnswerModels
 {
     [DataContract]
-    public class MultyAnswer
+    public class SingleAnswer
     {
         [DataMember]
-        public List<int> Answer { get; set; }
-        public MultyAnswer(List<int> newAnswers)
+        public int AnswerOptionId { get; set; }
+        public SingleAnswer(int newAnswer)
         {
-            Answer= newAnswers;
+            AnswerOptionId = newAnswer;
         }
     }
 }

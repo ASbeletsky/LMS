@@ -7,10 +7,8 @@ namespace LMS.Entities
         public Task()
         {
             AnswerOptions = new List<TaskAnswerOption>();
-            AnswersByUsers = new List<Answers>();
         }
         public IList<TaskAnswerOption> AnswerOptions { get; set; }
-        public ICollection<Answers> AnswersByUsers { get; set; }
 
         public int Id { get; set; }
         public int Complexity { get; set; }

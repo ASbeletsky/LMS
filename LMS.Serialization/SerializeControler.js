@@ -1,36 +1,17 @@
-﻿function SinglAnswerSerializer(id) {
+﻿function SingleAnswerSerializer(id) {
     if (!isInteger(id)) {
         return undefined;
     }
-    var SinglAnswerModel =
+    var SingleAnswerModel =
         {
-            Answer: id
+            AnswerOptionId: id
         }
-    return JSON.stringify(SinglAnswerModel);
-}
-function MultyAnswerSerializer(ListId) {
-    var toDelete=[];
-    ListId.forEach(function (item, i, arr) {
-        if (!isInteger(item)) {
-            toDelete.push(i);
-        }
-    });
-    toDelete.forEach(function (item, i, arr) {
-        ListId.splice(item - i, 1);
-    });
-    if (ListId.length < 1) {
-        return undefined;
-    }
-    var MultyAnswerModel =
-        {
-            Answer: ListId
-        }
-    return JSON.stringify(MultyAnswerModel);
+    return JSON.stringify(SingleAnswerModel);
 }
 function OpenAnswerSerializer(open) {
     var OpenAnswerModel =
         {
-            Answer: open
+            Content: open
         }
     return JSON.stringify(OpenAnswerModel);
 }
@@ -45,5 +26,5 @@ function isInteger(number) {
 
 function Deserializer(str) {
     var answer = JSON.parse(str);
-    return answer["Answer"];
+    return answer;
 }

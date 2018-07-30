@@ -21,7 +21,7 @@ namespace LMS.Data
         public DbSet<Test> Tests { get; }
         public DbSet<TestSession> TestSessions { get; }
         public DbSet<TestSessionUser> TestSessionUsers { get; }
-        public DbSet<Answers> Answers { get; }
+        public DbSet<TaskAnswer> Answers { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -186,13 +186,13 @@ namespace LMS.Data
                 .WithMany(t => t.AnswerOptions)
                 .HasForeignKey(k => k.TaskId);
 
-            modelBuilder.Entity<Answers>()
+            modelBuilder.Entity<TaskAnswer>()
                 .HasKey(t => t.Id);
-            modelBuilder.Entity<Answers>()
+            modelBuilder.Entity<TaskAnswer>()
                 .HasOne<Task>()
                 .WithMany(t => t.AnswersByUsers)
                 .HasForeignKey(k => k.TaskId);
-            modelBuilder.Entity<Answers>()
+            modelBuilder.Entity<TaskAnswer>()
                 .HasOne<TestSessionUser>()
                 .WithMany(t => t.Answers)
                 .HasForeignKey(k => k.TestSessionUserId);
