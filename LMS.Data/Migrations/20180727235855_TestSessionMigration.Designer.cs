@@ -3,14 +3,16 @@ using System;
 using LMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    partial class LMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180727235855_TestSessionMigration")]
+    partial class TestSessionMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,6 @@ namespace LMS.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
-
-                    b.Property<int?>("ParentCategoryId");
 
                     b.HasKey("Id");
 
@@ -86,24 +86,6 @@ namespace LMS.Data.Migrations
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("LMS.Entities.TaskAnswerOption", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Content");
-
-                    b.Property<bool>("IsCorrect");
-
-                    b.Property<int>("TaskId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("TaskAnswerOption");
-                });
-
             modelBuilder.Entity("LMS.Entities.TaskType", b =>
                 {
                     b.Property<int>("Id")
@@ -114,12 +96,7 @@ namespace LMS.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TaskType");
-
-                    b.HasData(
-                        new { Id = 1, Title = "open-ended question" },
-                        new { Id = 2, Title = "question with options" }
-                    );
+                    b.ToTable("TaskTypes");
                 });
 
             modelBuilder.Entity("LMS.Entities.Test", b =>
@@ -416,14 +393,6 @@ namespace LMS.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("LMS.Entities.Category", b =>
-            {
-                b.HasOne("LMS.Entities.Task", "ParentCategory")
-                    .WithMany()
-                    .HasForeignKey("ParentCategoryId")
-                    .OnDelete(DeleteBehavior.SetNull);
-            });
-
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
                 {
                     b.HasOne("LMS.Entities.Category", "Category")
@@ -463,14 +432,6 @@ namespace LMS.Data.Migrations
                     b.HasOne("LMS.Entities.TaskType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("LMS.Entities.TaskAnswerOption", b =>
-                {
-                    b.HasOne("LMS.Entities.Task")
-                        .WithMany("AnswerOptions")
-                        .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

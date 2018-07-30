@@ -10,6 +10,7 @@ namespace LMS.Interfaces
         IRepository<TaskType> TaskTypes { get; }
         IRepository<TestTemplate> TestTemplates { get; }
         IRepository<Test> Tests { get; }
+        IRepository<TestSession> TestSessions { get; }
 
         System.Threading.Tasks.Task SaveAsync();
     }
