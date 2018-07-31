@@ -37,12 +37,12 @@
                 <script>
                     var editor = ace.edit("editor"); // теперь обращаться к редактору будем через editor
                     // Далее весь экшон будет проходить тут!
+                    editor.setValue("");
                     var category = "@Model.Category";
-                    var code = "@Model.Result[0]";
                     setType(category);
-                    editor.on('change', function () { update() });
+                    editor.on('change', function () { update("@number") });
                     //editor.getSession().setMode("ace/mode/csharp");
-                    editor.setValue(code); // задаем
+                    DeserializeFormFromSession("code", "@number");;
                     function setType(category) {
                         if (category == "C#" || category == ".Net") {
                             editor.getSession().setMode("ace/mode/csharp");

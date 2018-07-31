@@ -31,6 +31,9 @@ function DeserializeFormFromSession(type, number) {
         else if (type === "text") {
             $("textarea").text(res);
         }
+        else if (type === "code") {
+            editor.setValue(res); // задаем
+        }
     }
     return res;
 }
@@ -49,10 +52,11 @@ function DeserializeForm(type, res) {
         $("textarea").text(res);
     }
 }
-function update()
+function update(number)
 {
     var res = editor.getSession().getValue();
     document.querySelector('input[name=result]').value = res;
+    sessionStorage.setItem(number, res);
     console.log($(editor).serialize());
 }
 function getResults() {
