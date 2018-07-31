@@ -19,5 +19,14 @@ namespace LMS.Entities
         public TimeSpan Duration { get; set; }
 
         public ICollection<TaskAnswer> Answers { get; set; }
+
+        public bool Equals(TestSessionUser other)
+        {
+            if (this.SessionId == other.SessionId && this.UserId == other.UserId)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }
