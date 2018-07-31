@@ -38,7 +38,7 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["AvailableCategories"] = categoryService.Filter(t => t.ParentCategoryId == null).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableCategories"] = categoryService.GetAvailableCategories();
             ViewData["AmountChildrenCategories"] = 0;
 
             return View(new CategoryDTO());
@@ -59,8 +59,8 @@ namespace LMS.Admin.Web.Controllers
         {
             var category = categoryService.GetById(id);
 
-            ViewData["AvailableCategories"] = categoryService.Filter(t => t.ParentCategoryId == null && t.Id != id).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            ViewData["AmountChildrenCategories"] = categoryService.Filter(t => t.ParentCategoryId == id).Count();
+            ViewData["AvailableCategories"] = categoryService.GetAvailableCategories(id);
+            ViewData["AmountChildrenCategories"] = categoryService.GetAmountChildrenCategories(id);
 
             return View(category);
         }

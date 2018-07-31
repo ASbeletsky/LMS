@@ -5,7 +5,7 @@ using LMS.Interfaces;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LMS.Business.Services
 {
@@ -89,9 +89,21 @@ namespace LMS.Business.Services
             return mapper.Map<Entities.Category, CategoryDTO>(category);
         }
 
-        public virtual IEnumerable<CategoryDTO> Filter(System.Linq.Expressions.Expression<Func<Category, bool>> filter)
+        public IEnumerable<SelectListItem> GetAvailableCategories()
         {
-            return mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(unitOfWork.Categories.Filter(filter));
+            return (mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(
+                unitOfWork.Categories.Filter(t => t.ParentCategoryId == null)))
+                .Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+        }
+        public IEnumerable<SelectListItem> GetAvailableCategories(int id)
+        {
+            return (mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(
+                unitOfWork.Categories.Filter(t => t.ParentCategoryId == null && t.Id != id)))
+                .Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title }); ;
+        }
+        public int GetAmountChildrenCategories(int id)
+        {
+            return unitOfWork.Categories.Filter(t => t.ParentCategoryId == id).Count();
         }
 
     }
