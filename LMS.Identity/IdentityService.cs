@@ -11,13 +11,14 @@ using LMS.Interfaces;
 
 namespace LMS.Identity
 {
-   public class IdentityService
+   public class IdentityService : BaseService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager; // allows  to authenticate a user and install or delete his cookies
         private RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IUnitOfWork unitOfWork)
+            :base(unitOfWork, mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -43,12 +44,17 @@ namespace LMS.Identity
             return usersDTO;
         }
 
-        public async Task Register(User user, string password, ICollection<string> roles)
+        public async Task Register(UserDTO model)
         {
-            var result = await _userManager.CreateAsync(user, password);
+            var user = _mapper.Map<UserDTO, User>(model);
+            var examinee = _mapper.Map<ExamineeDTO, Examinee>(model.Examinee);
+            var result = await _userManager.CreateAsync(user, model.Password);
+
             if (result.Succeeded)
             {
-                await _userManager.AddToRolesAsync(user, roles); // add role
+                examinee.UserId = (await _userManager.FindByNameAsync(user.UserName)).Id;
+                unitOfWork.Examinee.Create(examinee);
+                await _userManager.AddToRolesAsync(user, model.Roles); // add role
             }
             else
                 throw new AggregateException(result.Errors.Select(error => new Exception(error.Description)));
@@ -91,13 +97,24 @@ namespace LMS.Identity
             {
                 if(RoleInitializer.adminUserName == user.UserName)
                     throw new Exception("Sorry, but you can`t delete admin.");
+
+                unitOfWork.Examinee.Delete(
+                    unitOfWork.Examinee.Find(c => c.UserId == id).Id);
                 IdentityResult result = await _userManager.DeleteAsync(user);
+                
             }
         }
 
-        public Task<User> GetById(string id)
+        public async Task<UserDTO> GetById(string id)
         {
-            return _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
+
+            var userDTO = _mapper.Map<User, UserDTO>(user);
+            userDTO.Examinee = _mapper.Map<Examinee, ExamineeDTO>(unitOfWork.Examinee.Find(c => c.UserId == id));
+            userDTO.Roles = await GetUserRoles(id);
+            
+            return userDTO;
+
         }
 
         public async Task<ICollection<string>> GetUserRoles(string id)
@@ -106,25 +123,31 @@ namespace LMS.Identity
             return await _userManager.GetRolesAsync(user);
         }
 
-        public async Task UpdateAsync( User userNew, string password, ICollection<string> roles)
+        public async Task UpdateAsync(UserDTO userNew)
         {
             User userOld = await _userManager.FindByIdAsync(userNew.Id);
             if (userOld == null)
                 throw new ArgumentNullException(nameof(userOld));
-            if (!roles.Any())
+            if (!userNew.Roles.Any())
                 throw new ArgumentException("User should have at least one role");
-
+    
             userOld.UserName = userNew.UserName;
             userOld.FirstName = userNew.FirstName;
             userOld.LastName = userNew.LastName;
+            userOld.PhoneNumber = userNew.PhoneNumber;
+            userOld.Email = userNew.Email;
             await _userManager.UpdateAsync(userOld);
+
+            userNew.Examinee.UserId = userOld.Id;
+            unitOfWork.Examinee.Update(_mapper.Map<ExamineeDTO, Examinee>(userNew.Examinee));
+            await unitOfWork.SaveAsync();
 
             var oldUserRoles  = await GetUserRoles(userOld.Id);
             await _userManager.RemoveFromRolesAsync(userOld, oldUserRoles);
-            await _userManager.AddToRolesAsync(userOld, roles);
+            await _userManager.AddToRolesAsync(userOld, userNew.Roles);
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(userOld);
-            await _userManager.ResetPasswordAsync(userOld, token, password);
+            await _userManager.ResetPasswordAsync(userOld, token, userNew.Password);
         }
     }
 }

@@ -1,18 +1,18 @@
-﻿@{
+﻿@model LMS.Dto.UserDTO;
+@{
     ViewData["Title"] = "Register";
     var roles = ((IEnumerable<SelectListItem>)ViewData["AllRoles"]);
 }
-@model LMS.Admin.Web.ViewModels.RegisterViewModel
 
+<div class="card card-register">
+    <div class="card-header">Register an Account</div>
+    <form asp-action="Register">
+        @Html.Partial("FormFields", Model)
+    </form>
+</div>
 
-
-<body class="bg-dark">
-    <div class="container">
-        <div class="card card-register mx-auto mt-5">
-            <div class="card-header">Register an Account</div>
-            <form asp-action="Register">
-                @Html.Partial("FormFields", Model)
-            </form>
-        </div>
-    </div>
-</body>
+<br />
+<div>
+    <a asp-action="List">Go to User List</a>
+</div>
+<br />

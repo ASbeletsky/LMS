@@ -6,11 +6,11 @@ namespace LMS.Dto
 {
     public class ExamineeDTO
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string UserId { get; set; }
 
-        public int Year { get; set; }
+        public int Year { get; set; } = 2000;
 
         public string College { get; set; }
 
@@ -18,7 +18,7 @@ namespace LMS.Dto
 
         public string Specialty { get; set; }
 
-        public int Course { get; set; }
+        public int Course { get; set; } = 1;
 
         public string EnglishLevel { get; set; }
 

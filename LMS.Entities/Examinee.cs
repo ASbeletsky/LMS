@@ -2,7 +2,7 @@
 {
     public class Examinee
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public User User { get; set; }
 

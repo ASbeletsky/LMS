@@ -32,7 +32,7 @@ namespace LMS.Data.Migrations
 
             modelBuilder.Entity("LMS.Entities.Examinee", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("College");

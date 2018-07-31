@@ -7,6 +7,7 @@ using LMS.Entities;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using LMS.Dto;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -30,21 +31,20 @@ namespace LMS.Admin.Web.Controllers
         public IActionResult Register()
         {
             ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name});
-            return View();
+            return View(new UserDTO { Examinee = new ExamineeDTO() });
         }
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(UserDTO model)
         {
             if (ModelState.IsValid)
             {
-                var user = new User { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName };
-                // add user
                 try
                 {
-                    await _identityService.Register(user, model.Password, model.Roles);
-                    return View(model);
+                    await _identityService.Register(model);
+                    ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
+                    return View(new UserDTO { Examinee = new ExamineeDTO() });
                 }
                 catch(AggregateException e)
                 {
@@ -53,7 +53,7 @@ namespace LMS.Admin.Web.Controllers
                 }
             }
             ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
-            return View(model);
+            return View(new UserDTO { Examinee = new ExamineeDTO() });
         }
 
         [HttpGet]
@@ -105,19 +105,17 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit(string id)
         {
-            var user = await _identityService.GetById(id);
-            var rvm = new RegisterViewModel() { UserName = user.UserName, FirstName = user.FirstName, LastName  = user.LastName, Roles = await _identityService.GetUserRoles(id), Id = user.Id};
+            var userDTO = await _identityService.GetById(id);
             ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
-            return View(rvm);
+            return View(userDTO);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin, moderator")]
-        public async Task<IActionResult> Edit(RegisterViewModel model)
+        public async Task<IActionResult> Edit(UserDTO model)
         {
-            var user = new User { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName, Id = model.Id };
-            await _identityService.UpdateAsync(user, model.Password, model.Roles);
+            await _identityService.UpdateAsync(model);
 
             return RedirectToAction(nameof(List));
         }
