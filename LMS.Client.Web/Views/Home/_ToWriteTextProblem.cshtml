@@ -10,6 +10,7 @@
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
+    <script src="~/js/SerializeControler.js"></script>
     <script>
         $(function () {
             var stringArray = @Html.Raw(Json.Serialize(Model.Result));
@@ -25,7 +26,6 @@
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
         </h3>//
-            @*@Html.TextArea("result", null, 10, 80, null);*@
         <textarea name="result" rows="10" cols="80" onchange="changeText()"></textarea>
         <br />
 
@@ -44,7 +44,7 @@
     <script>
         function changeText(){
             var text = document.querySelector('textarea[name=result]').value;
-            StoreToSession("@number", text);
+            StoreToSession("text","@number", text);
         }
     </script>
 </div>

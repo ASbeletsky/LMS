@@ -12,12 +12,17 @@ function showValues() {
     //    $("#result").append(field.value + " ");
     //});
 }
-function StoreToSession(number,res) {
-    sessionStorage.setItem(number, res);
+function StoreToSession(type, number, res) {
+    if (type === "check" || type === "radio") {
+        sessionStorage.setItem(number, SinglAnswerSerializer(res));
+    }
+    else if (type === "text" || type === "code") {
+        sessionStorage.setItem(number, OpenAnswerSerializer(res));
+    }
     showValues();
 }
 function DeserializeFormFromSession(type, number) {
-    var res = sessionStorage.getItem(number);
+    var res = Deserializer(sessionStorage.getItem(number));
     if (res !== undefined && res!==null) {
         if (type === "check") {
             res.forEach(function (element) {
@@ -56,7 +61,7 @@ function update(number)
 {
     var res = editor.getSession().getValue();
     document.querySelector('input[name=result]').value = res;
-    sessionStorage.setItem(number, res);
+    sessionStorage.setItem(number, OpenAnswerSerializer(res));
     console.log($(editor).serialize());
 }
 function getResults() {

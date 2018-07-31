@@ -11,6 +11,7 @@
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
+    <script src="~/js/SerializeControler.js"></script>
     @*<script>
         DeserializeFormFromSession("radio", "@number");
     </script>*@
@@ -45,9 +46,8 @@
         var res = DeserializeFormFromSession("radio", "@number");
         $('input[type=radio][name=result]').on('change', function () {
             res = this.value;
-            StoreToSession("@number", this.value);
+            StoreToSession("radio","@number", this.value);
         });
-        @*$(":radio").click(StoreToSession("@number",res));*@
-        StoreToSession("@number",res);
+        StoreToSession("radio","@number",res);
     </script>
 </div>
