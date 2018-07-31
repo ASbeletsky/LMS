@@ -20,6 +20,7 @@ namespace LMS.Data
         public DbSet<TestTemplate> TestTemplates { get; }
         public DbSet<Test> Tests { get; }
         public DbSet<TestSession> TestSessions { get; }
+        public DbSet<TaskAnswer> Answers { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -169,6 +170,11 @@ namespace LMS.Data
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(u => u.UserId);
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne(t => t.Test)
+                .WithMany()
+                .HasForeignKey(t=>t.TestId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>();
          
@@ -179,6 +185,12 @@ namespace LMS.Data
                 .HasOne<Task>()
                 .WithMany(t => t.AnswerOptions)
                 .HasForeignKey(k => k.TaskId);
+
+            modelBuilder.Entity<TaskAnswer>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TaskAnswer>()
+                .HasOne(t => t.TestSessionUser)
+                .WithMany(t => t.Answers);
 
             base.OnModelCreating(modelBuilder);
         }
