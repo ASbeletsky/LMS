@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180731085602_AnswerMigration")]
+    [Migration("20180731090756_AnswerMigration")]
     partial class AnswerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,7 +142,9 @@ namespace LMS.Data.Migrations
 
                     b.HasData(
                         new { Id = 1, Title = "open-ended question" },
-                        new { Id = 2, Title = "question with options" }
+                        new { Id = 2, Title = "question with options" },
+                        new { Id = 3, Title = "coding task" },
+                        new { Id = 4, Title = "modelling task" }
                     );
                 });
 

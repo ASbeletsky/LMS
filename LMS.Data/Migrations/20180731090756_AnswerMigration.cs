@@ -8,16 +8,6 @@ namespace LMS.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "TaskType",
-                keyColumn: "Id",
-                keyValue: 3);
-
-            migrationBuilder.DeleteData(
-                table: "TaskType",
-                keyColumn: "Id",
-                keyValue: 4);
-
             migrationBuilder.AddColumn<TimeSpan>(
                 name: "Duration",
                 table: "TestSessionUser",
@@ -102,16 +92,6 @@ namespace LMS.Data.Migrations
             migrationBuilder.DropColumn(
                 name: "TestId",
                 table: "TestSessionUser");
-
-            migrationBuilder.InsertData(
-                table: "TaskType",
-                columns: new[] { "Id", "Title" },
-                values: new object[] { 3, "coding task" });
-
-            migrationBuilder.InsertData(
-                table: "TaskType",
-                columns: new[] { "Id", "Title" },
-                values: new object[] { 4, "modelling task" });
         }
     }
 }
