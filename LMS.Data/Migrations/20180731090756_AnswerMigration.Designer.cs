@@ -3,14 +3,16 @@ using System;
 using LMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    partial class LMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180731090756_AnswerMigration")]
+    partial class AnswerMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,35 +30,6 @@ namespace LMS.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("LMS.Entities.Examinee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("College");
-
-                    b.Property<string>("Comment");
-
-                    b.Property<int>("Course");
-
-                    b.Property<string>("EnglishLevel");
-
-                    b.Property<string>("Faculty");
-
-                    b.Property<string>("Specialty");
-
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("Year");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Examinee");
                 });
 
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
@@ -473,13 +446,6 @@ namespace LMS.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("LMS.Entities.Examinee", b =>
-                {
-                    b.HasOne("LMS.Entities.User", "User")
-                        .WithOne()
-                        .HasForeignKey("LMS.Entities.Examinee", "UserId");
                 });
 
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
