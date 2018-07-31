@@ -18,7 +18,7 @@ function StoreToSession(number,res) {
 }
 function DeserializeFormFromSession(type, number) {
     var res = sessionStorage.getItem(number);
-    if (res !== undefined || res!==null) {
+    if (res !== undefined && res!==null) {
         if (type === "check") {
             res.forEach(function (element) {
                 alert(element);
