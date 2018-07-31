@@ -42,9 +42,12 @@
         }
     }
     <script>
-        DeserializeFormFromSession("radio", "@number");
-        var res = document.querySelector('input[name=result]').value;
-        $(":radio").click(StoreToSession("@number",res));
+        var res = DeserializeFormFromSession("radio", "@number");
+        $('input[type=radio][name=result]').on('change', function () {
+            res = this.value;
+            StoreToSession("@number", this.value);
+        });
+        @*$(":radio").click(StoreToSession("@number",res));*@
         StoreToSession("@number",res);
     </script>
 </div>

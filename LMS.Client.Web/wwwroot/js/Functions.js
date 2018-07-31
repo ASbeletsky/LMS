@@ -32,6 +32,7 @@ function DeserializeFormFromSession(type, number) {
             $("textarea").text(res);
         }
     }
+    return res;
 }
 function DeserializeForm(type, res) {
     if (type === "check") {

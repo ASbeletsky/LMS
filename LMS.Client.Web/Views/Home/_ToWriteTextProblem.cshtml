@@ -13,7 +13,6 @@
     <script>
         $(function () {
             var stringArray = @Html.Raw(Json.Serialize(Model.Result));
-            alert(stringArray);
             DeserializeFormFromSession("text", "@number");
         });
     </script>
