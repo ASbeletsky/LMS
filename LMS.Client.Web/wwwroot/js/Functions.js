@@ -14,7 +14,7 @@ function showValues() {
 }
 function StoreToSession(type, number, res) {
     if (type === "check" || type === "radio") {
-        sessionStorage.setItem(number, SinglAnswerSerializer(res));
+        sessionStorage.setItem(number, SinglAnswerSerializer(Number(res)));
     }
     else if (type === "text" || type === "code") {
         sessionStorage.setItem(number, OpenAnswerSerializer(res));

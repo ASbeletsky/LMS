@@ -26,7 +26,7 @@
         </h3>
         @foreach (var Task in Model.OurTask.AnswerOptions)
         {
-        <input type="radio" name="result" value="@Task.Id" id="@Task.Id">
+        <input type="radio" name="result" value="@Task.Id" id="@Task.Id" onchange="changeRadio()">
             <span>@Task.Content</span>
             <br />
         }
@@ -44,10 +44,12 @@
     }
     <script>
         var res = DeserializeFormFromSession("radio", "@number");
-        $('input[type=radio][name=result]').on('change', function () {
-            res = this.value;
-            StoreToSession("radio","@number", this.value);
-        });
+        function changeRadio() {
+            var rad = document.querySelectorAll('input[type=radio][name=result]');
+            for (var i = 0, len = rad.length; i < len; i++) {
+                if(rad[i].checked) StoreToSession("radio","@number",rad[i].value);
+            }   
+        }
         StoreToSession("radio","@number",res);
     </script>
 </div>
