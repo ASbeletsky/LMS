@@ -51,7 +51,25 @@ namespace LMS.Business.Services
                 throw new EntityNotFoundException<TestSessionUser>();
             }
 
-            return mapper.Map<TestSessionUser, ExameneeResultDTO>(user);
+            var exameneeResult = mapper.Map<TestSessionUser, ExameneeResultDTO>(user);
+
+            var test = unitOfWork.Tests.Get(exameneeResult.TestId.Value);
+            var levels = test.Levels;
+            var templateLevels = unitOfWork.TestTemplates.Get(test.Id).Levels;
+
+            foreach (var task in exameneeResult.Answers.Select(a => a.Task))
+            {
+                var templateLevelId = levels
+                    .FirstOrDefault(l => l.Tasks.Select(t => t.TaskId).Contains(task.Id))?
+                    .TestTemplateLevelId;
+                var templateLevel = templateLevels.FirstOrDefault(l => l.Id == templateLevelId);
+                if (templateLevel != null)
+                {
+                    task.MaxScore = templateLevel.MaxScore / templateLevel.TasksCount;
+                }
+            }
+
+            return exameneeResult;
         }
 
         public Task DeleteByIdAsync(int id)
