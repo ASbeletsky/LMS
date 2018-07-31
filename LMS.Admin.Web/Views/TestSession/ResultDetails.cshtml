@@ -11,23 +11,48 @@
     <h4>Examenee result</h4>
     <hr />
     <div class="col-md-6">
-        @Model.TestTitle
-        <br />
-        @Model.UserName
-        <br />
-        @Model.Duration
-        <br />
-        @Model.TotalScore
-        <br />
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <label asp-for="TestTitle" class="font-weight-bold"></label>
+                <br />
+                @Model.TestTitle
+                <br />
+                <br />
+            </div>
+            <div class="col-12 col-md-6">
+                <label asp-for="UserName" class="font-weight-bold"></label>
+                <br />
+                @Model.UserName
+                <br />
+                <br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <label asp-for="Duration" class="font-weight-bold"></label>
+                <br />
+                @Model.Duration.ToString("hh\\:mm")
+                <br />
+                <br />
+            </div>
+            <div class="col-12 col-md-6">
+                <label asp-for="TotalScore" class="font-weight-bold"></label>
+                <br />
+                @Model.TotalScore
+                <br />
+                <br />
+            </div>
+        </div>
+        <h3>@Html.LabelFor(m => m.Answers)</h3>
         <div class="table-responsive">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>
-                            Content
+                            Score
                         </th>
                         <th>
-                            Score
+                            Content
                         </th>
                     </tr>
                 </thead>
@@ -35,22 +60,30 @@
                     @foreach (var answer in Model.Answers)
                     {
                         <tr>
-                            <td>
+                            <td rowspan="2">
+                                @answer.Score / @answer.Task.MaxScore
+                            </td>
+                            <td class="font-weight-bold">
                                 @answer.Task.Content
-                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-0">
                                 @switch (answer.Content)
                                 {
                                     case OpenAnswer open:
-                                        @: @open.Content
+                                        <div class="p-3">
+                                            @open.Content
+                                        </div>
                                         break;
                                     case SingleAnswer single:
                                         var choosed = answer.Task.AnswerOptions.FirstOrDefault(a => single.AnswerOptionId == a.Id);
                                         var choosedIndex = answer.Task.AnswerOptions.IndexOf(choosed);
-                                        @if (choosedIndex >= 0)
+                                        if (choosedIndex >= 0)
                                         {
-                                            @: <div class="@(choosed.IsCorrect ? "correct" : ""))">
-                                                @: @((char)(alphabetStart + choosedIndex)). @choosed.Content
-                                            @: </div>
+                                            <div class="alert @(choosed.IsCorrect ? "alert-success" : "alert-warning") m-0 rounded-0">
+                                                @((char)(alphabetStart + choosedIndex)). @choosed.Content
+                                            </div>
                                         }
                                         else
                                         {
@@ -61,9 +94,6 @@
                                         @: Invalid answer
                                         break;
                                 }
-                            </td>
-                            <td>
-                                @answer.Score
                             </td>
                         </tr>
                     }

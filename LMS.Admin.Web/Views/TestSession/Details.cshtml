@@ -9,59 +9,78 @@
     <h4>Test session results</h4>
     <hr />
     <div class="col-md-6">
-        @Model.Title
-        <br />
-        @Model.StartTime
-        <br />
-        @Model.EndTime
-        <br />
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>
-                            Examinee
-                        </th>
-                        <th>
-                            Test title
-                        </th>
-                        <th>
-                            Test duration
-                        </th>
-                        <th>
-                            Score
-                        </th>
-                        <th>
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var exameneeResult in Model.ExameneeResults)
-                    {
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <label asp-for="Title" class="font-weight-bold"></label>
+                <br />
+                @Model.Title
+                <br />
+                <br />
+            </div>
+        </div>
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <label asp-for="StartTime" class="font-weight-bold"></label>
+                    <br />
+                    @Model.StartTime.ToString("dd.MM.yyyy HH:mm")
+                    <br />
+                    <br />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="EndTime" class="font-weight-bold"></label>
+                    <br />
+                    @Model.EndTime.ToString("dd.MM.yyyy HH:mm")
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
                             <th>
-                                @exameneeResult.UserName
+                                Examinee
                             </th>
                             <th>
-                                @exameneeResult.TestTitle
+                                Test title
                             </th>
                             <th>
-                                @exameneeResult.Duration
+                                Test duration
                             </th>
                             <th>
-                                @exameneeResult.TotalScore
+                                Score
                             </th>
                             <th>
-                                <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                                Actions
                             </th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var exameneeResult in Model.ExameneeResults)
+                        {
+                            <tr>
+                                <td>
+                                    @exameneeResult.UserName
+                                </td>
+                                <td>
+                                    @exameneeResult.TestTitle
+                                </td>
+                                <td>
+                                    @exameneeResult.Duration.ToString("hh\\:mm")
+                                </td>
+                                <td>
+                                    @exameneeResult.TotalScore
+                                </td>
+                                <td>
+                                    <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 <br />
 <div>
     <a asp-action="List">Back to List</a>
