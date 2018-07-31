@@ -47,17 +47,10 @@ namespace LMS.Business.Services
                 throw new ArgumentNullException(nameof(categoryDTO));
             }
             if (!string.IsNullOrEmpty(categoryDTO.Title))
-            {
-                var entry = mapper.Map<CategoryDTO, Entities.Category>(categoryDTO);
+            {             
 
-                if (unitOfWork.Categories.Get(entry.Id) is Entities.Category category)
-                {
-                    if ((category.Title == entry.Title) && (category.ParentCategoryId == entry.ParentCategoryId))
-                    {
-                        return System.Threading.Tasks.Task.CompletedTask;
-                    }
-                    category.Title = entry.Title;
-                    category.ParentCategoryId = entry.ParentCategoryId;
+                if (mapper.Map<CategoryDTO, Entities.Category>(categoryDTO) is Entities.Category category)
+                {                    
                     unitOfWork.Categories.Update(category);
                 }
                 else
@@ -65,6 +58,8 @@ namespace LMS.Business.Services
                     return CreateAsync(categoryDTO);
                 }
             }
+
+        
 
             return unitOfWork.SaveAsync();
         }
@@ -92,6 +87,11 @@ namespace LMS.Business.Services
             }
 
             return mapper.Map<Entities.Category, CategoryDTO>(category);
+        }
+
+        public virtual IEnumerable<CategoryDTO> Filter(System.Linq.Expressions.Expression<Func<Category, bool>> filter)
+        {
+            return mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(unitOfWork.Categories.Filter(filter));
         }
 
     }

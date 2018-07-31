@@ -38,7 +38,7 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["AvailableCategories"] = categoryService.GetAll().Where(b => b.ParentCategoryId == null).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AvailableCategories"] = categoryService.Filter(t => t.ParentCategoryId == null).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
             ViewData["AmountChildrenCategories"] = 0;
 
             return View(new CategoryDTO());
@@ -58,8 +58,9 @@ namespace LMS.Admin.Web.Controllers
         public IActionResult Edit(int id)
         {
             var category = categoryService.GetById(id);
-            ViewData["AvailableCategories"] = categoryService.GetAll().Where(b => b.ParentCategoryId == null).Where(x => x.Id != id).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
-            ViewData["AmountChildrenCategories"] = categoryService.GetAll().Where(b => b.ParentCategoryId == id).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title }).Count();
+
+            ViewData["AvailableCategories"] = categoryService.Filter(t => t.ParentCategoryId == null && t.Id != id).Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            ViewData["AmountChildrenCategories"] = categoryService.Filter(t => t.ParentCategoryId == id).Count();
 
             return View(category);
         }
