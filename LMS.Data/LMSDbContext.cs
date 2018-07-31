@@ -57,8 +57,10 @@ namespace LMS.Data
                 .Property(t => t.Title).IsRequired();
             modelBuilder.Entity<TaskType>()
                 .HasData(
-               new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
-               new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion });
+                new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
+                new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion },
+                new TaskType() { Title = "coding task", Id = (int)TaskTypes.CodingTask },
+                new TaskType() { Title = "modelling task", Id = (int)TaskTypes.ModellingTask });
 
             modelBuilder.Entity<TestTemplate>()
                 .HasKey(t => t.Id);
