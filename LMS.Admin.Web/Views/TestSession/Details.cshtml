@@ -15,49 +15,51 @@
         <br />
         @Model.EndTime
         <br />
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Examinee
-                    </th>
-                    <th>
-                        Test title
-                    </th>
-                    <th>
-                        Test duration
-                    </th>
-                    <th>
-                        Score
-                    </th>
-                    <th>
-                        Actions
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var exameneeResult in Model.ExameneeResults)
-                {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
                     <tr>
                         <th>
-                            @exameneeResult.UserName
+                            Examinee
                         </th>
                         <th>
-                            @exameneeResult.TestTitle
+                            Test title
                         </th>
                         <th>
-                            @exameneeResult.Duration
+                            Test duration
                         </th>
                         <th>
-                            @exameneeResult.TotalScore
+                            Score
                         </th>
                         <th>
-                            <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                            Actions
                         </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var exameneeResult in Model.ExameneeResults)
+                    {
+                        <tr>
+                            <th>
+                                @exameneeResult.UserName
+                            </th>
+                            <th>
+                                @exameneeResult.TestTitle
+                            </th>
+                            <th>
+                                @exameneeResult.Duration
+                            </th>
+                            <th>
+                                @exameneeResult.TotalScore
+                            </th>
+                            <th>
+                                <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                            </th>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <br />

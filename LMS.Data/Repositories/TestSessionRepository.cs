@@ -95,6 +95,10 @@ namespace LMS.Data.Repositories
             return dbContext.Set<TestSession>()
                 .Include(v => v.Members)
                 .ThenInclude(m => m.User)
+                .Include(v => v.Members)
+                .ThenInclude(m => m.Answers)
+                .ThenInclude(a => a.Task)
+                .ThenInclude(t => t.AnswerOptions)
                 .Include(v => v.Tests)
                 .ThenInclude(l => l.Test);
         }

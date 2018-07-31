@@ -23,7 +23,9 @@ namespace LMS.AnswerModels
             {
                 var des = JsonConvert.DeserializeObject<IDictionary<string, object>>(obj);
                 var som = des.GetEnumerator();
-                if (des.Count == 1)
+                
+                if (des.Count == 1
+                    && som.MoveNext())
                 {
                     switch (som.Current.Key)
                     {
@@ -42,6 +44,7 @@ namespace LMS.AnswerModels
                 return null;
             }
         }
+
         public static bool CheckSerialization(string obj)
         {
             try

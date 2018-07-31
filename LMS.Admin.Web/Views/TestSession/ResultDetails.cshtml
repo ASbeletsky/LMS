@@ -1,8 +1,10 @@
 ﻿@using LMS.Dto
+@using LMS.AnswerModels
 @model ExameneeResultDTO
 
 @{
     ViewData["Title"] = "Details";
+    const int alphabetStart = (int)'a';
 }
 
 <div>
@@ -17,31 +19,57 @@
         <br />
         @Model.TotalScore
         <br />
-        <table>
-            <thead>
-                <tr>
-                    <th>
-                        Score
-                    </th>
-                    <th>
-                        Content
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var answer in Model.Answers)
-                {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
                     <tr>
                         <th>
-                            @answer.Content
+                            Content
                         </th>
                         <th>
-                            @answer.Score
+                            Score
                         </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var answer in Model.Answers)
+                    {
+                        <tr>
+                            <td>
+                                @answer.Task.Content
+                                <br />
+                                @switch (answer.Content)
+                                {
+                                    case OpenAnswer open:
+                                        @: @open.Content
+                                        break;
+                                    case SingleAnswer single:
+                                        var choosed = answer.Task.AnswerOptions.FirstOrDefault(a => single.AnswerOptionId == a.Id);
+                                        var choosedIndex = answer.Task.AnswerOptions.IndexOf(choosed);
+                                        @if (choosedIndex >= 0)
+                                        {
+                                            @: <div class="@(choosed.IsCorrect ? "correct" : ""))">
+                                                @: @((char)(alphabetStart + choosedIndex)). @choosed.Content
+                                            @: </div>
+                                        }
+                                        else
+                                        {
+                                            @: Invalid answer
+                                        }
+                                        break;
+                                    default:
+                                        @: Invalid answer
+                                        break;
+                                }
+                            </td>
+                            <td>
+                                @answer.Score
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <br />
