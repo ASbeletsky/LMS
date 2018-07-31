@@ -95,8 +95,6 @@ namespace LMS.Data.Migrations
 
                     b.Property<int>("TaskId");
 
-                    b.Property<int>("TestSessionUserId");
-
                     b.Property<int?>("TestSessionUserSessionId");
 
                     b.Property<string>("TestSessionUserUserId");
@@ -142,7 +140,9 @@ namespace LMS.Data.Migrations
 
                     b.HasData(
                         new { Id = 1, Title = "open-ended question" },
-                        new { Id = 2, Title = "question with options" }
+                        new { Id = 2, Title = "question with options" },
+                        new { Id = 3, Title = "coding task" },
+                        new { Id = 4, Title = "modelling task" }
                     );
                 });
 

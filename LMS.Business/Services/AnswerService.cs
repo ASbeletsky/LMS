@@ -50,15 +50,14 @@ namespace LMS.Business.Services
 
             if (unitOfWork.Answers.Get(newAnswer.Id) is Entities.TaskAnswer oldAnswer)
             {
-                if (oldAnswer.Content == newAnswer.Content
-                    && oldAnswer.TaskId == newAnswer.TaskId
-                    && oldAnswer.Content == newAnswer.Content
-                    && oldAnswer.TestSessionUserId != newAnswer.TestSessionUserId)
+                if (oldAnswer.TaskId == newAnswer.TaskId
+                    && oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser)
+                    && oldAnswer.Content == newAnswer.Content)
                 {
                     return Task.CompletedTask;
                 }
                 if (oldAnswer.TaskId != newAnswer.TaskId
-                    || oldAnswer.TestSessionUserId != newAnswer.TestSessionUserId)
+                    || !oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser))
                 {
                     unitOfWork.Answers.Create(newAnswer);
                 }

@@ -8,6 +8,5 @@
         public string Content { get; set; }
         public double Score { get; set; }
         public TestSessionUser TestSessionUser { get; set; }
-        public int TestSessionUserId { get; set; }
     }
 }
