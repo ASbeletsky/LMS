@@ -28,6 +28,7 @@ namespace LMS.Data.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired();
+                    b.Property<int?>("ParentCategoryId");
 
                     b.HasKey("Id");
 
@@ -91,6 +92,14 @@ namespace LMS.Data.Migrations
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
+
+            modelBuilder.Entity("LMS.Entities.Category", b =>
+            {
+                b.HasOne("LMS.Entities.Category", "ParentCategory")
+                    .WithMany()
+                    .HasForeignKey("ParentCategoryId")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
 #pragma warning restore 612, 618
         }
     }

@@ -10,7 +10,7 @@ namespace LMS.Data
 
         public LMSDbContext(string connection)
         {
-            connectionString = connection;
+            connectionString = connection;            
         }
 
         public DbSet<Category> Categories { get; }
@@ -34,6 +34,11 @@ namespace LMS.Data
             modelBuilder.Entity<Category>()
                 .Property(c => c.Title)
                 .IsRequired();
+            modelBuilder.Entity<Category>()
+             .HasOne(t => t.ParentCategory)
+              .WithMany()
+             .HasForeignKey(t => t.ParentCategoryId)
+             .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Task>()
                 .HasKey(t => t.Id);
