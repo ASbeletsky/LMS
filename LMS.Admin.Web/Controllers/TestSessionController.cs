@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using LMS.Business.Services;
 using LMS.Dto;
 using LMS.Identity;
@@ -125,6 +126,14 @@ namespace LMS.Admin.Web.Controllers
         {
             var testSessionResult = testSessionService.GetExameneeResult(sessionId, id);
             return View(testSessionResult);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveResultDetails(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
+        {
+            await testSessionService.SaveAnswerScoresAsync(taskAnswerScores);
+
+            return RedirectToAction(nameof(List));
         }
     }
 }

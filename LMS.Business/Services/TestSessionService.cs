@@ -128,5 +128,16 @@ namespace LMS.Business.Services
                 .Map<IEnumerable<TestSession>, IEnumerable<TestSessionDTO>>(
                     unitOfWork.TestSessions.GetAll());
         }
+
+        public Task SaveAnswerScoresAsync(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
+        {
+            var answers = unitOfWork.Answers.Filter(a => taskAnswerScores.Any(s => s.Id == a.Id));
+            foreach (var answer in answers)
+            {
+                answer.Score = taskAnswerScores.First(a => a.Id == answer.Id).Score;
+                unitOfWork.Answers.Update(answer);
+            }
+            return unitOfWork.SaveAsync();
+        }
     }
 }
