@@ -25,6 +25,6 @@ namespace LMS.Dto
 
         public int? TestId { get; set; }
 
-        public ICollection<TaskAnswerDTO> Answers { get; set; }
+        public IList<TaskAnswerDTO> Answers { get; set; }
     }
 }
