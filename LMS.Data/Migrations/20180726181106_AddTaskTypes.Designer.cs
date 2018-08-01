@@ -27,6 +27,8 @@ namespace LMS.Data.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<int?>("ParentCategoryId");
+
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
@@ -375,6 +377,14 @@ namespace LMS.Data.Migrations
 
                     b.ToTable("AspNetUserTokens");
                 });
+
+            modelBuilder.Entity("LMS.Entities.Category", b =>
+            {
+                b.HasOne("LMS.Entities.Category", "ParentCategory")
+                    .WithMany()
+                    .HasForeignKey("ParentCategoryId")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
 
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
                 {

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 
 
@@ -36,6 +38,9 @@ namespace LMS.Admin.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewData["AvailableCategories"] = categoryService.GetAvailableCategories();
+            ViewData["AmountChildrenCategories"] = 0;
+
             return View(new CategoryDTO());
         }
 
@@ -53,6 +58,10 @@ namespace LMS.Admin.Web.Controllers
         public IActionResult Edit(int id)
         {
             var category = categoryService.GetById(id);
+
+            ViewData["AvailableCategories"] = categoryService.GetAvailableCategories(id);
+            ViewData["AmountChildrenCategories"] = categoryService.GetAmountChildrenCategories(id);
+
             return View(category);
         }
 
