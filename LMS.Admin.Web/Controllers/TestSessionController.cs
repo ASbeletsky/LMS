@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using LMS.Business.Services;
-using LMS.Dto;
-using LMS.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using LMS.Dto;
+using LMS.Identity;
+using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -69,6 +69,12 @@ namespace LMS.Admin.Web.Controllers
         {
             var testSession = testSessionService.GetById(id);
 
+            if (testSession.StartTime < DateTimeOffset.Now
+                && !HttpContext.User.IsInRole(Roles.Admin))
+            {
+                return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
+            }
+
             ViewData["Templates"] = testTemplateService
                 .GetAll()
                 .Select(template => new SelectListItem
@@ -92,6 +98,13 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit([FromForm] TestSessionDTO testSession)
         {
+            var oldSession = testSessionService.GetById(testSession.Id);
+            if (oldSession.StartTime < DateTimeOffset.Now
+                && !HttpContext.User.IsInRole(Roles.Admin))
+            {
+                return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
+            }
+
             await testSessionService.UpdateAsync(testSession);
 
             return RedirectToAction(nameof(List));
