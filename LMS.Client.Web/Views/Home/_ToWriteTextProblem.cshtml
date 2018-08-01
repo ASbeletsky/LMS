@@ -38,7 +38,14 @@
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="changeGot('@i')"> @(i + 1)</button>
+            if (i == @number)
+            {
+                <button disabled onclick="changeGot('@i')"> @(i + 1)</button>
+            }
+            else
+            {
+                <button onclick="changeGot('@i')"> @(i + 1)</button>
+            }
         }
     }
     <script>

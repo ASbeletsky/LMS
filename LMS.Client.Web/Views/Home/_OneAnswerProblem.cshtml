@@ -13,8 +13,8 @@
     <script src="~/js/Functions.js"></script>
     <script src="~/js/SerializeControler.js"></script>
     @*<script>
-        DeserializeFormFromSession("radio", "@number");
-    </script>*@
+            DeserializeFormFromSession("radio", "@number");
+        </script>*@
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
@@ -26,7 +26,7 @@
         </h3>
         @foreach (var Task in Model.OurTask.AnswerOptions)
         {
-        <input type="radio" name="result" value="@Task.Id" id="@Task.Id" onchange="changeRadio()">
+            <input type="radio" name="result" value="@Task.Id" id="@Task.Id" onchange="changeRadio()">
             <span>@Task.Content</span>
             <br />
         }
@@ -39,7 +39,14 @@
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="changeGot('@i')"> @(i + 1)</button>
+            if (i == @number)
+            {
+                <button disabled onclick="changeGot('@i')"> @(i + 1)</button>
+            }
+            else
+            {
+                <button onclick="changeGot('@i')"> @(i + 1)</button>
+            }
         }
     }
     <script>
@@ -48,7 +55,7 @@
             var rad = document.querySelectorAll('input[type=radio][name=result]');
             for (var i = 0, len = rad.length; i < len; i++) {
                 if(rad[i].checked) StoreToSession("radio","@number",rad[i].value);
-            }   
+            }
         }
         StoreToSession("radio","@number",res);
     </script>
