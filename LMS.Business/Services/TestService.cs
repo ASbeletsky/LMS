@@ -36,8 +36,7 @@ namespace LMS.Business.Services
             {
                 throw new EntityNotFoundException<Test>(id);
             }
-
-            return mapper.Map<Test, TestDTO>(test);
+            return mapper.Map<Test, TestClientDTO>(test);
         }
 
         public Task DeleteByIdAsync(int id)
