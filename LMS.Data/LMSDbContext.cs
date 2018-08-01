@@ -18,6 +18,9 @@ namespace LMS.Data
         public DbSet<TaskType> TaskType { get; }
 
         public DbSet<TestTemplate> TestTemplates { get; }
+        public DbSet<Test> Tests { get; }
+        public DbSet<TestSession> TestSessions { get; }
+        public DbSet<TaskAnswer> Answers { get; }
 
         public DbSet<Examenee> AnswerSheets { get; }
         
@@ -57,8 +60,10 @@ namespace LMS.Data
                 .Property(t => t.Title).IsRequired();
             modelBuilder.Entity<TaskType>()
                 .HasData(
-               new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
-               new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion });
+                new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
+                new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion },
+                new TaskType() { Title = "coding task", Id = (int)TaskTypes.CodingTask },
+                new TaskType() { Title = "modelling task", Id = (int)TaskTypes.ModellingTask });
 
             modelBuilder.Entity<TestTemplate>()
                 .HasKey(t => t.Id);
@@ -136,6 +141,43 @@ namespace LMS.Data
                 .HasOne(t => t.Task)
                 .WithMany();
 
+            modelBuilder.Entity<TestSession>()
+                .HasKey(s => s.Id);
+
+            modelBuilder.Entity<TestSession>()
+                .HasMany(s => s.Members)
+                .WithOne(e => e.Session);
+
+            modelBuilder.Entity<TestSession>()
+                .HasMany(s => s.Tests)
+                .WithOne(e => e.Session);
+
+            modelBuilder.Entity<TestSessionTest>()
+                .HasKey(t => new
+                {
+                    t.SessionId,
+                    t.TestId
+                });
+            modelBuilder.Entity<TestSessionTest>()
+                .HasOne(t => t.Test)
+                .WithMany();
+
+            modelBuilder.Entity<TestSessionUser>()
+                .HasKey(u => new
+                {
+                    u.SessionId,
+                    u.UserId
+                });
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(u => u.UserId);
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne(t => t.Test)
+                .WithMany()
+                .HasForeignKey(t=>t.TestId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<User>();
          
 
@@ -145,6 +187,12 @@ namespace LMS.Data
                 .HasOne<Task>()
                 .WithMany(t => t.AnswerOptions)
                 .HasForeignKey(k => k.TaskId);
+
+            modelBuilder.Entity<TaskAnswer>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TaskAnswer>()
+                .HasOne(t => t.TestSessionUser)
+                .WithMany(t => t.Answers);
 
             base.OnModelCreating(modelBuilder);
         }
