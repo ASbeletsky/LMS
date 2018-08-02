@@ -72,6 +72,8 @@ namespace LMS.Business.Services
             foreach (var category in categoriesDTO)
             {
                 category.TasksCount = unitOfWork.Tasks.Filter(b => b.CategoryId == category.Id).Count();
+                if(category.ParentCategoryId!=null)
+                category.ParentCategory= mapper.Map<Entities.Category, CategoryDTO>(categories.Where(c=>c.Id== category.ParentCategoryId).First());
             }
 
             return categoriesDTO;
