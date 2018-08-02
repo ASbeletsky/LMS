@@ -12,6 +12,7 @@
     "jquery": "^3.3.1",
     "jquery-validation": "^1.17.0",
     "jquery-validation-unobtrusive": "^3.2.10",
+    "signalr": "^2.3.0",
     "startbootstrap-sb-admin": "^4.0.0",
     "tempusdominus-bootstrap-4": "^5.0.1"
   },

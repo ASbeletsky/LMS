@@ -55,5 +55,18 @@
       "renameLocals": true
     },
     "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/socket.min.js",
+    "inputFiles": [
+      "node_modules/signalr/jquery.signalR.min.js",
+      "wwwroot/js/socket/AdminHub.js",
+      "wwwroot/js/socket/ReportModel.js",
+      "wwwroot/js/socket/UserHub.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
   }
 ]

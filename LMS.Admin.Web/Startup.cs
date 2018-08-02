@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LMS.Socket;
 using LMS.Identity;
 
 namespace LMS.Admin.Web
@@ -23,6 +24,7 @@ namespace LMS.Admin.Web
         {
             services.AddMvc();
             services.AddIdentity();
+            services.AddSocket("http://localhost:49241");
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
@@ -42,6 +44,8 @@ namespace LMS.Admin.Web
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseSocket();
 
             app.UseStaticFiles();
             app.UseAuthentication();

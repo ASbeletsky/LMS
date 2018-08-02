@@ -23,6 +23,7 @@
     <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
     <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
+    <ProjectReference Include="..\LMS.Socket\LMS.Socket.csproj" />
   </ItemGroup>
 
   <Target Name="GulpTarget" BeforeTargets="Build">
