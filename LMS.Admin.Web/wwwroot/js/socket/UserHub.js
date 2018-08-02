@@ -1,9 +1,9 @@
-﻿const connection = new signalR.HubConnectionBuilder()
+﻿var connection = new signalR.HubConnectionBuilder()
     .withUrl("/testHub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-connection.on("Task", (comand, message) => {
+connection.on("Task", function(comand, message) {
     switch (comand) {
         case "setTimer":
             var time = TimeToArray(message);
@@ -22,14 +22,18 @@ connection.on("Task", (comand, message) => {
     }
 });
 
-connection.start().catch(err => console.error(err.toString()));
+connection.start().catch(function (err) {
+    console.error(err.toString());
+});
 
-if (sessionStorage.getItem("Baned") == "true") {
+if (sessionStorage.getItem("Baned") === "true") {
     document.location.href = "/Home/Baned";
 }
 
 function SendReport() {
     var report = Report(TimerM.StartTime, TimeToString(TimerM.EndTime.diff(moment())));
     connection.invoke("SendReportToGroups", report)
-        .catch(err => console.error(err.toString()));
+        .catch(function (err) {
+            console.error(err.toString());
+        });
 }
