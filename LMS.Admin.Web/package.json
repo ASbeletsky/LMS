@@ -9,6 +9,7 @@
     "del": "^3.0.0",
     "fullcalendar": "^3.9.0",
     "gulp": "^3.9.1",
+    "gulp-error-handle": "^1.0.1",
     "jquery": "^3.3.1",
     "jquery-validation": "^1.17.0",
     "jquery-validation-unobtrusive": "^3.2.10",
