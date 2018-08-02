@@ -24,12 +24,11 @@ namespace LMS.Admin.Web
             services.AddMvc();
             services.AddIdentity();
 
-          
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
             var container = builder.Build();
-          
+
             return new AutofacServiceProvider(container);
         }
 
