@@ -6,6 +6,9 @@ using LMS.Interfaces;
 using LMS.Business.Services;
 using Moq;
 using Xunit;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System;
 
 namespace LMS.Test.Services
 {
@@ -160,6 +163,49 @@ namespace LMS.Test.Services
             Assert.Equal(sessionToGet.Title, actualGet.Title);
 
             repositoryMock.Verify(m => m.Get(1));
+        }
+
+        [Fact]
+        public async Task Should_Save_Answers_Scores()
+        {
+            var testList = new List<TaskAnswer>
+            {
+                new TaskAnswer
+                {
+                    Id = 1,
+                    Score = 5,
+                    Content = "#5"
+                },
+                new TaskAnswer
+                {
+                    Id = 3,
+                    Score = 9,
+                    Content = "#7"
+                }
+            };
+
+            var updatedScores = new List<TaskAnswerScoreDTO>
+            {
+                new TaskAnswerScoreDTO { Id = 1, Score = 3 },
+                new TaskAnswerScoreDTO { Id = 3, Score = 8 }
+            };
+
+            var repositoryMock = new Mock<IRepository<TaskAnswer>>();
+            repositoryMock.Setup(u => u
+                .Filter(It.IsAny<Expression<Func<TaskAnswer, bool>>>()))
+                .Returns(testList);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => repositoryMock.Object);
+
+            var service = new TestSessionService(unitOfWorkMock.Object, mapper);
+
+            await service.SaveAnswerScoresAsync(updatedScores);
+
+            repositoryMock.Verify(m => m.Update(It.Is<TaskAnswer>(a =>
+                (a.Id == 1 && a.Score == updatedScores[0].Score && a.Content == testList[0].Content)
+                || (a.Id == 3 && a.Score == updatedScores[1].Score && a.Content == testList[1].Content))));
+            unitOfWorkMock.Verify(m => m.SaveAsync());
         }
     }
 }
