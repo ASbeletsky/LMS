@@ -87,19 +87,13 @@ namespace LMS.Business.Services
         }
         public string GenerateCode()
         {
-            double previous=0;
-            double generator = Math.Pow(13, 11);
-            string possibleChars = "ACEFHJKMNPRTUVWXY123456789";
-            double modulus = Math.Pow(7, possibleChars.Length); //int might be too small
-            previous = (previous + generator) % modulus;
+            string possibleChars = "QWERTYUIOPLKJHGFDSAZXCVBNM0123456789";
             string output = "";
-            double temp = previous;
-
-            for (int i = 0; i < 8; i++) {
-                output += possibleChars[Convert.ToInt32(temp % possibleChars.Length)];
-                temp = temp / possibleChars.Length;
+            var rnd = new Random();
+            for (int i = 0; i < 8; i++)
+            {
+                output += possibleChars[rnd.Next(0, possibleChars.Length - 1)];
             }
-
             return output;
         }
     }
