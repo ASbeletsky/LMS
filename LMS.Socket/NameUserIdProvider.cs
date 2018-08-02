@@ -7,7 +7,15 @@ namespace LMS.Socket
     {
         public string GetUserId(HubConnectionContext connection)
         {
-            return connection.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return connection.User.GetUserId();
+        }
+    }
+
+    public static class ClaimsExtensions
+    {
+        public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
+        {
+            return claimsPrincipal?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         }
     }
 }
