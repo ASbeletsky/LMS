@@ -11,7 +11,7 @@ namespace LMS.Socket
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<TestHub>("/testHub");
+                routes.MapHub<SessionHub>("/sessionHub");
             });
         }
     }
