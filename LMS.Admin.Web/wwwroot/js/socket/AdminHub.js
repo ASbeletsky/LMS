@@ -1,17 +1,34 @@
-﻿var connection = new signalR.HubConnectionBuilder()
+﻿var adminConnection = new signalR.HubConnectionBuilder()
     .withUrl("/sessionHub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
-connection.on("Report", function (report) {
-    document.getElementById("report").innerHTML = ParseReport(report);
-});
 
-connection.start().catch(function (err) {
+adminConnection.start().catch(function (err) {
     console.error(err.toString());
 });
 
-function send() {
-    connection.invoke("SendComandToGroups", document.getElementById("command").value, document.getElementById("message").value)
+adminConnection.on("UpdateState", function (state) {
+    console.log("UpdateState", state);
+});
+
+adminConnection.on("Complete", function (state) {
+    console.log("Complete", state);
+});
+
+adminConnection.on("Users", function (users) {
+    console.log("Users", users);
+});
+
+adminConnection.on("UserConnected", function (user) {
+    console.log("UserConnected", user);
+});
+
+adminConnection.on("UserDisconnected", function (user) {
+    console.log("UserDisconnected", user);
+});
+
+function banUser(sessionId, userId) {
+    adminConnection.invoke("Ban", sessionId, userId)
         .catch(function (err) {
             console.error(err.toString());
         });

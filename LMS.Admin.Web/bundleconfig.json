@@ -61,7 +61,6 @@
     "inputFiles": [
       "node_modules/@aspnet/signalr/dist/browser/signalr.min.js",
       "wwwroot/js/socket/AdminHub.js",
-      "wwwroot/js/socket/ReportModel.js"
     ],
     "minify": {
       "enabled": true,

@@ -29,17 +29,17 @@ namespace LMS.Socket
         [Authorize]
         public Task UpdateState(TestTasksStateDTO state)
         {
-            var sessionUser = UpdateStateForCurrentUser(state);
+            state = UpdateStateForCurrentUser(state);
 
-            return Clients.Groups(AdminGroup).SendAsync(nameof(UpdateState), sessionUser);
+            return Clients.Groups(AdminGroup).SendAsync(nameof(UpdateState), state);
         }
 
         [Authorize]
         public Task Complete(TestTasksStateDTO state)
         {
-            var sessionUser = UpdateStateForCurrentUser(state);
+            state = UpdateStateForCurrentUser(state);
 
-            return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), sessionUser);
+            return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), state);
         }
 
         public override async Task OnConnectedAsync()
@@ -109,16 +109,20 @@ namespace LMS.Socket
             }
         }
 
-        private SessionUserDTO UpdateStateForCurrentUser(TestTasksStateDTO state)
+        private TestTasksStateDTO UpdateStateForCurrentUser(TestTasksStateDTO state)
         {
             if (!(Context.User.GetUserId() is string userId))
             {
                 throw new UnauthorizedAccessException();
             }
 
-            return users.AddOrUpdate(userId,
+            state.UserId = userId;
+
+            var sessionUser = users.AddOrUpdate(userId,
                 (id) => new SessionUserDTO { Id = id, StartTime = DateTimeOffset.Now, TasksState = state },
-                (id, user) => { state.UserId = id; user.TasksState = state; return user; });
+                (_, user) => { user.TasksState = state; return user; });
+
+            return sessionUser.TasksState;
         }
     }
 }
