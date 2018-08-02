@@ -41,7 +41,7 @@ namespace LMS.Socket
 
             users.TryRemove(state.UserId, out _);
 
-            return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), state);
+            return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), state, DateTimeOffset.Now);
         }
 
         public override async Task OnConnectedAsync()

@@ -21,6 +21,10 @@ namespace LMS.Dto
         [Display(Name = "End time")]
         public DateTimeOffset EndTime { get; set; }
 
+        public bool IsActive => StartTime < DateTimeOffset.Now && !IsEnded;
+
+        public bool IsEnded => DateTimeOffset.Now >= EndTime;
+
         [Display(Name = "Examenee results")]
         public ICollection<ExameneeResultDTO> ExameneeResults { get; set; }
     }

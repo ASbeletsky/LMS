@@ -32,7 +32,7 @@
                     allDaySlot: true,
                     selectHelper: true,
                     eventClick: function (calEvent, jsEvent, view) {
-                        location.href = (calEvent.start > new Date())
+                        location.href = (new Date() < calEvent.start)
                             ? ('@Url.Action("Edit")/' + calEvent.id)
                             : ('@Url.Action("Details")/' + calEvent.id);
                     },

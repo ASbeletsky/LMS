@@ -149,13 +149,6 @@ namespace LMS.Admin.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Interactive(int id)
-        {
-            var testSession = testSessionService.GetById(id);
-            return View(testSession);
-        }
-
-        [HttpGet]
         public IActionResult Test(int a)
         {
             return View();
