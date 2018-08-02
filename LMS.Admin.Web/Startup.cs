@@ -36,7 +36,6 @@ namespace LMS.Admin.Web
         {
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
