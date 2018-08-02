@@ -13,9 +13,9 @@ namespace LMS.Socket
     {
         private const string AdminGroup = "Admins";
 
-        private readonly ConcurrentDictionary<string, SessionUserDTO> users;
+        private static readonly ConcurrentDictionary<string, SessionUserDTO> users;
 
-        public SessionHub()
+        static SessionHub()
         {
             users = new ConcurrentDictionary<string, SessionUserDTO>();
         }

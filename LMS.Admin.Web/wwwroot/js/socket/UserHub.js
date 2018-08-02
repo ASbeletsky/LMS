@@ -3,9 +3,9 @@
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-userConnection.On("Ban", function (sessionId) {
+userConnection.on("Ban", function (sessionId) {
     sessionStorage.setItem("Baned", true);
-    document.location.href = "/Home/Baned"; break;
+    document.location.href = "/Home/Baned"; 
 });
 
 userConnection.start().catch(function (err) {
@@ -17,19 +17,19 @@ if (sessionStorage.getItem("Baned") === "true") {
 }
 
 function sendUpdateState(currentNumber, completedCount, totalCount) {
-    userConnection.invoke("UpdateState", new {
-        CurrentNumber = currentNumber,
-        CompletedCount = completedCount,
-        TotalCount = totalCount
+    userConnection.invoke("UpdateState", {
+        CurrentNumber: currentNumber,
+        CompletedCount: completedCount,
+        TotalCount: totalCount
     }).catch(function (err) {
         console.error(err.toString());
     });
 }
 
-function sendCompleted(completedCount, totalCount) {
-    userConnection.invoke("Completed", new {
-        CompletedCount = completedCount,
-        TotalCount = totalCount
+function sendComplete(completedCount, totalCount) {
+    userConnection.invoke("Complete", {
+        CompletedCount: completedCount,
+        TotalCount: totalCount
     }).catch(function (err) {
         console.error(err.toString());
     });
