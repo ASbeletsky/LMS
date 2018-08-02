@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using System.Linq;
 using LMS.Admin.Web.ViewModels;
 using LMS.Identity;
-using LMS.Entities;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using LMS.Dto;
+using System.Collections.Generic;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -30,8 +30,8 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Register()
         {
-            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name});
-            return View(new UserDTO { Examinee = new ExamineeDTO() });
+            ViewData["AllRoles"] = GetRolesListItem();
+            return View(_identityService.GetDefaultRegisterModel());
         }
 
         [HttpPost]
@@ -43,17 +43,17 @@ namespace LMS.Admin.Web.Controllers
                 try
                 {
                     await _identityService.Register(model);
-                    ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
-                    return View(new UserDTO { Examinee = new ExamineeDTO() });
+                    ViewData["AllRoles"] = GetRolesListItem();
+                    return View(_identityService.GetDefaultRegisterModel());
                 }
-                catch(AggregateException e)
+                catch (AggregateException e)
                 {
                     foreach (Exception ex in e.InnerExceptions)
                         ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
-            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
-            return View(new UserDTO { Examinee = new ExamineeDTO() });
+            ViewData["AllRoles"] = GetRolesListItem();
+            return View(_identityService.GetDefaultRegisterModel());
         }
 
         [HttpGet]
@@ -75,7 +75,7 @@ namespace LMS.Admin.Web.Controllers
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("TestSession", "List");
                 }
                 catch (Exception e)
                 {
@@ -106,7 +106,7 @@ namespace LMS.Admin.Web.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var userDTO = await _identityService.GetById(id);
-            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
+            ViewData["AllRoles"] = GetRolesListItem();
             return View(userDTO);
         }
 
@@ -133,6 +133,11 @@ namespace LMS.Admin.Web.Controllers
                 return RedirectToAction("AccessDenied", "Account");
             }
             return RedirectToAction("List", "Account");
+        }
+
+        public IEnumerable<SelectListItem> GetRolesListItem()
+        {
+            return _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
         }
     }
 }

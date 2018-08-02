@@ -64,7 +64,8 @@ namespace LMS.Data.Repositories
 
         private IQueryable<Examinee> GetAllQuery()
         {
-            return dbContext.Set<Examinee>();
+            return dbContext.Set<Examinee>()
+                .Include(e => e.User);
         }
     }
 }

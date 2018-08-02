@@ -15,15 +15,17 @@ namespace LMS.Identity
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager; // allows  to authenticate a user and install or delete his cookies
-        private RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ExamineeService _examineeService;
         private readonly IMapper _mapper;
-        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IUnitOfWork unitOfWork)
+        public IdentityService(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IUnitOfWork unitOfWork, ExamineeService examineeService)
             :base(unitOfWork, mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _mapper = mapper;
+            _examineeService = examineeService;
         }
 
         public IEnumerable<IdentityRole> GetAllRoles()
@@ -31,17 +33,15 @@ namespace LMS.Identity
             return _roleManager.Roles;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllUsers()
+        public async Task<IEnumerable<UserSummary>> GetAllUsers()
         {
-            var users = _userManager.Users.ToArray();
-            var roles = await Task.WhenAll(users.Select(u => _userManager.GetRolesAsync(u)));
-            var usersDTO = _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(users).ToArray();
-
-            for(var i = 0; i < usersDTO.Length; i ++)
-            {
-                usersDTO[i].Roles = roles[i];
-            }
-            return usersDTO;
+            var result = _userManager.Users.Select(u => new UserSummary { UserName = u.UserName, Id = u.Id, Name = $"{u.FirstName} {u.LastName}" }).ToArray();
+            var roles = await Task.WhenAll(result.Select(u => GetUserRoles(u.Id)));
+          
+            for(int i =0;i < result.Length;i++)   
+                result[i].Roles = string.Join(", ", roles[i]);
+            
+            return result;
         }
 
         public async Task Register(UserDTO model)
@@ -130,14 +130,12 @@ namespace LMS.Identity
                 throw new ArgumentNullException(nameof(userOld));
             if (!userNew.Roles.Any())
                 throw new ArgumentException("User should have at least one role");
-    
-            userOld.UserName = userNew.UserName;
-            userOld.FirstName = userNew.FirstName;
-            userOld.LastName = userNew.LastName;
-            userOld.PhoneNumber = userNew.PhoneNumber;
-            userOld.Email = userNew.Email;
-            await _userManager.UpdateAsync(userOld);
 
+            userNew.ConcurrencyStamp = userOld.ConcurrencyStamp;
+            _mapper.Map(userNew, userOld);
+            await _userManager.AddPasswordAsync(userOld, userNew.Password);
+            await _userManager.UpdateAsync(userOld);
+            
             userNew.Examinee.UserId = userOld.Id;
             unitOfWork.Examinee.Update(_mapper.Map<ExamineeDTO, Examinee>(userNew.Examinee));
             await unitOfWork.SaveAsync();
@@ -145,9 +143,12 @@ namespace LMS.Identity
             var oldUserRoles  = await GetUserRoles(userOld.Id);
             await _userManager.RemoveFromRolesAsync(userOld, oldUserRoles);
             await _userManager.AddToRolesAsync(userOld, userNew.Roles);
+           
+        }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(userOld);
-            await _userManager.ResetPasswordAsync(userOld, token, userNew.Password);
+        public UserDTO GetDefaultRegisterModel()
+        {
+            return new UserDTO { Examinee = _examineeService.GetDefaultExaminee() };
         }
     }
 }

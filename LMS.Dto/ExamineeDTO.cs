@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace LMS.Dto
 {
     public class ExamineeDTO
@@ -10,7 +7,7 @@ namespace LMS.Dto
 
         public string UserId { get; set; }
 
-        public int Year { get; set; } = 2000;
+        public int BirthYear { get; set; }
 
         public string College { get; set; }
 
@@ -18,7 +15,7 @@ namespace LMS.Dto
 
         public string Specialty { get; set; }
 
-        public int Course { get; set; } = 1;
+        public int Course { get; set; }
 
         public string EnglishLevel { get; set; }
 

@@ -8,7 +8,7 @@
 
         public string UserId { get; set; }
 
-        public int Year { get; set; }
+        public int BirthYear { get; set; }
 
         public string College { get; set; }
 

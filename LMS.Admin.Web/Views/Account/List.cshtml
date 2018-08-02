@@ -1,5 +1,5 @@
 ﻿@using LMS.Dto;
-@model IEnumerable<UserDTO>
+@model IEnumerable<UserSummary>
 @{
     ViewData["Title"] = "List";
     var roles = ((IEnumerable<SelectListItem>)ViewData["AllRoles"]);
@@ -40,7 +40,7 @@
                             <label>@item.Name</label>
                         </td>
                         <td>
-                            <label>@String.Join(", ",item.Roles)</label>
+                            <label>@item.Roles</label>
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
