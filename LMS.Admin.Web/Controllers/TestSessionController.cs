@@ -98,8 +98,7 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit([FromForm] TestSessionDTO testSession)
         {
-            var oldSession = testSessionService.GetById(testSession.Id);
-            if (oldSession.StartTime < DateTimeOffset.Now
+            if (testSession.StartTime < DateTimeOffset.Now
                 && !HttpContext.User.IsInRole(Roles.Admin))
             {
                 return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
