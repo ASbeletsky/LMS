@@ -12,10 +12,13 @@ namespace LMS.Dto
         {
             AnswerOptions = new List<TaskAnswerOptionDTO>();
         }
-       
+
         public int Id { get; set; }
 
         public IList<TaskAnswerOptionDTO> AnswerOptions { get; set; }
+
+        [Display(Name = "Max score")]
+        public double MaxScore { get; set; }
 
         [Range(MinComplexity, MaxComplexity, ErrorMessage = "Value out of range")]
         public int Complexity { get; set; }

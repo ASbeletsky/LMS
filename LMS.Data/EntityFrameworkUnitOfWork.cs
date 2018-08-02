@@ -17,6 +17,7 @@ namespace LMS.Data
             TestTemplates = new TestTemplateRepository(context);
             Tests = new TestRepository(context);
             TestSessions = new TestSessionRepository(context);
+            Answers = new BasicRepository<TaskAnswer>(context);
 
             UserRepository = usersRepo;
         }
