@@ -11,7 +11,8 @@ namespace LMS.Interfaces
         IRepository<TestTemplate> TestTemplates { get; }
         IRepository<Test> Tests { get; }
         IRepository<TestSession> TestSessions { get; }
-        IRepository<TaskAnswer> Answers { get; }
+        IRepository<TestSessionUser> TestSessionUsers { get; }
+        IRepository<Answer>TaskAnswers{ get; }
 
         System.Threading.Tasks.Task SaveAsync();
     }

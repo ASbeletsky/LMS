@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LMS.AnswerModels\LMS.Serialization.csproj" />
     <ProjectReference Include="..\LMS.Bootstrap\LMS.Bootstrap.csproj" />
     <ProjectReference Include="..\LMS.Business\LMS.Business.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />

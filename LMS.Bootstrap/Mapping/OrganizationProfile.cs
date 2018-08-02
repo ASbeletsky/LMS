@@ -22,8 +22,8 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<TaskAnswerOption, TaskAnswerOptionDTO>();
             CreateMap<TaskAnswerOptionDTO, TaskAnswerOption>();
 
-            CreateMap<TaskAnswer, TaskAnswerDTO>();
-            CreateMap<TaskAnswerDTO, TaskAnswer>();
+            CreateMap<Answer, TaskAnswerDTO>();
+            CreateMap<TaskAnswerDTO, Answer>();
 
             CreateMap<LevelTaskType, TaskTypeDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<TaskType, TaskTypeDTO>(entity.TaskType));
@@ -88,6 +88,13 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<Test, TestDTO>();
             CreateMap<TestDTO, Test>();
 
+            CreateMap<Test, TestClientDTO>()
+                .ForMember(m => m.Tasks, m => m.ResolveUsing(l => l.Levels
+                     .SelectMany(t => t.Tasks)
+                     .Select(n => n.Task)
+                     .ToList()));
+            CreateMap<TestClientDTO, Test>();
+
             CreateMap<TestSessionTest, TestDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<Test, TestDTO>(entity.Test));
 
@@ -111,6 +118,9 @@ namespace LMS.Bootstrap.Mapping
                         SessionId = dto.Id,
                         UserId = id
                     })));
+
+            CreateMap<TestSessionUser, TestSessionUserDTO>();
+            CreateMap<TestSessionUserDTO, TestSessionUser>();
         }
     }
 }

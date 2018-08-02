@@ -7,12 +7,27 @@ using LMS.Client.Web.Models;
 using LMS.Entities;
 using System;
 using LMS.Dto;
+using LMS.Business.Services;
+using LMS.Interfaces;
 
 namespace LMS.Client.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly TestSessionUserService testSessionUserService;
+        private readonly TestService testService;
+        private readonly IMapper dtoMapper;
+
+        private static TestClientDTO DBTest;
         TaskInfo info = new TaskInfo();
+
+        public HomeController( TestService _testService,TestSessionUserService _testSessionUserService, IMapper mapper)
+        {
+            testSessionUserService = _testSessionUserService;
+            testService = _testService;
+            dtoMapper = mapper;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -37,7 +52,13 @@ namespace LMS.Client.Web.Controllers
         //}
         public IActionResult Greetings()
         {
-            return View();
+            var UserSession = testSessionUserService.GetByUserId("65546306-32a5-48ee-8a0a-a384d9ad2063");
+            if (UserSession == null)
+            {
+                return View("Baned");
+            };
+            DBTest = dtoMapper.Map<Entities.Test, TestClientDTO>(UserSession.Test);
+            return View(DBTest);
         }
 
         public IActionResult TimerTest()
@@ -45,33 +66,23 @@ namespace LMS.Client.Web.Controllers
             return View();
         }
 
-        public IActionResult TestAjax()
-        {
-            return View(test);
-        }
+        //public IActionResult TestAjax()
+        //{
+        //    return View(test);
+        //}
         public ActionResult ShowProblem(int number)
         {
-            var tasks = new List<TaskClientDTO>();
-            foreach (var item in test.Levels)
-            {
-                foreach (var item2 in item.Tasks)
-                {
-                    tasks.Add(item2);
-                }
-            }
-            info.OurTask = tasks[number];
+            info.OurTask = DBTest.Tasks[number];
             info.CurrentQuestionNumber = number;
-            info.TaskCount = tasks.Count;
-            info.Category = tasks[number].Category.Title;
+            info.TaskCount = DBTest.Tasks.Count;
+            info.Category = DBTest.Tasks[number].Category.Title;
             info.Result = new string[]{""};
             switch (info.OurTask.Type.Id)
             {
-                case 0:
-                    return PartialView("_OneAnswerProblem",info);
                 case 1:
-                    return PartialView("_MultipleAnswerProblem", info);
-                case 2:
                     return PartialView("_ToWriteTextProblem", info);
+                case 2:
+                    return PartialView("_OneAnswerProblem", info);
                 case 3:
                     return PartialView("_ToWriteCodeProblem", info);
                 case 4:

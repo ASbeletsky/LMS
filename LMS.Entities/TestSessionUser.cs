@@ -6,7 +6,7 @@ namespace LMS.Entities
     public class TestSessionUser
     {
         public TestSessionUser() {
-            Answers = new List<TaskAnswer>();
+            Answers = new List<Answer>();
         }
         public TestSession Session { get; set; }
         public int SessionId { get; set; }
@@ -18,7 +18,7 @@ namespace LMS.Entities
 
         public TimeSpan Duration { get; set; }
 
-        public ICollection<TaskAnswer> Answers { get; set; }
+        public ICollection<Answer> Answers { get; set; }
 
         public bool Equals(TestSessionUser other)
         {
