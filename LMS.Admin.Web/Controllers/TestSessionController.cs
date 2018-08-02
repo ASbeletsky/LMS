@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.Admin.Web.Controllers
 {
-    [Authorize(Roles = "admin, moderator, reviewer")]
+    [Authorize(Roles = "admin, moderator, reviewer, examenee")]
     public class TestSessionController : Controller
     {
         private readonly TestSessionService testSessionService;
@@ -111,6 +111,13 @@ namespace LMS.Admin.Web.Controllers
         {
             var testSessions = testSessionService.GetAll();
             return View(testSessions);
+        }
+
+        [HttpGet]
+        public IActionResult Interactive(int id)
+        {
+            var testSession = testSessionService.GetById(id);
+            return View(testSession);
         }
     }
 }

@@ -31,7 +31,7 @@ if (sessionStorage.getItem("Baned") === "true") {
 }
 
 function SendReport() {
-    var report = Report(TimerM.StartTime, TimeToString(TimerM.EndTime.diff(moment())));
+    var report = CreateReport(TimerM.StartTime, TimeToString(TimerM.EndTime.diff(moment())));
     connection.invoke("SendReportToGroups", report)
         .catch(function (err) {
             console.error(err.toString());

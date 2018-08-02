@@ -59,10 +59,9 @@
   {
     "outputFileName": "wwwroot/js/socket.min.js",
     "inputFiles": [
-      "node_modules/signalr/jquery.signalR.min.js",
+      "node_modules/@aspnet/signalr/dist/browser/signalr.min.js",
       "wwwroot/js/socket/AdminHub.js",
-      "wwwroot/js/socket/ReportModel.js",
-      "wwwroot/js/socket/UserHub.js"
+      "wwwroot/js/socket/ReportModel.js"
     ],
     "minify": {
       "enabled": true,

@@ -13,18 +13,21 @@ namespace LMS.Admin.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services, IHostingEnvironment env)
+        public IHostingEnvironment Environment { get; }
+
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             services.AddIdentity();
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 services.AddSocket();
             }
@@ -41,9 +44,9 @@ namespace LMS.Admin.Web
             return new AutofacServiceProvider(container);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -52,10 +55,10 @@ namespace LMS.Admin.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseAuthentication();
             app.UseSocket();
 
             app.UseStaticFiles();
-            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -3,7 +3,7 @@
     .configureLogging(signalR.LogLevel.Information)
     .build();
 connection.on("Report", function (report) {
-    document.getElementById("report").innerHTML = UnserReport(report);
+    document.getElementById("report").innerHTML = ParseReport(report);
 });
 
 connection.start().catch(function (err) {
@@ -11,7 +11,7 @@ connection.start().catch(function (err) {
 });
 
 function send() {
-    connection.invoke("SendComandToGroups", document.getElementById("comand").value, document.getElementById("message").value)
+    connection.invoke("SendComandToGroups", document.getElementById("command").value, document.getElementById("message").value)
         .catch(function (err) {
             console.error(err.toString());
         });
