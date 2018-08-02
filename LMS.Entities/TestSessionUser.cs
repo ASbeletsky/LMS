@@ -18,6 +18,8 @@ namespace LMS.Entities
 
         public TimeSpan Duration { get; set; }
 
+        public string Code { get; set; }
+
         public ICollection<TaskAnswer> Answers { get; set; }
 
         public bool Equals(TestSessionUser other)

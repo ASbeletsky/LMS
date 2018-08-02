@@ -70,7 +70,10 @@ namespace LMS.Business.Services
             }
 
             var testSession = mapper.Map<TestSessionDTO, TestSession>(testSessionDTO);
-
+            foreach(var user in testSession.Members)
+            {
+                user.Code = GenerateCode();
+            }
             unitOfWork.TestSessions.Create(testSession);
 
             return unitOfWork.SaveAsync();
@@ -81,6 +84,23 @@ namespace LMS.Business.Services
             return mapper
                 .Map<IEnumerable<TestSession>, IEnumerable<TestSessionDTO>>(
                     unitOfWork.TestSessions.GetAll());
+        }
+        public string GenerateCode()
+        {
+            double previous=0;
+            double generator = Math.Pow(13, 11);
+            string possibleChars = "ACEFHJKMNPRTUVWXY123456789";
+            double modulus = Math.Pow(7, possibleChars.Length); //int might be too small
+            previous = (previous + generator) % modulus;
+            string output = "";
+            double temp = previous;
+
+            for (int i = 0; i < 8; i++) {
+                output += possibleChars[Convert.ToInt32(temp % possibleChars.Length)];
+                temp = temp / possibleChars.Length;
+            }
+
+            return output;
         }
     }
 }
