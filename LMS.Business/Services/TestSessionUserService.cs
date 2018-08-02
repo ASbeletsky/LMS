@@ -26,8 +26,8 @@ namespace LMS.Business.Services
         //public TestSessionUser GetByCode(string Code)
         //{
         //    var template = unitOfWork.TestSessionUsers.Filter(t => t.CodeId == Code
-        //    && t.Session.StartTime <= DateTimeOffset.Now
-        //    && t.Session.StartTime.Add(t.Duration) > DateTimeOffset.Now);
+        //    && t.Session.StartTime > DateTimeOffset.Now.Subtract(new TimeSpan(0,15,0))
+            //&& t.Session.StartTime <= DateTimeOffset.Now.Add(new TimeSpan(0, 15, 0)));
         //    if (template.Count()==0)
         //    {
         //        return null;
@@ -37,9 +37,9 @@ namespace LMS.Business.Services
 
         public TestSessionUser GetByUserId(string user)
         {
-            var template = unitOfWork.TestSessionUsers.Filter(t => t.UserId == user);
-            //&& t.Session.StartTime <= DateTimeOffset.Now);
-            //&& t.Session.StartTime.Add(t.Duration) > DateTimeOffset.Now);
+            var template = unitOfWork.TestSessionUsers.Filter(t => t.UserId == user
+            && t.Session.StartTime > DateTimeOffset.Now.Subtract(new TimeSpan(0,15,0))
+            && t.Session.StartTime <= DateTimeOffset.Now.Add(new TimeSpan(0, 15, 0)));
             if (template.Count() == 0)
             {
                 return null;
