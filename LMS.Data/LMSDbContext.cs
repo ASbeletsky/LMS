@@ -20,6 +20,7 @@ namespace LMS.Data
         public DbSet<TestTemplate> TestTemplates { get; }
         public DbSet<Test> Tests { get; }
         public DbSet<TestSession> TestSessions { get; }
+        public DbSet<TaskAnswer> Answers { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -62,8 +63,10 @@ namespace LMS.Data
                 .Property(t => t.Title).IsRequired();
             modelBuilder.Entity<TaskType>()
                 .HasData(
-               new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
-               new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion });
+                new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
+                new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion },
+                new TaskType() { Title = "coding task", Id = (int)TaskTypes.CodingTask },
+                new TaskType() { Title = "modelling task", Id = (int)TaskTypes.ModellingTask });
 
             modelBuilder.Entity<TestTemplate>()
                 .HasKey(t => t.Id);
@@ -172,6 +175,11 @@ namespace LMS.Data
                 .HasOne<User>()
                 .WithMany()
                 .HasForeignKey(u => u.UserId);
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne(t => t.Test)
+                .WithMany()
+                .HasForeignKey(t=>t.TestId)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>();
          
@@ -182,6 +190,12 @@ namespace LMS.Data
                 .HasOne<Task>()
                 .WithMany(t => t.AnswerOptions)
                 .HasForeignKey(k => k.TaskId);
+
+            modelBuilder.Entity<TaskAnswer>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TaskAnswer>()
+                .HasOne(t => t.TestSessionUser)
+                .WithMany(t => t.Answers);
 
             base.OnModelCreating(modelBuilder);
         }

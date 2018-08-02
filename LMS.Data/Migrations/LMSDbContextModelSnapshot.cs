@@ -86,6 +86,30 @@ namespace LMS.Data.Migrations
                     b.ToTable("Tasks");
                 });
 
+            modelBuilder.Entity("LMS.Entities.TaskAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content");
+
+                    b.Property<double>("Score");
+
+                    b.Property<int>("TaskId");
+
+                    b.Property<int?>("TestSessionUserSessionId");
+
+                    b.Property<string>("TestSessionUserUserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
+
+                    b.HasIndex("TestSessionUserSessionId", "TestSessionUserUserId");
+
+                    b.ToTable("Answers");
+                });
+
             modelBuilder.Entity("LMS.Entities.TaskAnswerOption", b =>
                 {
                     b.Property<int>("Id")
@@ -118,7 +142,9 @@ namespace LMS.Data.Migrations
 
                     b.HasData(
                         new { Id = 1, Title = "open-ended question" },
-                        new { Id = 2, Title = "question with options" }
+                        new { Id = 2, Title = "question with options" },
+                        new { Id = 3, Title = "coding task" },
+                        new { Id = 4, Title = "modelling task" }
                     );
                 });
 
@@ -207,7 +233,13 @@ namespace LMS.Data.Migrations
 
                     b.Property<string>("UserId");
 
+                    b.Property<TimeSpan>("Duration");
+
+                    b.Property<int?>("TestId");
+
                     b.HasKey("SessionId", "UserId");
+
+                    b.HasIndex("TestId");
 
                     b.HasIndex("UserId");
 
@@ -466,6 +498,18 @@ namespace LMS.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("LMS.Entities.TaskAnswer", b =>
+                {
+                    b.HasOne("LMS.Entities.Task", "Task")
+                        .WithMany()
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.TestSessionUser", "TestSessionUser")
+                        .WithMany("Answers")
+                        .HasForeignKey("TestSessionUserSessionId", "TestSessionUserUserId");
+                });
+
             modelBuilder.Entity("LMS.Entities.TaskAnswerOption", b =>
                 {
                     b.HasOne("LMS.Entities.Task")
@@ -527,6 +571,11 @@ namespace LMS.Data.Migrations
                         .WithMany("Members")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("LMS.Entities.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("LMS.Entities.User")
                         .WithMany()
