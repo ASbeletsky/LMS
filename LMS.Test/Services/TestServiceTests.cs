@@ -104,13 +104,13 @@ namespace LMS.Test.Services
                 Title = "Sample",
                 Levels =
                 {
-                    new TestLevelClientDTO
+                    new TestLevelDTO
                     {
                         TestTemplateLevelId = singleLevelTemplateId,
                         Description = "Level desc",
                         Tasks =
                         {
-                            new TaskClientDTO
+                            new TaskDTO
                             {
                                 Id = singleTaskId
                             }
@@ -149,13 +149,13 @@ namespace LMS.Test.Services
                 Title = "Sample",
                 Levels =
                 {
-                    new TestLevelClientDTO
+                    new TestLevelDTO
                     {
                         TestTemplateLevelId = singleLevelTemplateId,
                         Description = "Level desc",
                         Tasks =
                         {
-                            new TaskClientDTO
+                            new TaskDTO
                             {
                                 Id = singleTaskId
                             }
@@ -235,7 +235,7 @@ namespace LMS.Test.Services
             unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => templatesRepositoryMock.Object);
 
             var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskClientDTO[3]);
+            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
 
             var service = new TestService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
             service.BindToTemplate(testToBeBinded, 1);
@@ -268,12 +268,12 @@ namespace LMS.Test.Services
                 TestTemplateId = 1,
                 Levels =
                 {
-                    new TestLevelClientDTO
+                    new TestLevelDTO
                     {
                         TestTemplateLevelId = 2,
                         Tasks =
                         {
-                            new TaskClientDTO
+                            new TaskDTO
                             {
                                 Id = 3
                             }
@@ -295,7 +295,7 @@ namespace LMS.Test.Services
 
             var taskServiceMock = new Mock<ITaskSource>();
             taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>()))
-                .Returns(new[] { new TaskClientDTO { Id = 4 }, new TaskClientDTO { Id = 5 } });
+                .Returns(new[] { new TaskDTO { Id = 4 }, new TaskDTO { Id = 5 } });
 
             var service = new TestService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
             service.BindToTemplate(testToBeBinded, 1);
@@ -318,7 +318,7 @@ namespace LMS.Test.Services
                 TestTemplateId = 1,
                 Levels =
                 {
-                    new TestLevelClientDTO
+                    new TestLevelDTO
                     {
                         TestTemplateLevelId = 3
                     }
@@ -351,17 +351,17 @@ namespace LMS.Test.Services
             {
                 Levels =
                 {
-                    new TestLevelClientDTO
+                    new TestLevelDTO
                     {
                         TestTemplateLevelId = null,
                         TemplateDeleted = true
                     },
-                    new TestLevelClientDTO
+                    new TestLevelDTO
                     {
                         TestTemplateLevelId = singleLevelTemplateId,
                         Tasks =
                         {
-                            new TaskClientDTO()
+                            new TaskDTO()
                         }
                     }
                 }

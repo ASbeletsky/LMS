@@ -40,7 +40,7 @@ namespace LMS.Test.Services
 
             var categories = service.GetAll().ToArray();
 
-            Assert.NotEqual(0, categories.Length);
+            
             Assert.Equal(3, categories[0].TasksCount);
             repositoryMock.Verify(m => m.GetAll());
         }
@@ -75,10 +75,12 @@ namespace LMS.Test.Services
             var oldCategory = new Entities.Category
             {
                 Id = 1,
-                Title = "Category 1"
+                Title = "Category 1",
+                ParentCategoryId = 0
             };
             var newCategoryDto = mapper.Map<Entities.Category, CategoryDTO>(oldCategory);
             newCategoryDto.Title = "Category 2";
+            newCategoryDto.ParentCategoryId = 3;
 
             var repositoryMock = new Mock<IRepository<Entities.Category>>();
             repositoryMock.Setup(u => u.Get(1)).Returns(oldCategory);
@@ -90,7 +92,8 @@ namespace LMS.Test.Services
 
             await service.UpdateAsync(newCategoryDto);
 
-            repositoryMock.Verify(m => m.Update(It.Is<Entities.Category>(t => t.Title == newCategoryDto.Title)));
+            repositoryMock.Verify(m => m.Update(It.Is<Entities.Category>(t =>
+            t.Title == newCategoryDto.Title && (t.ParentCategoryId == newCategoryDto.ParentCategoryId))));
             unitOfWorkMock.Verify(m => m.SaveAsync());
         }
 

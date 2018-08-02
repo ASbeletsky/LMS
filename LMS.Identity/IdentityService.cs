@@ -54,22 +54,12 @@ namespace LMS.Identity
             else
                 throw new Exception("Your role does not allow you to enter.");
         }
-        public async Task LogInUser(string code)
+
+        public async System.Threading.Tasks.Task<IEnumerable<User>> GetAllAsync(string roleName)
         {
-            User user = await _userManager.FindByNameAsync(userName);
-            if (user == null)
-                throw new Exception("The username or password provided is incorrect.");
-            var currentUserRole = await _userManager.GetRolesAsync(user);
-            if (currentUserRole.Contains(Roles.Examinee))
-            {
-                var result =
-                    await _signInManager.PasswordSignInAsync(userName, password, rememberMe, false);
-                if (!result.Succeeded)
-                    throw new Exception("The username or password provided is incorrect.");
-            }
-            else
-                throw new Exception("Your role is not for this test.");
+            return await _userManager.GetUsersInRoleAsync(roleName);
         }
+
         public async Task Logout()
         {
             // delete cookies
