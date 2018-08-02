@@ -20,11 +20,18 @@ namespace LMS.Admin.Web
 
         public IConfiguration Configuration { get; }
 
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services, IHostingEnvironment env)
         {
             services.AddMvc();
             services.AddIdentity();
-            services.AddSocket("http://localhost:49241");
+            if (env.IsDevelopment())
+            {
+                services.AddSocket();
+            }
+            else
+            {
+                services.AddSocket("http://localhost:49241");
+            }
 
             var builder = new ContainerBuilder();
             builder.Populate(services);

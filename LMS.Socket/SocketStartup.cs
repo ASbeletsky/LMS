@@ -7,7 +7,7 @@ namespace LMS.Socket
 {
     public static class SocketStartup
     {
-        public static void AddSocket(this IServiceCollection services, string clientOrigin)
+        public static void AddSocket(this IServiceCollection services, string clientOrigin = null)
         {
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -16,10 +16,17 @@ namespace LMS.Socket
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAllOrigins", builder => builder.WithOrigins(clientOrigin)
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+                if (clientOrigin == null)
+                {
+                    options.AddPolicy("AllowAllOrigins", builder => builder.AllowAnyOrigin());
+                }
+                else
+                {
+                    options.AddPolicy("AllowAllOrigins", builder => builder.WithOrigins(clientOrigin)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+                }
             });
 
             services.AddSignalR();
