@@ -39,6 +39,8 @@ namespace LMS.Socket
         {
             state = UpdateStateForCurrentUser(state);
 
+            users.TryRemove(state.UserId, out _);
+
             return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), state);
         }
 
