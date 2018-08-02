@@ -1,0 +1,23 @@
+﻿@model LMS.Dto.TestSessionDTO
+@{
+    ViewData["Title"] = "Interactive";
+}
+
+<h4>Test session</h4>
+<hr />
+
+<input id="command" />
+<input id="message" />
+<input onclick="send()" />
+
+<div id="report"></div>
+
+<br />
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
+<br />
+
+@section Scripts{
+    <script src="~/js/socket.user.min.js" asp-append-version="true"></script>
+}
