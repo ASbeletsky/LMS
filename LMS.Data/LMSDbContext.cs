@@ -169,7 +169,8 @@ namespace LMS.Data
                 .HasKey(u => new
                 {
                     u.SessionId,
-                    u.UserId
+                    u.UserId,
+                    u.Code
                 });
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne<User>()

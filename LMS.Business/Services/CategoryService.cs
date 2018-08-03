@@ -5,7 +5,6 @@ using LMS.Interfaces;
 using System.Linq;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LMS.Business.Services
 {
@@ -18,7 +17,7 @@ namespace LMS.Business.Services
 
         public System.Threading.Tasks.Task DeleteAsync(int categoryId)
         {
-            unitOfWork.Categories.Delete(categoryId);   
+            unitOfWork.Categories.Delete(categoryId);
 
             return unitOfWork.SaveAsync();
         }
@@ -47,10 +46,10 @@ namespace LMS.Business.Services
                 throw new ArgumentNullException(nameof(categoryDTO));
             }
             if (!string.IsNullOrEmpty(categoryDTO.Title))
-            {             
+            {
 
                 if (mapper.Map<CategoryDTO, Entities.Category>(categoryDTO) is Entities.Category category)
-                {                    
+                {
                     unitOfWork.Categories.Update(category);
                 }
                 else
@@ -59,7 +58,7 @@ namespace LMS.Business.Services
                 }
             }
 
-        
+
 
             return unitOfWork.SaveAsync();
         }
@@ -89,17 +88,15 @@ namespace LMS.Business.Services
             return mapper.Map<Entities.Category, CategoryDTO>(category);
         }
 
-        public IEnumerable<SelectListItem> GetAvailableCategories()
+        public IEnumerable<CategoryDTO> GetAvailableCategories1()
         {
-            return (mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(
-                unitOfWork.Categories.Filter(t => t.ParentCategoryId == null)))
-                .Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title });
+            return (mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(
+            unitOfWork.Categories.Filter(t => t.ParentCategoryId == null)));
         }
-        public IEnumerable<SelectListItem> GetAvailableCategories(int id)
+        public IEnumerable<CategoryDTO> GetAvailableCategories1(int id)
         {
-            return (mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(
-                unitOfWork.Categories.Filter(t => t.ParentCategoryId == null && t.Id != id)))
-                .Select(t => new SelectListItem() { Value = t.Id.ToString(), Text = t.Title }); ;
+            return (mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(
+            unitOfWork.Categories.Filter(t => t.ParentCategoryId == null && t.Id != id)));
         }
         public int GetAmountChildrenCategories(int id)
         {

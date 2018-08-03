@@ -55,6 +55,14 @@ namespace LMS.Identity
                 throw new Exception("Your role does not allow you to enter.");
         }
 
+        public async Task LogInUser(string code)
+        {
+            //Поиск по коду
+            //Если код существует, возвращаем User
+            //Если нет то выдаём ошибку
+            
+        }
+
         public async System.Threading.Tasks.Task<IEnumerable<User>> GetAllAsync(string roleName)
         {
             return await _userManager.GetUsersInRoleAsync(roleName);

@@ -73,6 +73,7 @@ namespace LMS.Business.Services
             foreach(var user in testSession.Members)
             {
                 user.Code = GenerateCode();
+                //Тут ещё нужна проверка на уникальность ключа, точнее скорее всего лучше это делать прям в методе генерацуии
             }
             unitOfWork.TestSessions.Create(testSession);
 
