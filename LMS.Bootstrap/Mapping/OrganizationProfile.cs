@@ -70,8 +70,8 @@ namespace LMS.Bootstrap.Mapping
                 .ForMember(m => m.Categories, m => m.ResolveUsing(entity =>
                     entity.Levels
                       .SelectMany(l => l.Categories)
-                      .Distinct()
-                      .Select(c => c.Category.Title)
+                      .GroupBy(l => l.CategoryId)
+                      .Select(l => l.First().Category.Title)
                       .ToList()))
                 .ForMember(m => m.Levels, m => m.Ignore());
 
