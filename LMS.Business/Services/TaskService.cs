@@ -14,9 +14,15 @@ namespace LMS.Business.Services
         {
         }
 
-        public Task MarkAsDeletedByIdAsync(int taskId)
+        public Task DeleteByIdAsync(int taskId)
         {
-            if (unitOfWork.Tasks.Get(taskId) is Entities.Task task)
+            if (unitOfWork.Answers.Find(a => a.TaskId == taskId) == null)
+            {
+                unitOfWork.Tasks.Delete(taskId);
+
+                return unitOfWork.SaveAsync();
+            }
+            else if (unitOfWork.Tasks.Get(taskId) is Entities.Task task)
             {
                 task.IsActive = false;
 
@@ -65,7 +71,12 @@ namespace LMS.Business.Services
 
             var newTask = mapper.Map<TaskDTO, Entities.Task>(taskDto);
 
-            if (unitOfWork.Tasks.Get(newTask.Id) is Entities.Task oldTask)
+            if (unitOfWork.Answers.Find(a => a.TaskId == newTask.Id) == null)
+            {
+                unitOfWork.Tasks.Update(newTask);
+                return unitOfWork.SaveAsync();
+            }
+            else if (unitOfWork.Tasks.Get(newTask.Id) is Entities.Task oldTask)
             {
                 if (oldTask.Content == newTask.Content
                     && oldTask.Complexity == newTask.Complexity
