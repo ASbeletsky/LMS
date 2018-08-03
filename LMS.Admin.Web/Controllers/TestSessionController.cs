@@ -11,7 +11,7 @@ using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
-    [Authorize(Roles = "admin, moderator, reviewer, examenee")]
+    [Authorize(Roles = "admin, moderator, reviewer")]
     public class TestSessionController : Controller
     {
         private readonly TestSessionService testSessionService;
