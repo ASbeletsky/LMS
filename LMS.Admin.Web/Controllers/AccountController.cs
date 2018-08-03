@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using System.Linq;
 using LMS.Admin.Web.ViewModels;
 using LMS.Identity;
-using LMS.Entities;
 using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using LMS.Dto;
+using System.Collections.Generic;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -29,31 +30,30 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult Register()
         {
-            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name});
-            return View();
+            ViewData["AllRoles"] = GetRolesListItem();
+            return View(_identityService.GetDefaultRegisterModel());
         }
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(UserDTO model)
         {
             if (ModelState.IsValid)
             {
-                var user = new User { FirstName = model.FirstName, LastName = model.LastName, UserName = model.UserName };
-                // add user
                 try
                 {
-                    await _identityService.Register(user, model.Password, model.Role);
-                    return View(model);
+                    await _identityService.Register(model);
+                    ViewData["AllRoles"] = GetRolesListItem();
+                    return View(_identityService.GetDefaultRegisterModel());
                 }
-                catch(AggregateException e)
+                catch (AggregateException e)
                 {
                     foreach (Exception ex in e.InnerExceptions)
                         ModelState.AddModelError(string.Empty, ex.Message);
                 }
             }
-            ViewData["AllRoles"] = _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
-            return View(model);
+            ViewData["AllRoles"] = GetRolesListItem();
+            return View(_identityService.GetDefaultRegisterModel());
         }
 
         [HttpGet]
@@ -75,7 +75,7 @@ namespace LMS.Admin.Web.Controllers
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("TestSession", "List");
                 }
                 catch (Exception e)
                 {
@@ -91,6 +91,53 @@ namespace LMS.Admin.Web.Controllers
         {
             await _identityService.Logout();
             return RedirectToAction("Login", "Account");
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "admin, moderator")]
+        public async Task<IActionResult> List()
+        {
+            var users = await _identityService.GetAllUsers();
+           
+            return View(users);
+        }
+
+        [Authorize(Roles = "admin, moderator")]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var userDTO = await _identityService.GetById(id);
+            ViewData["AllRoles"] = GetRolesListItem();
+            return View(userDTO);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin, moderator")]
+        public async Task<IActionResult> Edit(UserDTO model)
+        {
+            await _identityService.UpdateAsync(model);
+
+            return RedirectToAction(nameof(List));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            try
+            {
+                await _identityService.DeleteUser(id);
+            }
+            catch (Exception e)
+            {
+                return RedirectToAction("AccessDenied", "Account");
+            }
+            return RedirectToAction("List", "Account");
+        }
+
+        public IEnumerable<SelectListItem> GetRolesListItem()
+        {
+            return _identityService.GetAllRoles().Select(t => new SelectListItem() { Value = t.Name, Text = t.Name });
         }
     }
 }
