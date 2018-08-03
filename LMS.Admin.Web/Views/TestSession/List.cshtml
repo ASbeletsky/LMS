@@ -8,7 +8,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div id='calendar'></div>
+<div id='calendar' class="col-md-8"></div>
 
 @section scripts
     {
@@ -32,7 +32,9 @@
                     allDaySlot: true,
                     selectHelper: true,
                     eventClick: function (calEvent, jsEvent, view) {
-                        location.href = '@Url.Action("Edit")/' + calEvent.id;
+                        location.href = (calEvent.start > new Date())
+                            ? ('@Url.Action("Edit")/' + calEvent.id)
+                            : ('@Url.Action("Details")/' + calEvent.id);
                     },
                     dayClick: function (date, jsEvent, view) {
                         location.href = buildUrlWithParam('@Url.Action("Create")', "startTime", date.toJSON());

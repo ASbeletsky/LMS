@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using LMS.Dto;
 using LMS.Entities;
+using LMS.AnswerModels;
 
 namespace LMS.Bootstrap.Mapping
 {
@@ -17,13 +18,16 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<TaskTypeDTO, TaskType>();
 
             CreateMap<TaskDTO, Task>();
-            CreateMap<Task, TaskDTO>();
+            CreateMap<Task, TaskDTO>()
+                .ForMember(m => m.MaxScore, m => m.Ignore());
 
             CreateMap<TaskAnswerOption, TaskAnswerOptionDTO>();
             CreateMap<TaskAnswerOptionDTO, TaskAnswerOption>();
 
-            CreateMap<TaskAnswer, TaskAnswerDTO>();
-            CreateMap<TaskAnswerDTO, TaskAnswer>();
+            CreateMap<TaskAnswer, TaskAnswerDTO>()
+                .ForMember(m => m.Content, m => m.ResolveUsing(a => SerializeControler.DeserializeJSON(a.Content)));
+            CreateMap<TaskAnswerDTO, TaskAnswer>()
+                .ForMember(m => m.Content, m => m.ResolveUsing(a => SerializeControler.SerializeToJSON(a.Content)));
 
             CreateMap<LevelTaskType, TaskTypeDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<TaskType, TaskTypeDTO>(entity.TaskType));
@@ -99,7 +103,7 @@ namespace LMS.Bootstrap.Mapping
                 .ConstructUsing((entity, context) => context.Mapper.Map<Test, TestDTO>(entity.Test));
 
             CreateMap<TestSession, TestSessionDTO>()
-                .ForMember(m => m.TestTemplateId, m => m.ResolveUsing(entity => 
+                .ForMember(m => m.TestTemplateId, m => m.ResolveUsing(entity =>
                     entity.Tests.FirstOrDefault()?.Test?.TestTemplateId ?? 0))
                 .ForMember(m => m.TestIds, m => m.ResolveUsing(entity =>
                     entity.Tests.Select(t => t.TestId).ToList()))
@@ -118,6 +122,15 @@ namespace LMS.Bootstrap.Mapping
                         SessionId = dto.Id,
                         UserId = id
                     })));
+
+            CreateMap<TestSessionUser, ExameneeResultDTO>()
+                .ForMember(m => m.TestTitle, m => m.MapFrom(u => u.Test.Title))
+                .ForMember(m => m.UserName, m => m.MapFrom(u => u.User.Name))
+                .ForMember(m => m.TotalScore, m => m.ResolveUsing(u => u.Answers.Sum(a => a.Score)));
+
+            CreateMap<TestSession, TestSessionResultsDTO>()
+                .ForMember(m => m.ExameneeResults, m => m.MapFrom(u => u.Members))
+                .ForMember(m => m.EndTime, m => m.ResolveUsing(u => u.StartTime + u.Duration));
 
             CreateMap<TestSessionUser, TestSessionUserDTO>();
             CreateMap<TestSessionUserDTO, TestSessionUser>();

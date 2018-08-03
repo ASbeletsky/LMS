@@ -31,9 +31,9 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(answer));
             }
-            if (string.IsNullOrEmpty(answer.Content))
+            if (answer.Content == null)
             {
-                throw new ArgumentException($"{nameof(Entities.TaskAnswer)}.{nameof(Entities.TaskAnswer.Content)} cannot be null or empty");
+                throw new ArgumentException($"{nameof(Entities.TaskAnswer)}.{nameof(Entities.TaskAnswer.Content)} cannot be null");
             }
 
             var entry = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answer);
@@ -60,14 +60,21 @@ namespace LMS.Business.Services
                 {
                     return Task.CompletedTask;
                 }
-
-                unitOfWork.TaskAnswers.Update(oldAnswer);
-                return unitOfWork.SaveAsync();
+                if (oldAnswer.TaskId != newAnswer.TaskId
+                    || !oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser))
+                {
+                    unitOfWork.Answers.Create(newAnswer);
+                }
+                else
+                {
+                    unitOfWork.Answers.Update(oldAnswer);
+                }
             }
             else
             {
-                return CreateAsync(answerDto);
+                unitOfWork.Answers.Create(newAnswer);
             }
+            return unitOfWork.SaveAsync();
         }
 
         public IEnumerable<TaskAnswerDTO> GetAll()
