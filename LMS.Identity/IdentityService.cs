@@ -44,7 +44,8 @@ namespace LMS.Identity
             var currentUserRole = await _userManager.GetRolesAsync(user);
             if (currentUserRole.Contains(Roles.Admin) 
                 || currentUserRole.Contains(Roles.Moderator) 
-                || currentUserRole.Contains(Roles.Reviewer))
+                || currentUserRole.Contains(Roles.Reviewer)
+                || currentUserRole.Contains(Roles.Examinee))
             {
                 var result =
                     await _signInManager.PasswordSignInAsync(userName, password, rememberMe, false);

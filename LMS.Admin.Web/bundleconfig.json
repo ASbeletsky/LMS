@@ -79,5 +79,27 @@
       "renameLocals": true
     },
     "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/socket.min.js",
+    "inputFiles": [
+      "node_modules/@aspnet/signalr/dist/browser/signalr.min.js",
+      "wwwroot/js/socket/AdminHub.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
+  },
+  {
+    "outputFileName": "wwwroot/js/socket.user.min.js",
+    "inputFiles": [
+      "node_modules/@aspnet/signalr/dist/browser/signalr.min.js",
+      "wwwroot/js/socket/UserHub.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    }
   }
 ]

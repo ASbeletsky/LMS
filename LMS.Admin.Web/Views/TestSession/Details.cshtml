@@ -18,70 +18,112 @@
                 <br />
             </div>
         </div>
-            <div class="row">
-                <div class="col-12 col-sm-6">
-                    <label asp-for="StartTime" class="font-weight-bold"></label>
-                    <br />
-                    @Model.StartTime.ToString("dd.MM.yyyy HH:mm")
-                    <br />
-                    <br />
-                </div>
-                <div class="col-12 col-md-6">
-                    <label asp-for="EndTime" class="font-weight-bold"></label>
-                    <br />
-                    @Model.EndTime.ToString("dd.MM.yyyy HH:mm")
-                    <br />
-                    <br />
-                </div>
+        <div class="row">
+            <div class="col-12 col-sm-6">
+                <label asp-for="StartTime" class="font-weight-bold"></label>
+                <br />
+                @Model.StartTime.ToString("dd.MM.yyyy HH:mm")
+                <br />
+                <br />
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>
-                                Examinee
-                            </th>
-                            <th>
-                                Test title
-                            </th>
-                            <th>
-                                Test duration
-                            </th>
-                            <th>
-                                Score
-                            </th>
-                            <th>
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var exameneeResult in Model.ExameneeResults)
-                        {
-                            <tr>
-                                <td>
-                                    @exameneeResult.UserName
-                                </td>
-                                <td>
-                                    @exameneeResult.TestTitle
-                                </td>
-                                <td>
-                                    @exameneeResult.Duration.ToString("hh\\:mm")
-                                </td>
-                                <td>
-                                    @exameneeResult.TotalScore
-                                </td>
-                                <td>
-                                    <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+            <div class="col-12 col-md-6">
+                <label asp-for="EndTime" class="font-weight-bold"></label>
+                <br />
+                @Model.EndTime.ToString("dd.MM.yyyy HH:mm")
+                <br />
+                <br />
             </div>
         </div>
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>
+                            Examinee
+                        </th>
+                        <th>
+                            Test title
+                        </th>
+                        <th>
+                            @if (Model.IsEnded)
+                            {
+                                @:Test duration
+                            }
+                            else if (Model.IsActive)
+                            {
+                                @:Start time / Duration
+                            }
+                        </th>
+                        <th>
+                            @if (Model.IsEnded)
+                            {
+                                @:Score
+                            }
+                            else if (Model.IsActive)
+                            {
+                                @:State
+                            }
+                        </th>
+                        <th>
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var exameneeResult in Model.ExameneeResults)
+                    {
+                        <tr class="examenee" id="examenee-@exameneeResult.UserId">
+                            <td>
+                                @exameneeResult.UserName
+                            </td>
+                            <td>
+                                @exameneeResult.TestTitle
+                            </td>
+                            <td>
+                                @if (Model.IsEnded)
+                                {
+                                    @:@exameneeResult.Duration.ToString("hh\\:mm")
+                                }
+                                else if (Model.IsActive)
+                                {
+                                    <span class="examenee-time">-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (Model.IsEnded)
+                                {
+                                    @exameneeResult.TotalScore
+                                }
+                                else if (Model.IsActive)
+                                {
+                                    <span class="examenee-state">Not started</span>
+                                }
+                            </td>
+                            <td>
+                                @if (Model.IsEnded)
+                                {
+                                    <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                                }
+                                else if (Model.IsActive)
+                                {
+                                    <a href="javascript:banUser(@Model.Id, '@exameneeResult.UserId')">Ban</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+</div>
 <br />
 <div>
     <a asp-action="List">Back to List</a>
 </div>
+
+@section Scripts{
+    @if (Model.IsActive)
+    {
+        <script src="~/js/socket.min.js" asp-append-version="true"></script>
+    }
+}

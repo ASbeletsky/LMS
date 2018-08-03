@@ -11,7 +11,7 @@ using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
-    [Authorize(Roles = "admin, moderator, reviewer")]
+   // [Authorize(Roles = "admin, moderator, reviewer, examenee")]
     public class TestSessionController : Controller
     {
         private readonly TestSessionService testSessionService;
@@ -98,8 +98,7 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit([FromForm] TestSessionDTO testSession)
         {
-            var oldSession = testSessionService.GetById(testSession.Id);
-            if (oldSession.StartTime < DateTimeOffset.Now
+            if (testSession.StartTime < DateTimeOffset.Now
                 && !HttpContext.User.IsInRole(Roles.Admin))
             {
                 return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
@@ -147,6 +146,12 @@ namespace LMS.Admin.Web.Controllers
             await testSessionService.SaveAnswerScoresAsync(taskAnswerScores);
 
             return RedirectToAction(nameof(List));
+        }
+
+        [HttpGet]
+        public IActionResult Test(int a)
+        {
+            return View();
         }
     }
 }

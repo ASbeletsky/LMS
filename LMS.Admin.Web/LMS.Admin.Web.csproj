@@ -7,9 +7,9 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.1.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,17 +23,7 @@
     <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
     <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
-    <ProjectReference Include="..\LMS.Serialization\LMS.Serialization.csproj" />
-    <ProjectReference Include="..\LMS.Socet\LMS.Socet.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Update="Views\TestSession\ResultDetails.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\TestSession\Details.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
+    <ProjectReference Include="..\LMS.Socket\LMS.Socket.csproj" />
   </ItemGroup>
 
   <Target Name="GulpTarget" BeforeTargets="Build">
