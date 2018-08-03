@@ -40,9 +40,6 @@
     <input type="number" min="0" class="form-control" onchange="displayTable(this)" value="@(Model?.AnswerOptions?.Count ?? 0)" />
 </div>
 
-<div class="form-group">
-    <input type="submit" value="Save" class="btn btn-default" />
-</div>
 <div id="tableThead" class="form-group @(Model?.Type?.Id == (int)TaskTypes.OptionQuestion ? "" : "collapse")">
     <table class="table table-bordered">
         <thead>
@@ -55,6 +52,9 @@
     </table>
 </div>
 
+<div class="form-group">
+    <input type="submit" value="Save" class="btn btn-default" />
+</div>
 <script>
     function optionCheck(select) {
         var selected = $(select).find("option:selected").val();
@@ -109,6 +109,5 @@
                 tr.appendTo("#tableBody");
             }
         });
-        alert(Array[0]["id"]);
     </script>
 }
