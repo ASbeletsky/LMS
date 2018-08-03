@@ -13,7 +13,10 @@
 <div class="row">
     <div class="form-group col-12 col-md-6">
         <label asp-for="Complexity" class="control-label"></label>
-        <input asp-for="Complexity" class="form-control form-control-range" type="range" min="@TaskDTO.MinComplexity" max="@TaskDTO.MaxComplexity" />
+        <label id="taskComplexity">@Model.Complexity</label>
+        <label>/ @TaskDTO.MaxComplexity</label>
+        <br />
+        <input onchange="$('#taskComplexity').text($(this).val())" style="width: 100%" asp-for="Complexity" data-slider-value="@Model.Complexity" class="form-control form-control-range" type="text" data-provide="slider" data-slider-min="@TaskDTO.MinComplexity" data-slider-max="@TaskDTO.MaxComplexity" />
         <span asp-validation-for="Complexity" class="text-danger"></span>
     </div>
     <div class="form-group col-12 col-md-6">
