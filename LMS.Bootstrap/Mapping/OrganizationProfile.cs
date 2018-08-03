@@ -116,6 +116,15 @@ namespace LMS.Bootstrap.Mapping
                         UserId = id
                     })));
 
+
+            CreateMap<UserDTO, User>();
+            CreateMap<User, UserDTO>()
+                .ForMember(m => m.Roles, m => m.Ignore())
+                .ForMember(m=> m.Examinee, m => m.Ignore());
+
+            CreateMap<ExamineeDTO, Examinee>();
+            CreateMap<Examinee, ExamineeDTO>();
+
             CreateMap<TestSessionUser, ExameneeResultDTO>()
                 .ForMember(m => m.TestTitle, m => m.MapFrom(u => u.Test.Title))
                 .ForMember(m => m.UserName, m => m.MapFrom(u => u.User.Name))
