@@ -1,6 +1,6 @@
 ﻿namespace LMS.Entities
 {
-    public class Answer
+    public class TaskAnswer
     {
         public int Id { get; set; }
         public Task Task { get; set; }

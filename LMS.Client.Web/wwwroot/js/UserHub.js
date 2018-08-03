@@ -28,7 +28,7 @@ connection.on("RestoreAnswer", () => {
 
 connection.start().catch(err => console.error(err.toString()));
 
-if (sessionStorage.getItem("Baned") == "true") {
+if (sessionStorage.getItem("Baned") === "true") {
     document.location.href = "/Home/Baned";
 }
 

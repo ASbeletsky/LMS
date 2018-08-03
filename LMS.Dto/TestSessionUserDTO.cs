@@ -17,8 +17,9 @@ namespace LMS.Dto
 
         public TestDTO Test { get; set; }
         public int? TestId { get; set; }
-
-        public TimeSpan Duration { get; set; }
+        public DateTimeOffset StartTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
+        public bool Ended { get; set; }
 
         public ICollection<TaskAnswerDTO> Answers { get; set; }
     }

@@ -13,22 +13,24 @@ namespace LMS.Business.Services
         public TestSessionUserService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
-        public TestSessionUser GetById(int id)
+        public TestSessionUser GetById(int sessionId,string userId)
         {
-            var template = unitOfWork.TestSessionUsers.Get(id);
+            var template = unitOfWork.TestSessionUsers.Find(t =>
+            t.SessionId == sessionId
+            && t.UserId == userId);
             if (template == null)
             {
-                throw new EntityNotFoundException<TestSessionUser>(id);
+                throw new EntityNotFoundException<TestSessionUser>();
             }
             return template;
         }
 
         //public TestSessionUser GetByCode(string Code)
         //{
-        //    var template = unitOfWork.TestSessionUsers.Filter(t => t.CodeId == Code
-        //    && t.Session.StartTime > DateTimeOffset.Now.Subtract(new TimeSpan(0,15,0))
-            //&& t.Session.StartTime <= DateTimeOffset.Now.Add(new TimeSpan(0, 15, 0)));
-        //    if (template.Count()==0)
+        //    var template = unitOfWork.TestSessionUsers.Filter(t => 
+        //(t.CodeId == Code && t.Session.StartTime.Add(new TimeSpan(0, 15, 0)) >= DateTimeOffset.Now)
+        //    || (t.CodeId == Code && t.TestId != null && t.Ended == false && t.EndTime > DateTimeOffset.Now));
+        //    if (template.Count() == 0)
         //    {
         //        return null;
         //    }
@@ -37,9 +39,9 @@ namespace LMS.Business.Services
 
         public TestSessionUser GetByUserId(string user)
         {
-            var template = unitOfWork.TestSessionUsers.Filter(t => t.UserId == user
-            && t.Session.StartTime > DateTimeOffset.Now.Subtract(new TimeSpan(0,15,0))
-            && t.Session.StartTime <= DateTimeOffset.Now.Add(new TimeSpan(0, 15, 0)));
+            var template = unitOfWork.TestSessionUsers.Filter(t => 
+            (t.UserId == user && t.Session.StartTime.Add(new TimeSpan(0, 15, 0)) >= DateTimeOffset.Now)
+            || (t.UserId == user && t.TestId != null && t.Ended == false && t.EndTime > DateTimeOffset.Now));
             if (template.Count() == 0)
             {
                 return null;
