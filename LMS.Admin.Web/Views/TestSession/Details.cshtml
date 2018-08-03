@@ -41,9 +41,12 @@
                         <th>
                             Examinee
                         </th>
-                        <th>
-                            Test title
-                        </th>
+                        @if (Model.IsEnded)
+                        {
+                            <th>
+                                Test title
+                            </th>
+                        }
                         <th>
                             @if (Model.IsEnded)
                             {
@@ -72,13 +75,16 @@
                 <tbody>
                     @foreach (var exameneeResult in Model.ExameneeResults)
                     {
-                        <tr class="examenee" id="examenee-@exameneeResult.UserId">
+                        <tr class="examenee" id="examenee-@exameneeResult.UserId" data-sessionid="@Model.Id">
                             <td>
                                 @exameneeResult.UserName
                             </td>
-                            <td>
-                                @exameneeResult.TestTitle
-                            </td>
+                            @if (Model.IsEnded)
+                            {
+                                <td>
+                                    @(exameneeResult.TestTitle ?? "Undefined")
+                                </td>
+                            }
                             <td>
                                 @if (Model.IsEnded)
                                 {
@@ -86,7 +92,7 @@
                                 }
                                 else if (Model.IsActive)
                                 {
-                                    <span class="examenee-time">-</span>
+                                    <span class="examenee-time">- / -</span>
                                 }
                             </td>
                             <td>
