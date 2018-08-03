@@ -139,5 +139,11 @@ namespace LMS.Business.Services
             }
             return unitOfWork.SaveAsync();
         }
+
+        public TestSessionDTO FindByUserId(string userId)
+        {
+            return mapper.Map<TestSession, TestSessionDTO>(unitOfWork
+                .TestSessions.Find(s => s.Members.Any(m => m.UserId == userId)));
+        }
     }
 }

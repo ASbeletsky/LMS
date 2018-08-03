@@ -46,6 +46,9 @@ namespace LMS.Bootstrap
             builder.RegisterType<IdentityService>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<ExamineeService>()
+              .AsSelf()
+              .InstancePerLifetimeScope();
 
             //builder.RegisterBuildCallback(container =>
             //    DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));

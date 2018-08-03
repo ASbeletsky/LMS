@@ -13,12 +13,8 @@ namespace LMS.Socket
     {
         private const string AdminGroup = "Admins";
 
-        private static readonly ConcurrentDictionary<string, SessionUserDTO> users;
-
-        static SessionHub()
-        {
-            users = new ConcurrentDictionary<string, SessionUserDTO>();
-        }
+        private static readonly ConcurrentDictionary<string, SessionUserDTO> users =
+            new ConcurrentDictionary<string, SessionUserDTO>();
 
         [Authorize(Roles = "admin, moderator")]
         public Task Ban(int sessionId, string userId)
@@ -29,19 +25,43 @@ namespace LMS.Socket
         [Authorize]
         public Task UpdateState(TestTasksStateDTO state)
         {
-            state = UpdateStateForCurrentUser(state);
+            var user = UpdateStateForCurrentUser(state);
 
-            return Clients.Groups(AdminGroup).SendAsync(nameof(UpdateState), state);
+            return Clients.Groups(AdminGroup).SendAsync(nameof(UpdateState), user);
         }
 
         [Authorize]
         public Task Complete(TestTasksStateDTO state)
         {
-            state = UpdateStateForCurrentUser(state);
+            var user = UpdateStateForCurrentUser(state);
+            user.StartTime = user.StartTime ?? DateTimeOffset.Now;
+            user.Duration = DateTimeOffset.Now - user.StartTime.Value;
 
-            users.TryRemove(state.UserId, out _);
+            return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), user);
+        }
 
-            return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), state, DateTimeOffset.Now);
+        [Authorize]
+        public Task Start()
+        {
+            if (!(Context.User.GetUserId() is string userId))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = users.AddOrUpdate(userId,
+                (id) => new SessionUserDTO
+                {
+                    Id = id,
+                    StartTime = DateTimeOffset.Now
+                },
+                (_, u) =>
+                {
+                    u.StartTime = DateTimeOffset.Now;
+                    u.Duration = null;
+                    return u;
+                });
+
+            return Clients.Groups(AdminGroup).SendAsync(nameof(Start), user);
         }
 
         public override async Task OnConnectedAsync()
@@ -54,10 +74,7 @@ namespace LMS.Socket
 
                 if (users.Any())
                 {
-                    await Clients.Caller.SendAsync("Users", new
-                    {
-                        Users = users
-                    });
+                    await Clients.Caller.SendAsync("Users", users.Values);
                 }
 
                 await base.OnConnectedAsync();
@@ -72,11 +89,7 @@ namespace LMS.Socket
                 await Groups.AddToGroupAsync(Context.ConnectionId, "Users");
 
                 var user = users.GetOrAdd(userId,
-                    (id) => new SessionUserDTO
-                    {
-                        Id = id,
-                        StartTime = DateTimeOffset.Now
-                    });
+                    (id) => new SessionUserDTO { Id = id });
 
                 await Clients.Group(AdminGroup).SendAsync("UserConnected", user);
 
@@ -111,20 +124,21 @@ namespace LMS.Socket
             }
         }
 
-        private TestTasksStateDTO UpdateStateForCurrentUser(TestTasksStateDTO state)
+        private SessionUserDTO UpdateStateForCurrentUser(TestTasksStateDTO state)
         {
             if (!(Context.User.GetUserId() is string userId))
             {
                 throw new UnauthorizedAccessException();
             }
+            if (!users.TryGetValue(userId, out var user))
+            {
+                throw new InvalidOperationException("Attempt to update not connected user");
+            }
+            user.TasksState = state;
 
-            state.UserId = userId;
+            users.TryUpdate(userId, user, user);
 
-            var sessionUser = users.AddOrUpdate(userId,
-                (id) => new SessionUserDTO { Id = id, StartTime = DateTimeOffset.Now, TasksState = state },
-                (_, user) => { user.TasksState = state; return user; });
-
-            return sessionUser.TasksState;
+            return user;
         }
     }
 }

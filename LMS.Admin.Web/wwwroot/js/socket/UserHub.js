@@ -16,6 +16,12 @@ if (sessionStorage.getItem("Baned") === "true") {
     document.location.href = "/Home/Baned";
 }
 
+function sendStart() {
+    userConnection.invoke("Start").catch(function (err) {
+        console.error(err.toString());
+    });
+}
+
 function sendUpdateState(currentNumber, completedCount, totalCount) {
     userConnection.invoke("UpdateState", {
         CurrentNumber: currentNumber,

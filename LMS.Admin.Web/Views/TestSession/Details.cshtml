@@ -6,7 +6,7 @@
 }
 
 <div>
-    <h4>Test session results</h4>
+    <h4>Details</h4>
     <hr />
     <div class="col-md-10 col-lg-9">
         <div class="row">
@@ -22,14 +22,14 @@
             <div class="col-12 col-sm-6">
                 <label asp-for="StartTime" class="font-weight-bold"></label>
                 <br />
-                @Model.StartTime.ToString("dd.MM.yyyy HH:mm")
+                @Model.StartTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                 <br />
                 <br />
             </div>
             <div class="col-12 col-md-6">
                 <label asp-for="EndTime" class="font-weight-bold"></label>
                 <br />
-                @Model.EndTime.ToString("dd.MM.yyyy HH:mm")
+                @Model.EndTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                 <br />
                 <br />
             </div>
@@ -41,18 +41,20 @@
                         <th>
                             Examinee
                         </th>
+                        @if (Model.IsEnded)
+                        {
+                            <th>
+                                Test title
+                            </th>
+                        }
+                        @if (Model.IsActive)
+                        {
+                            <th>
+                                Start time
+                            </th>
+                        }
                         <th>
-                            Test title
-                        </th>
-                        <th>
-                            @if (Model.IsEnded)
-                            {
-                                @:Test duration
-                            }
-                            else if (Model.IsActive)
-                            {
-                                @:Start time / Duration
-                            }
+                            Test duration
                         </th>
                         <th>
                             @if (Model.IsEnded)
@@ -72,21 +74,28 @@
                 <tbody>
                     @foreach (var exameneeResult in Model.ExameneeResults)
                     {
-                        <tr class="examenee" id="examenee-@exameneeResult.UserId">
+                        <tr class="examenee alert" id="examenee-@exameneeResult.UserId" data-session="@Model.Id">
                             <td>
                                 @exameneeResult.UserName
                             </td>
-                            <td>
-                                @exameneeResult.TestTitle
-                            </td>
+                            @if (Model.IsEnded)
+                            {
+                                <td>
+                                    @(exameneeResult.TestTitle ?? "Undefined")
+                                </td>
+                            }
+                            @if (Model.IsActive)
+                            {
+                                <td class="examenee-time">-</td>
+                            }
                             <td>
                                 @if (Model.IsEnded)
                                 {
                                     @:@exameneeResult.Duration.ToString("hh\\:mm")
                                 }
-                                else if (Model.IsActive)
+                                else
                                 {
-                                    <span class="examenee-time">-</span>
+                                    <span class="examenee-duration">-</span>
                                 }
                             </td>
                             <td>
@@ -118,6 +127,12 @@
 </div>
 <br />
 <div>
+    @if ((!Model.IsActive && !Model.IsEnded)
+        || User.IsInRole(LMS.Identity.Roles.Admin))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <br />
+    }
     <a asp-action="List">Back to List</a>
 </div>
 
