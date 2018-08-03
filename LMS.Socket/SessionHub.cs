@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using LMS.Dto;
 using LMS.Identity;
-using LMS.Business.Services;
 
 namespace LMS.Socket
 {
@@ -16,13 +15,6 @@ namespace LMS.Socket
 
         private static readonly ConcurrentDictionary<string, SessionUserDTO> users =
             new ConcurrentDictionary<string, SessionUserDTO>();
-
-        private readonly TestSessionService testSessionService;
-
-        public SessionHub(TestSessionService sessionService)
-        {
-            testSessionService = sessionService;
-        }
 
         [Authorize(Roles = "admin, moderator")]
         public Task Ban(int sessionId, string userId)
@@ -56,24 +48,16 @@ namespace LMS.Socket
                 throw new UnauthorizedAccessException();
             }
 
-            var sessionId = testSessionService.FindByUserId(userId)?.Id;
-            if (!sessionId.HasValue)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             var user = users.AddOrUpdate(userId,
                 (id) => new SessionUserDTO
                 {
                     Id = id,
-                    SessionId = sessionId.Value,
                     StartTime = DateTimeOffset.Now
                 },
                 (_, u) =>
                 {
                     u.StartTime = DateTimeOffset.Now;
                     u.Duration = null;
-                    u.SessionId = sessionId.Value;
                     return u;
                 });
 
@@ -148,7 +132,7 @@ namespace LMS.Socket
             }
             if (!users.TryGetValue(userId, out var user))
             {
-                throw new InvalidOperationException("Attempt to update not started user");
+                throw new InvalidOperationException("Attempt to update not connected user");
             }
             user.TasksState = state;
 
