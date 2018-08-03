@@ -66,7 +66,7 @@ function updateUser(user, state) {
         exameneeDurationElement.text("-");
     }
     if (state === "Disconnected"
-        || !user.duration) {
+        && !user.duration) {
         exameneeStateElement.text(state);
     }
     else if (user.tasksState) {
