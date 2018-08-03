@@ -40,13 +40,12 @@ namespace LMS.Test.Services
 
             var categories = service.GetAll().ToArray();
 
-            
             Assert.Equal(3, categories[0].TasksCount);
             repositoryMock.Verify(m => m.GetAll());
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Should_Delete()
+        public async Task Should_Delete()
         {
             var categoryForDelete = new Entities.Category
             {
@@ -70,7 +69,7 @@ namespace LMS.Test.Services
         }
 
         [Fact]
-        public async System.Threading.Tasks.Task Should_Update()
+        public async Task Should_Update()
         {
             var oldCategory = new Entities.Category
             {
@@ -96,34 +95,9 @@ namespace LMS.Test.Services
             t.Title == newCategoryDto.Title && (t.ParentCategoryId == newCategoryDto.ParentCategoryId))));
             unitOfWorkMock.Verify(m => m.SaveAsync());
         }
-
+        
         [Fact]
-        public async System.Threading.Tasks.Task Should_Create_If_New_On_Update()
-        {
-
-            var newCategory = new Entities.Category
-            {
-                Id = 1,
-                Title = "MyCategory"
-            };
-            var newCategoryDto = mapper.Map<Entities.Category, CategoryDTO>(newCategory);
-
-            var repositoryMock = new Mock<IRepository<Entities.Category>>();
-            repositoryMock.Setup(u => u.Get(1)).Returns((Entities.Category)null);
-
-            var unitOfWorkMock = new Mock<IUnitOfWork>();
-            unitOfWorkMock.Setup(u => u.Categories).Returns(() => repositoryMock.Object);
-
-            var service = new CategoryService(unitOfWorkMock.Object, mapper);
-
-            await service.UpdateAsync(newCategoryDto);
-
-            repositoryMock.Verify(m => m.Create(It.Is<Entities.Category>(dto => dto.Title == newCategory.Title)));
-            unitOfWorkMock.Verify(m => m.SaveAsync());
-        }
-
-        [Fact]
-        public async System.Threading.Tasks.Task Should_Create_New_Item()
+        public async Task Should_Create_New_Item()
         {
             var newCategory = new CategoryDTO
             {

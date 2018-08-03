@@ -71,7 +71,7 @@ namespace LMS.Business.Services
                     && oldTask.Complexity == newTask.Complexity
                     && oldTask.CategoryId == newTask.CategoryId
                     && oldTask.TypeId == newTask.TypeId
-                    && oldTask.AnswerOptions.Equals(newTask.AnswerOptions))
+                    && oldTask.AnswerOptions.SequenceEqual(newTask.AnswerOptions))
                 {
                     return Task.CompletedTask;
                 }
