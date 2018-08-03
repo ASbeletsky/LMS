@@ -8,6 +8,7 @@ namespace LMS.Dto
         public int SessionId { get; set; }
 
         public DateTimeOffset? StartTime { get; set; }
+        public TimeSpan? Duration { get; set; }
 
         public TestTasksStateDTO TasksState { get; set; }
     }

@@ -42,8 +42,8 @@ namespace LMS.Socket
         public Task Complete(TestTasksStateDTO state)
         {
             var user = UpdateStateForCurrentUser(state);
-
-            users.TryRemove(user.Id, out _);
+            user.StartTime = user.StartTime ?? DateTimeOffset.Now;
+            user.Duration = DateTimeOffset.Now - user.StartTime.Value;
 
             return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), user);
         }
@@ -72,6 +72,7 @@ namespace LMS.Socket
                 (_, u) =>
                 {
                     u.StartTime = DateTimeOffset.Now;
+                    u.Duration = null;
                     u.SessionId = sessionId.Value;
                     return u;
                 });
@@ -89,10 +90,7 @@ namespace LMS.Socket
 
                 if (users.Any())
                 {
-                    await Clients.Caller.SendAsync("Users", new
-                    {
-                        Users = users
-                    });
+                    await Clients.Caller.SendAsync("Users", users.Values);
                 }
 
                 await base.OnConnectedAsync();

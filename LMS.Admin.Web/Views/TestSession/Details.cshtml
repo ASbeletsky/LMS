@@ -47,15 +47,14 @@
                                 Test title
                             </th>
                         }
+                        @if (Model.IsActive)
+                        {
+                            <th>
+                                Start time
+                            </th>
+                        }
                         <th>
-                            @if (Model.IsEnded)
-                            {
-                                @:Test duration
-                            }
-                            else if (Model.IsActive)
-                            {
-                                @:Start time / Duration
-                            }
+                            Test duration
                         </th>
                         <th>
                             @if (Model.IsEnded)
@@ -75,7 +74,7 @@
                 <tbody>
                     @foreach (var exameneeResult in Model.ExameneeResults)
                     {
-                        <tr class="examenee" id="examenee-@exameneeResult.UserId" data-sessionid="@Model.Id">
+                        <tr class="examenee alert" id="examenee-@exameneeResult.UserId" data-session="@Model.Id">
                             <td>
                                 @exameneeResult.UserName
                             </td>
@@ -85,14 +84,18 @@
                                     @(exameneeResult.TestTitle ?? "Undefined")
                                 </td>
                             }
+                            @if (Model.IsActive)
+                            {
+                                <td class="examenee-time">-</td>
+                            }
                             <td>
                                 @if (Model.IsEnded)
                                 {
                                     @:@exameneeResult.Duration.ToString("hh\\:mm")
                                 }
-                                else if (Model.IsActive)
+                                else
                                 {
-                                    <span class="examenee-time">- / -</span>
+                                    <span class="examenee-duration">-</span>
                                 }
                             </td>
                             <td>
@@ -124,6 +127,11 @@
 </div>
 <br />
 <div>
+    @if (User.IsInRole(LMS.Identity.Roles.Admin))
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+        <br />
+    }
     <a asp-action="List">Back to List</a>
 </div>
 

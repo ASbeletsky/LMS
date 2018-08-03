@@ -8,26 +8,13 @@ adminConnection.start().catch(function (err) {
 });
 
 adminConnection.on("UpdateState", function (user) {
-    $("#examenee-" + user.id + "[data-session='" + user.sessionId + "'] .examenee-state").text(
-        "Current task: " + user.taskState.currentNumber + "<br/>" +
-        "Progress: " + user.taskState.completedCount + " / " + user.taskState.totalCount);
+    updateUser(user);
 
     console.log("UpdateState", user);
 });
 
 adminConnection.on("Complete", function (user, time) {
-    var exameneeElement = $("#examenee-" + user.id + "[data-session='" + user.sessionId + "']");
-    if (exameneeElement.length == 0)
-        return;
-
-    var timeSpan = exameneeElement.find(".examenee-time");
-    var startDate = timeSpan.data("startTime");
-    var duration = moment(new Date(time)).diff(startDate);
-    timeSpan.text(moment(startDate).format("HH:mm")
-        + " / "
-        + moment.utc(duration).format("HH:mm"));
-    exameneeElement.addClass("completed");
-    exameneeElement.find(".examenee-state").text("Completed " + user.taskState.completedCount + " / " + user.taskState.totalCount);
+    updateUser(user, "Completed");
 
     console.log("Complete", user, time);
 });
@@ -35,90 +22,85 @@ adminConnection.on("Complete", function (user, time) {
 adminConnection.on("Users", function (users) {
     for (var userKey in users) {
         var user = users[userKey];
-        var exameneeElement = $("#examenee-" + user.id);
-        var exameneeTimeElement = exameneeElement.find(".examenee-time")
-        var exameneeStateElement = exameneeElement.find(".examenee-state")
-        var date = new Date(user.startTime);
-        var dateString = moment(date).format("HH:mm");
-
-        exameneeTimeElement.text(dateString);
-        exameneeTimeElement.data("startTime", date);
-        exameneeElement.removeClass("disconnected");
-        if (user.state) {
-            exameneeStateElement.find(".examenee-state").text(
-                "Current task: " + state.currentNumber +
-                "Progress: " + state.completedCount + " / " + state.totalCount);
-        }
-        else {
-            exameneeStateElement.find(".examenee-state").text("Started");
-        }
+        updateUser(user);
     }
     console.log("Users", users);
 });
 
 adminConnection.on("UserConnected", function (user) {
-    var exameneeElement = $("#examenee-" + user.id);
-    var exameneeTimeElement = exameneeElement.find(".examenee-time")
-    var exameneeStateElement = exameneeElement.find(".examenee-state")
-
-    exameneeElement.removeClass("disconnected");
-
-    if (user.startTime) {
-        var date = new Date(user.startTime);
-        var dateString = moment(date).format("HH:mm");
-
-        exameneeTimeElement.text(dateString + " / -");
-        exameneeTimeElement.data("startTime", date);
-    }
-    else {
-        exameneeTimeElement.text("- / -");
-    }
-    if (user.state) {
-        exameneeStateElement.text(
-            "Current task: " + state.currentNumber +
-            "Progress: " + state.completedCount + " / " + state.totalCount);
-    }
-    else {
-        exameneeStateElement.text("Connected");
-    }
+    updateUser(user, "Connected");
     console.log("UserConnected", user);
 });
 
 adminConnection.on("Start", function (user) {
-    var exameneeElement = $("#examenee-" + user.id);
-    var exameneeTimeElement = exameneeElement.find(".examenee-time")
-    var exameneeStateElement = exameneeElement.find(".examenee-state")
+    updateUser(user, "Started");
 
-    exameneeElement.removeClass("disconnected");
+    console.log("Start", user);
+});
+
+adminConnection.on("UserDisconnected", function (user) {
+    updateUser(user, "Disconnected");
+
+    console.log("UserDisconnected", user);
+});
+
+function updateUser(user, state) {
+    var exameneeElement = $("#examenee-" + user.id);
+    var exameneeTimeElement = exameneeElement.find(".examenee-time");
+    var exameneeDurationElement = exameneeElement.find(".examenee-duration");
+    var exameneeStateElement = exameneeElement.find(".examenee-state");
 
     if (user.startTime) {
         var date = new Date(user.startTime);
         var dateString = moment(date).format("HH:mm");
-
-        exameneeTimeElement.text(dateString + " / -");
-        exameneeTimeElement.data("startTime", date);
+        exameneeTimeElement.text(dateString);
     }
     else {
-        exameneeTimeElement.text("- / -");
+        exameneeTimeElement.text("-");
     }
-    if (user.state) {
-        exameneeStateElement.text(
-            "Current task: " + state.currentNumber +
-            "Progress: " + state.completedCount + " / " + state.totalCount);
+    if (user.duration) {
+        var time = moment(user.duration, "HH:mm:ss").format("HH:mm:ss");
+        exameneeDurationElement.text(time);
     }
     else {
-        exameneeStateElement.text("Connected");
+        exameneeDurationElement.text("-");
     }
-    console.log("UserConnected", user);
-});
-
-adminConnection.on("UserDisconnected", function (user) {
-    $("#examenee-" + user.id).addClass("disconnected");
-    if (user.state) {
-        exameneeElement.find(".examenee-state").text("Disconnected");
+    if (state === "Disconnected"
+        || !user.duration) {
+        exameneeStateElement.text(state);
     }
-    console.log("UserDisconnected", user);
-});
+    else if (user.tasksState) {
+        if (user.duration) {
+            exameneeStateElement.html(
+                "Completed " + user.tasksState.completedCount + " / " + user.tasksState.totalCount);
+        }
+        else {
+            exameneeStateElement.html(
+                "Current task: " + user.tasksState.currentNumber + "<br/>" +
+                "Progress: " + user.tasksState.completedCount + " / " + user.tasksState.totalCount);
+        }
+    }
+    else if (state) {
+        exameneeStateElement.text(state);
+    }
+    else if (user.duration) {
+        exameneeStateElement.text("Completed");
+    }
+    else if (user.startTime) {
+        exameneeStateElement.text("Started");
+    }
+    else {
+        exameneeStateElement.text("-");
+    }
+    exameneeElement.removeClass("alert-warning");
+    exameneeElement.removeClass("alert-success");
+    if (user.duration) {
+        exameneeElement.addClass("alert-success");
+    }
+    else if (state == "Disconnected") {
+        exameneeElement.addClass("alert-warning");
+    }
+}
 
 function banUser(sessionId, userId) {
     adminConnection.invoke("Ban", sessionId, userId)
