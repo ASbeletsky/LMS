@@ -127,7 +127,8 @@
 </div>
 <br />
 <div>
-    @if (User.IsInRole(LMS.Identity.Roles.Admin))
+    @if ((!Model.IsActive && !Model.IsEnded)
+        || User.IsInRole(LMS.Identity.Roles.Admin))
     {
         <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
         <br />
