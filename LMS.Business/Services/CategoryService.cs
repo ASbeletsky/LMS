@@ -4,7 +4,7 @@ using LMS.Entities;
 using LMS.Interfaces;
 using System.Linq;
 using System;
-using System.Threading.Tasks;
+using Task = System.Threading.Tasks.Task;
 
 namespace LMS.Business.Services
 {
@@ -15,14 +15,14 @@ namespace LMS.Business.Services
         {
         }
 
-        public System.Threading.Tasks.Task DeleteAsync(int categoryId)
+        public Task DeleteAsync(int categoryId)
         {
-            unitOfWork.Categories.Delete(categoryId);   
+            unitOfWork.Categories.Delete(categoryId);
 
             return unitOfWork.SaveAsync();
         }
 
-        public System.Threading.Tasks.Task CreateAsync(CategoryDTO category)
+        public Task CreateAsync(CategoryDTO category)
         {
             if (category == null)
             {
@@ -39,26 +39,19 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public System.Threading.Tasks.Task UpdateAsync(CategoryDTO categoryDTO)
+        public Task UpdateAsync(CategoryDTO categoryDTO)
         {
             if (categoryDTO == null)
             {
                 throw new ArgumentNullException(nameof(categoryDTO));
             }
-            if (!string.IsNullOrEmpty(categoryDTO.Title))
-            {             
-
-                if (mapper.Map<CategoryDTO, Entities.Category>(categoryDTO) is Entities.Category category)
-                {                    
-                    unitOfWork.Categories.Update(category);
-                }
-                else
-                {
-                    return CreateAsync(categoryDTO);
-                }
+            if (string.IsNullOrEmpty(categoryDTO.Title))
+            {
+                throw new ArgumentNullException(nameof(categoryDTO.Title));
             }
 
-        
+            var category = mapper.Map<CategoryDTO, Category>(categoryDTO);
+            unitOfWork.Categories.Update(category);
 
             return unitOfWork.SaveAsync();
         }
@@ -68,12 +61,11 @@ namespace LMS.Business.Services
             var categories = unitOfWork.Categories.GetAll();
             var categoriesDTO = mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(categories);
 
-
             foreach (var category in categoriesDTO)
             {
                 category.TasksCount = unitOfWork.Tasks.Filter(b => b.CategoryId == category.Id).Count();
-                if(category.ParentCategoryId!=null)
-                category.ParentCategory= mapper.Map<Entities.Category, CategoryDTO>(categories.Where(c=>c.Id== category.ParentCategoryId).First());
+                if (category.ParentCategoryId != null)
+                    category.ParentCategory = mapper.Map<Category, CategoryDTO>(categories.Where(c => c.Id == category.ParentCategoryId).First());
             }
 
             return categoriesDTO;
@@ -84,20 +76,21 @@ namespace LMS.Business.Services
             var category = unitOfWork.Categories.Get(categoryId);
             if (category == null)
             {
-                throw new EntityNotFoundException<Entities.Category>(categoryId);
+                throw new EntityNotFoundException<Category>(categoryId);
             }
 
-            return mapper.Map<Entities.Category, CategoryDTO>(category);
+            return mapper.Map<Category, CategoryDTO>(category);
         }
 
         public IEnumerable<CategoryDTO> GetAvailableCategories()
         {
-            return (mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(
-                unitOfWork.Categories.Filter(t => t.ParentCategoryId == null)));
+            return mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(
+                unitOfWork.Categories.Filter(t => t.ParentCategoryId == null));
         }
+
         public IEnumerable<CategoryDTO> GetAvailableCategories(int id)
         {
-            return (mapper.Map<IEnumerable<Entities.Category>, IEnumerable<CategoryDTO>>(
+            return (mapper.Map<IEnumerable<Category>, IEnumerable<CategoryDTO>>(
                 unitOfWork.Categories.Filter(t => t.ParentCategoryId == null && t.Id != id)));
         }
 
@@ -105,6 +98,5 @@ namespace LMS.Business.Services
         {
             return unitOfWork.Categories.Filter(t => t.ParentCategoryId == id).Count();
         }
-
     }
 }
