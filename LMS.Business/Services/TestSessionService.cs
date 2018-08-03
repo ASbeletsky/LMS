@@ -26,6 +26,52 @@ namespace LMS.Business.Services
             return mapper.Map<TestSession, TestSessionDTO>(template);
         }
 
+        public TestSessionResultsDTO GetResults(int id)
+        {
+            var template = unitOfWork.TestSessions.Get(id);
+            if (template == null)
+            {
+                throw new EntityNotFoundException<TestSession>(id);
+            }
+
+            return mapper.Map<TestSession, TestSessionResultsDTO>(template);
+        }
+
+        public ExameneeResultDTO GetExameneeResult(int sessionId, string exameneeId)
+        {
+            var template = unitOfWork.TestSessions.Get(sessionId);
+            if (template == null)
+            {
+                throw new EntityNotFoundException<TestSession>(sessionId);
+            }
+
+            var user = template.Members.FirstOrDefault(m => m.UserId == exameneeId);
+            if (user == null)
+            {
+                throw new EntityNotFoundException<TestSessionUser>();
+            }
+
+            var exameneeResult = mapper.Map<TestSessionUser, ExameneeResultDTO>(user);
+
+            var test = unitOfWork.Tests.Get(exameneeResult.TestId.Value);
+            var levels = test.Levels;
+            var templateLevels = unitOfWork.TestTemplates.Get(test.Id).Levels;
+
+            foreach (var task in exameneeResult.Answers.Select(a => a.Task))
+            {
+                var templateLevelId = levels
+                    .FirstOrDefault(l => l.Tasks.Select(t => t.TaskId).Contains(task.Id))?
+                    .TestTemplateLevelId;
+                var templateLevel = templateLevels.FirstOrDefault(l => l.Id == templateLevelId);
+                if (templateLevel != null)
+                {
+                    task.MaxScore = templateLevel.MaxScore / templateLevel.TasksCount;
+                }
+            }
+
+            return exameneeResult;
+        }
+
         public Task DeleteByIdAsync(int id)
         {
             unitOfWork.TestSessions.Delete(id);
@@ -81,6 +127,17 @@ namespace LMS.Business.Services
             return mapper
                 .Map<IEnumerable<TestSession>, IEnumerable<TestSessionDTO>>(
                     unitOfWork.TestSessions.GetAll());
+        }
+
+        public Task SaveAnswerScoresAsync(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
+        {
+            var answers = unitOfWork.Answers.Filter(a => taskAnswerScores.Any(s => s.Id == a.Id));
+            foreach (var answer in answers)
+            {
+                answer.Score = taskAnswerScores.First(a => a.Id == answer.Id).Score;
+                unitOfWork.Answers.Update(answer);
+            }
+            return unitOfWork.SaveAsync();
         }
     }
 }

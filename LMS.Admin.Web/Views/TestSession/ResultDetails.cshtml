@@ -1,0 +1,124 @@
+﻿@using LMS.Dto
+@using LMS.AnswerModels
+@model ExameneeResultDTO
+
+@{
+    ViewData["Title"] = "Details";
+    const int alphabetStart = (int)'a';
+
+    (TaskAnswerOptionDTO option, char alphabet) GetAnswerOptionWithAlphabet(
+        TaskAnswerDTO answer, SingleAnswer singleAnswer)
+    {
+        var options = answer.Task.AnswerOptions;
+        var choosed = options.FirstOrDefault(a => singleAnswer.AnswerOptionId == a.Id);
+        var choosedIndex = options.IndexOf(choosed);
+
+        return (choosed, (char)(choosedIndex + alphabetStart));
+    }
+}
+
+<div>
+    <h4>Examenee result</h4>
+    <hr />
+    <form asp-action="SaveResultDetails" method="post">
+        <div class="col-md-10 col-lg-9">
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <label asp-for="TestTitle" class="font-weight-bold"></label>
+                    <br />
+                    @Model.TestTitle
+                    <br />
+                    <br />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="UserName" class="font-weight-bold"></label>
+                    <br />
+                    @Model.UserName
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-sm-6">
+                    <label asp-for="Duration" class="font-weight-bold"></label>
+                    <br />
+                    @Model.Duration.ToString("hh\\:mm")
+                    <br />
+                    <br />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label asp-for="TotalScore" class="font-weight-bold"></label>
+                    <br />
+                    @Model.TotalScore
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <h3>@Html.LabelFor(m => m.Answers)</h3>
+            <div class="list-group">
+                @for (int index = 0; index < Model.Answers.Count; index++)
+                {
+                    <div class="list-group-item p-0">
+                        <div class="row m-0 ">
+                            <div class="col-12 pl-3 pt-3 pr-3">
+                                <span class="font-weight-bold">
+                                    @(index + 1).
+                                    <label asp-for="Answers[index].Score"></label>
+                                    <span onclick="$('#score_@index').val(@(Model.Answers[index].Task.MaxScore))">
+                                        (max @Model.Answers[index].Task.MaxScore)
+                                    </span>
+                                </span>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input hidden name="[@index].Id" value="@Model.Answers[index].Id" />
+                                        <input type="number" class="form-control" min="0" max="@Model.Answers[index].Task.MaxScore" id="score_@index" required name="[@index].Score" value="@Model.Answers[index].Score" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 p-3">
+                                <span class="col-12 font-weight-bold p-0">
+                                    Q: @Model.Answers[index].Task.Content
+                                </span>
+                                <div class="col-12 p-0 mt-2">
+                                    @switch (Model.Answers[index].Content)
+                                    {
+                                        case OpenAnswer open:
+                                            <div class="alert alert-dark bg-transparent">
+                                                <p style="white-space: pre-wrap;">@open.Content</p>
+                                            </div>
+                                            break;
+                                        case SingleAnswer single:
+                                            var (option, alphabet) = GetAnswerOptionWithAlphabet(Model.Answers[index], single);
+
+                                            if (option != null)
+                                            {
+                                                <div class="alert @(option.IsCorrect ? "alert-success" : "alert-danger") m-0 rounded-0">
+                                                    @alphabet. @option.Content
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                @:Invalid answer
+                                            }
+                                            break;
+                                        default:
+                                            @:Invalid answer
+                                            break;
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </form>
+</div>
+<br />
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
