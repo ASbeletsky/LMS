@@ -63,16 +63,16 @@ namespace LMS.Business.Services
                 if (oldAnswer.TaskId != newAnswer.TaskId
                     || !oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser))
                 {
-                    unitOfWork.Answers.Create(newAnswer);
+                    unitOfWork.TaskAnswers.Create(newAnswer);
                 }
                 else
                 {
-                    unitOfWork.Answers.Update(oldAnswer);
+                    unitOfWork.TaskAnswers.Update(oldAnswer);
                 }
             }
             else
             {
-                unitOfWork.Answers.Create(newAnswer);
+                unitOfWork.TaskAnswers.Create(newAnswer);
             }
             return unitOfWork.SaveAsync();
         }

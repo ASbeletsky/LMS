@@ -131,11 +131,11 @@ namespace LMS.Business.Services
 
         public Task SaveAnswerScoresAsync(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
         {
-            var answers = unitOfWork.Answers.Filter(a => taskAnswerScores.Any(s => s.Id == a.Id));
+            var answers = unitOfWork.TaskAnswers.Filter(a => taskAnswerScores.Any(s => s.Id == a.Id));
             foreach (var answer in answers)
             {
                 answer.Score = taskAnswerScores.First(a => a.Id == answer.Id).Score;
-                unitOfWork.Answers.Update(answer);
+                unitOfWork.TaskAnswers.Update(answer);
             }
             return unitOfWork.SaveAsync();
         }

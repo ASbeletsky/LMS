@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +24,7 @@
     <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
     <ProjectReference Include="..\LMS.Serialization\LMS.Serialization.csproj" />
+    <ProjectReference Include="..\LMS.Socet\LMS.Socet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
