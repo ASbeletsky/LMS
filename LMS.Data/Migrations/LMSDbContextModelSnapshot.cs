@@ -34,6 +34,35 @@ namespace LMS.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("LMS.Entities.Examinee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BirthYear");
+
+                    b.Property<string>("College");
+
+                    b.Property<string>("Comment");
+
+                    b.Property<int>("Course");
+
+                    b.Property<string>("EnglishLevel");
+
+                    b.Property<string>("Faculty");
+
+                    b.Property<string>("Specialty");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Examinee");
+                });
+
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
                 {
                     b.Property<int>("CategoryId");
@@ -456,6 +485,13 @@ namespace LMS.Data.Migrations
                         .WithMany()
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("LMS.Entities.Examinee", b =>
+                {
+                    b.HasOne("LMS.Entities.User", "User")
+                        .WithOne()
+                        .HasForeignKey("LMS.Entities.Examinee", "UserId");
                 });
 
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>

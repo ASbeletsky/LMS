@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    [Migration("20180731191409_AddExaminee")]
+    [Migration("20180803112519_AddExaminee")]
     partial class AddExaminee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,10 +24,14 @@ namespace LMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ParentCategoryId");
+
                     b.Property<string>("Title")
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -36,6 +40,8 @@ namespace LMS.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("BirthYear");
 
                     b.Property<string>("College");
 
@@ -50,8 +56,6 @@ namespace LMS.Data.Migrations
                     b.Property<string>("Specialty");
 
                     b.Property<string>("UserId");
-
-                    b.Property<int>("Year");
 
                     b.HasKey("Id");
 
@@ -475,6 +479,14 @@ namespace LMS.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("LMS.Entities.Category", b =>
+                {
+                    b.HasOne("LMS.Entities.Category", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("LMS.Entities.Examinee", b =>

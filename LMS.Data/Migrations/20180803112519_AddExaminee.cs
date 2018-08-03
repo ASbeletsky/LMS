@@ -14,7 +14,7 @@ namespace LMS.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: true),
-                    Year = table.Column<int>(nullable: false),
+                    BirthYear = table.Column<int>(nullable: false),
                     College = table.Column<string>(nullable: true),
                     Faculty = table.Column<string>(nullable: true),
                     Specialty = table.Column<string>(nullable: true),

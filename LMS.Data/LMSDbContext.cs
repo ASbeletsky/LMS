@@ -10,7 +10,7 @@ namespace LMS.Data
 
         public LMSDbContext(string connection)
         {
-            connectionString = connection;            
+            connectionString = connection;
         }
 
         public DbSet<Category> Categories { get; }
@@ -178,12 +178,16 @@ namespace LMS.Data
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne(t => t.Test)
                 .WithMany()
-                .HasForeignKey(t=>t.TestId)
+                .HasForeignKey(t => t.TestId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<User>()
-                 .HasOne<Examinee>()
-                 .WithOne(e => e.User);
+                .HasOne<Examinee>()
+               .WithOne(e => e.User);
+
+            modelBuilder.Entity<Examinee>()
+                .HasKey(k => k.Id);
+
 
             modelBuilder.Entity<TaskAnswerOption>()
                 .HasKey(c => c.Id);
@@ -197,10 +201,6 @@ namespace LMS.Data
             modelBuilder.Entity<TaskAnswer>()
                 .HasOne(t => t.TestSessionUser)
                 .WithMany(t => t.Answers);
-
-            modelBuilder.Entity<Examinee>()
-                .HasKey(k => k.Id);
-
 
             base.OnModelCreating(modelBuilder);
         }
