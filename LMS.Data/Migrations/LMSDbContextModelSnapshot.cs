@@ -22,12 +22,14 @@ namespace LMS.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("ParentCategoryId");
+
                     b.Property<string>("Title")
                         .IsRequired();
 
-                    b.Property<int?>("ParentCategoryId");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -449,12 +451,12 @@ namespace LMS.Data.Migrations
                 });
 
             modelBuilder.Entity("LMS.Entities.Category", b =>
-            {
-                b.HasOne("LMS.Entities.Task", "ParentCategory")
-                    .WithMany()
-                    .HasForeignKey("ParentCategoryId")
-                    .OnDelete(DeleteBehavior.SetNull);
-            });
+                {
+                    b.HasOne("LMS.Entities.Category", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
 
             modelBuilder.Entity("LMS.Entities.LevelCategory", b =>
                 {
