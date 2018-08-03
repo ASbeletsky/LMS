@@ -1,20 +1,23 @@
 ﻿@using LMS.Dto;
-@model TestClientDTO
+@model TestSessionUserDTO
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<script>
+    sessionStorage.setItem("sessionId",@Model.SessionId);
+</script>
 <div class="well">
     <h3>
         <strong>Добрый день!</strong>
     </h3>
     <h4>
-        <strong>@Model.Title</strong>
+        <strong>@Model.Test.Title</strong>
         <br><br>
-        <strong>Тема теста: @Model.Tasks.First().Category.Title</strong>
+        <strong>Тема теста: @Model.Test.Levels.First().Tasks.First().Category.Title</strong>
         @*<br><br>
-        <strong>Время на тест: @Model.Duration</strong>
-        <br><br>
-        <strong>Количество вопросов: @Model.Problems.Count</strong>*@
+            <strong>Время на тест: @Model.Duration</strong>
+            <br><br>
+            <strong>Количество вопросов: @Model.Problems.Count</strong>*@
     </h4>
     <span>
         При нажатии на кнопку "Старт" запуститься таймер, по истечению которого тест завершится. <br>
@@ -22,6 +25,7 @@
     </span>
     @using (Html.BeginForm("Start", "Home"))
     {
+        @Html.Hidden("sessionId", Model.SessionId);
         <input type="submit" class="btn btn-success" value="Старт" />
     }
 </div>

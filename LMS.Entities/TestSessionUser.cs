@@ -19,9 +19,9 @@ namespace LMS.Entities
         public Test Test { get; set; }
         public int? TestId { get; set; }
 
-        public bool Ended { get; set; }
-        public DateTimeOffset StartTime { get; set; }
-        public DateTimeOffset EndTime { get; set; }
+        //public bool Ended { get; set; }
+        //public DateTimeOffset StartTime { get; set; }
+        //public DateTimeOffset EndTime { get; set; }
 
         public ICollection<TaskAnswer> Answers { get; set; }
 

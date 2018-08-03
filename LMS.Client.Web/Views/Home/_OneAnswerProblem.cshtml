@@ -13,12 +13,14 @@
     <script src="~/js/Functions.js"></script>
     <script>
         DeserializeForm("radio", @res);
+        document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
         @Html.Hidden("number", number);
         @Html.Hidden("got", 1);
+        <input type="hidden" id="sessionId" value="">
         <h3>
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>

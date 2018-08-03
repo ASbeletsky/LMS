@@ -96,7 +96,8 @@ namespace LMS.Bootstrap.Mapping
                 .ForMember(m => m.Tasks, m => m.ResolveUsing(l => l.Levels
                      .SelectMany(t => t.Tasks)
                      .Select(n => n.Task)
-                     .ToList()));
+                     .ToList()))
+                .ForMember(m=>m.EndTime,m=>m.Ignore());
             CreateMap<TestClientDTO, Test>();
 
             CreateMap<TestSessionTest, TestDTO>()

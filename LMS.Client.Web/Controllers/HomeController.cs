@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Client.Web.Models;
 using LMS.Entities;
+using System.Threading;
 using System;
 using LMS.Dto;
 using LMS.Business.Services;
@@ -14,17 +15,23 @@ namespace LMS.Client.Web.Controllers
     public class HomeController : Controller
     {
         private readonly TestSessionUserService testSessionUserService;
+        private readonly TestSessionService testSessionService;
         private readonly TestService testService;
         private readonly IMapper dtoMapper;
+        private static IDictionary<int, TestClientDTO> TestDictionary;
+        private static Timer timerTestChecker;
 
-        private static TestClientDTO DBTest;
+        //private static TestClientDTO DBTest;
         TaskInfo info = new TaskInfo();
 
-        public HomeController( TestService _testService,TestSessionUserService _testSessionUserService, IMapper mapper)
+        public HomeController(TestSessionUserService _testSessionUserService,TestSessionService _testSessionService,TestService _testService, IMapper mapper)
         {
+            TestDictionary = new Dictionary<int, TestClientDTO>();
             testSessionUserService = _testSessionUserService;
+            testSessionService = _testSessionService;
             testService = _testService;
             dtoMapper = mapper;
+            timerTestChecker = new Timer(new TimerCallback(TestChecker), null, 0, 1000 * 60 * 30);
         }
 
         public IActionResult Index()
@@ -56,7 +63,9 @@ namespace LMS.Client.Web.Controllers
             {
                 return View("Baned");
             };
-            DBTest = dtoMapper.Map<Entities.Test, TestClientDTO>(UserSession.Test);
+            TestToStore(UserSession);
+            var DBTest = dtoMapper.Map<Entities.TestSessionUser, TestSessionUserDTO>(UserSession);
+            
             return View(DBTest);
         }
 
@@ -69,12 +78,15 @@ namespace LMS.Client.Web.Controllers
         //{
         //    return View(test);
         //}
-        public ActionResult ShowProblem(int number)
+        public ActionResult ShowProblem(int number,int sessionId)
         {
-            info.OurTask = DBTest.Tasks[number];
+            var UserSession = testSessionUserService.GetById(sessionId, "65546306-32a5-48ee-8a0a-a384d9ad2063");
+            TestToStore(UserSession);
+            var test = TestDictionary[UserSession.TestId.Value];
+            info.OurTask = test.Tasks[number];
             info.CurrentQuestionNumber = number;
-            info.TaskCount = DBTest.Tasks.Count;
-            info.Category = DBTest.Tasks[number].Category.Title;
+            info.TaskCount = test.Tasks.Count;
+            info.Category = test.Tasks[number].Category.Title;
             info.Result = new string[]{""};
             switch (info.OurTask.Type.Id)
             {
@@ -89,12 +101,12 @@ namespace LMS.Client.Web.Controllers
             }
             return PartialView("_OneAnswerProblem");
         }
-        public RedirectToActionResult Start()
+        public RedirectToActionResult Start(int sessionId)
         {
             var number = 0;
             return RedirectToAction("ShowProblem", new { number});
         }
-        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got)
+        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got,int testId)
         {
             switch (mode)
             {
@@ -121,6 +133,40 @@ namespace LMS.Client.Web.Controllers
                 IdList.Add(Convert.ToInt32(s));
             }
             return IdList;
+        }
+
+        public void TestToStore(TestSessionUser UserSession)
+        {
+            if (!TestDictionary.ContainsKey(UserSession.TestId.Value))
+            {
+                var testDto = testService.GetByIdClient(UserSession.TestId.Value);
+                testDto.EndTime = testSessionService.GetById(UserSession.SessionId).EndTime.AddMinutes(15);
+                TestDictionary.Add(UserSession.TestId.Value, testDto);
+            }
+            else
+            {
+                var newTime = testSessionService.GetById(UserSession.SessionId).EndTime.AddMinutes(15);
+                var testId = UserSession.TestId.Value;
+                TestDictionary[testId].EndTime = newTime.AddMinutes(15) > TestDictionary[testId].EndTime ?
+                    newTime : TestDictionary[testId].EndTime;
+            }
+        }
+
+        public static void TestChecker(object obj)
+        {
+            lock (TestDictionary)
+            {
+                if (TestDictionary.Count > 0)
+                {
+                    foreach (var item in TestDictionary)
+                    {
+                        if (item.Value.EndTime <= DateTimeOffset.Now)
+                        {
+                            TestDictionary.Remove(item.Key);
+                        }
+                    }
+                }
+            }
         }
 
     }

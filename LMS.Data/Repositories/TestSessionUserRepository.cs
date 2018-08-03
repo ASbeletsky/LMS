@@ -70,24 +70,6 @@ namespace LMS.Data.Repositories
         private IQueryable<TestSessionUser> GetAllQuery()
         {
             return dbContext.Set<TestSessionUser>()
-                .Include(t => t.Test)
-                .ThenInclude(t=>t.Levels)
-                .ThenInclude(m => m.Tasks)
-                .ThenInclude(m=>m.Task)
-                .ThenInclude(m=>m.AnswerOptions)
-
-                .Include(t => t.Test)
-                .ThenInclude(t => t.Levels)
-                .ThenInclude(m => m.Tasks)
-                .ThenInclude(m => m.Task)
-                .ThenInclude(m=>m.Category)
-
-                .Include(t => t.Test)
-                .ThenInclude(t => t.Levels)
-                .ThenInclude(m => m.Tasks)
-                .ThenInclude(m => m.Task)
-                .ThenInclude(m => m.Type)
-
                 .Include(t => t.Answers);
         }
 
