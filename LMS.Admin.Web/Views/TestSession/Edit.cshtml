@@ -1,10 +1,9 @@
 ﻿@model LMS.Dto.TestSessionDTO
 @{
-    ViewData["Title"] = "Edit";
-}
+    ViewData["Title"] = "Test session";
+    ViewData["Action"] = "Edit";
+    ViewData["Icon"] = "fa-edit";}
 
-<h4>Test sessions</h4>
-<hr />
 <div class="row">
     <div class="col-md-9 col-lg-8 col-xl-6">
         <form asp-action="Edit">
@@ -18,7 +17,6 @@
     <br />
     <a href="#" data-toggle="modal" data-target="#deleteModal" data-arg-id="@Model.Id">Delete</a>
 </div>
-<br />
 
 @Html.Partial("Dialog", new DialogViewModel("deleteModal")
 {

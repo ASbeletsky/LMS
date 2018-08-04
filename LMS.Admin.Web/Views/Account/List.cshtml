@@ -1,7 +1,9 @@
 ﻿@using LMS.Dto;
 @model IEnumerable<UserSummary>
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "Account";
+    ViewData["Action"] = "List";
+    ViewData["Icon"] = "fa-users";
     var roles = ((IEnumerable<SelectListItem>)ViewData["AllRoles"]);
 }
 
@@ -55,7 +57,7 @@ else
 {
     <center>No users found</center>
 }
-<br />
+
 @Html.Partial("Dialog", new DialogViewModel("deleteUser")
 {
     Content = "Are you sure that you want to delete this user?",

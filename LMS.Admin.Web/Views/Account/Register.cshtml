@@ -1,11 +1,12 @@
 ﻿@model LMS.Dto.UserDTO;
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Account";
+    ViewData["Action"] = "Register";
+    ViewData["Icon"] = "fa-user-plus";
     var roles = ((IEnumerable<SelectListItem>)ViewData["AllRoles"]);
 }
 
-<div class="card card-register">
-    <div class="card-header">Register an Account</div>
+<div class="col-md-6">
     <form asp-action="Register">
         @Html.Partial("FormFields", Model)
     </form>
@@ -15,4 +16,3 @@
 <div>
     <a asp-action="List">Go to User List</a>
 </div>
-<br />

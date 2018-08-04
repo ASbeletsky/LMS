@@ -4,7 +4,7 @@
     var roles = ((IEnumerable<SelectListItem>)ViewData["AllRoles"]);
 }
 
-<div class="card-body">
+<div>
     <div asp-validation-summary="ModelOnly"></div>
     <input asp-for="Id" type="hidden" />
     <input asp-for="Examinee.Id" type="hidden" />
@@ -53,9 +53,10 @@
         </div>
         <input type="submit" class="btn btn-primary btn-block" value="Register" />
     </div>
+</div>
 
 <script>
-    function roleSelect(select) { 
+    function roleSelect(select) {
         var selected = $(select).find("option:selected");
         var flag = false;
         selected.each(function () {

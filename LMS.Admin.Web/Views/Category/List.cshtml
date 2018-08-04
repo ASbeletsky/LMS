@@ -2,8 +2,9 @@
 @model IEnumerable<CategoryDTO>
 
 @{
-    ViewData["Title"] = "List";
-}
+    ViewData["Title"] = "Category";
+    ViewData["Action"] = "List";
+    ViewData["Icon"] = "fa-table";}
 
 @if (Model.Any())
 {
@@ -52,7 +53,7 @@ else
 {
     <center>No items found</center>
 }
-<br />
+
 @Html.Partial("Dialog", new DialogViewModel("deleteModal")
 {
     Content = "Are you sure that you want to delete this сategory?",

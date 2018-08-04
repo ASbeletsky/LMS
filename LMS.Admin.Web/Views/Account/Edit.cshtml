@@ -1,18 +1,16 @@
 ﻿@model LMS.Dto.UserDTO;
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Account";
+    ViewData["Action"] = "Edit";
+    ViewData["Icon"] = "fa-user-edit";
 }
 
-<div class="card card-register">
-    <div class="card-header">Edit account</div>
+<div class="col-md-6">
     <form asp-action="Edit">
         @Html.Partial("FormFields", Model)
     </form>
 </div>
-
 <br />
 <div>
     <a asp-action="List">Back to List</a>
 </div>
-<br />
-

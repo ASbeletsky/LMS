@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LMS Admin</title>
+    <title>@ViewData["Action"] - LMS Admin</title>
 
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <environment include="Development">
@@ -74,8 +74,15 @@
                 </li>
                 <li class="breadcrumb-item active">@ViewData["Title"]</li>
             </ol>
-
-            @RenderBody()
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa @ViewData["Icon"]"></i>
+                    <span class="pl-1">@ViewData["Action"]</span>
+                </div>
+                <div class="card-body">
+                    @RenderBody()
+                </div>
+            </div>
         </div>
         <!-- /.container-fluid-->
         <!-- /.content-wrapper-->
