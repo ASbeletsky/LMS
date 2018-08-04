@@ -79,6 +79,7 @@ namespace LMS.Bootstrap.Mapping
                 .ConstructUsing((entity, context) => context.Mapper.Map<Task, TaskDTO>(entity.Task));
 
             CreateMap<TestLevel, TestLevelDTO>()
+                .ForMember(m => m.RequiredTasksCount, m => m.Ignore())
                 .ForMember(m => m.AvailableTasks, m => m.Ignore())
                 .ForMember(m => m.TaskIds, m => m.Ignore());
             CreateMap<TestLevelDTO, TestLevel>()

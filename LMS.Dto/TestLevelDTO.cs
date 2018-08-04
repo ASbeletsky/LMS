@@ -16,6 +16,9 @@ namespace LMS.Dto
         public int TestId { get; set; }
         public int? TestTemplateLevelId { get; set; }
 
+        [Display(Name = "Required tasks count")]
+        public int RequiredTasksCount { get; set; }
+
         [Required(ErrorMessage = "Description must be defined")]
         public string Description { get; set; }
 

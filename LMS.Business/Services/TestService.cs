@@ -139,12 +139,14 @@ namespace LMS.Business.Services
                     {
                         Description = templateLevel.Description,
                         TestTemplateLevelId = templateLevel.Id,
+                        RequiredTasksCount = templateLevel.TasksCount,
                         TestId = test.Id,
                         AvailableTasks = availableTasks.ToList()
                     });
                 }
                 else
                 {
+                    existedLevel.RequiredTasksCount = templateLevel.TasksCount;
                     existedLevel.AvailableTasks = availableTasks.ToList();
                     existedLevel.TemplateModified = existedLevel.Tasks
                         .Select(t => t.Id)
