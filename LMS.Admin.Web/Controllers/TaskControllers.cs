@@ -83,7 +83,7 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Delete(int id)
         {
-            await taskService.MarkAsDeletedByIdAsync(id);
+            await taskService.DeleteByIdAsync(id);
             return RedirectToAction(nameof(List));
         }
 
