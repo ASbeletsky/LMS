@@ -2,7 +2,9 @@
 @model TestSessionResultsDTO
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Test session";
+    ViewData["Action"] = "Details";
+    ViewData["Icon"] = "fa-info";
 }
 
 <div>
@@ -111,7 +113,7 @@
                             <td>
                                 @if (Model.IsEnded)
                                 {
-                                    <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Edit</a>
+                                    <a asp-action="ResultDetails" asp-route-sessionId="@Model.Id" asp-route-id="@exameneeResult.UserId">Details</aDetails
                                 }
                                 else if (Model.IsActive)
                                 {
@@ -125,7 +127,6 @@
         </div>
     </div>
 </div>
-<br />
 <div>
     @if ((!Model.IsActive && !Model.IsEnded)
         || User.IsInRole(LMS.Identity.Roles.Admin))

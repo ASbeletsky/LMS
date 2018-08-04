@@ -1,11 +1,11 @@
 ﻿@model LMS.Dto.TaskDTO
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Task";
+    ViewData["Action"] = "Create";
+    ViewData["Icon"] = "fa-plus";
 }
 
-<h4>Task</h4>
-<hr />
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Create">
@@ -17,5 +17,3 @@
 <div>
     <a asp-action="List">Back to List</a>
 </div>
-<br />
-

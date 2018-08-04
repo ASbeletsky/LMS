@@ -1,11 +1,11 @@
 ﻿@model LMS.Dto.TestTemplateDTO
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Test template";
+    ViewData["Action"] = "Edit";
+    ViewData["Icon"] = "fa-edit";
 }
 
-<h4>Test template</h4>
-<hr />
 <div class="row">
     <div class="col-md-9 col-lg-8 col-xl-6">
         <form asp-action="Edit">
@@ -17,4 +17,3 @@
 <div>
     <a asp-action="List">Back to List</a>
 </div>
-<br />
