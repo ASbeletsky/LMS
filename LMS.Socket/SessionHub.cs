@@ -168,7 +168,7 @@ namespace LMS.Socket
             return user;
         }
 
-        private async void ClearSessionCallback(object state)
+        private void ClearSessionCallback(object state)
         {
             var sessionId = (int)state;
             var removedUsers = new List<SessionUserDTO>(users.Count);
@@ -185,14 +185,6 @@ namespace LMS.Socket
             {
                 timer.Dispose();
             }
-
-            await Task.WhenAll(removedUsers.Select(user =>
-            {
-                user.StartTime = user.StartTime ?? DateTimeOffset.Now;
-                user.Duration = DateTimeOffset.Now - user.StartTime.Value;
-
-                return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), user);
-            }));
         }
     }
 }
