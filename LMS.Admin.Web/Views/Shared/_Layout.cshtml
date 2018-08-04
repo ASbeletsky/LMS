@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             @Html.Partial("Menu", new MenuViewModel()
             {
-                new MenuItemViewModel("Home", "fa-home", "Index", "Home"),
+                new MenuItemViewModel("Test sessions", "fa-calendar", "List", "TestSession"),
                 new MenuItemViewModel("Tasks", "fa-tasks")
                 {
                     new MenuItemViewModel("Create new", "Create", "Task"),
@@ -36,6 +36,17 @@
                     new MenuItemViewModel("Create new", "Create", "TestTemplate"),
                     new MenuItemViewModel("List all", "List", "TestTemplate")
                 },
+                new MenuItemViewModel("Categories", "fa-tasks")
+                {
+                    new MenuItemViewModel("Create new", "Create", "Category"),
+                    new MenuItemViewModel("List all", "List", "Category")
+                },
+                new MenuItemViewModel("Tests", "fa-graduation-cap")
+                {
+                    new MenuItemViewModel("Create new", "Create", "Test"),
+                    new MenuItemViewModel("List all", "List", "Test")
+                },
+                new MenuItemViewModel("Users", "fa fa-users", "List", "Account"),
                 new MenuItemViewModel("Register", "fa-user-plus", "Register", "Account")
             })
             <ul class="navbar-nav sidenav-toggler">

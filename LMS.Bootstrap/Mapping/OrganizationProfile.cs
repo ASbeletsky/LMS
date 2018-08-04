@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using LMS.Dto;
 using LMS.Entities;
+using LMS.AnswerModels;
 
 namespace LMS.Bootstrap.Mapping
 {
@@ -17,7 +18,16 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<TaskTypeDTO, TaskType>();
 
             CreateMap<TaskDTO, Task>();
-            CreateMap<Task, TaskDTO>();
+            CreateMap<Task, TaskDTO>()
+                .ForMember(m => m.MaxScore, m => m.Ignore());
+
+            CreateMap<TaskAnswerOption, TaskAnswerOptionDTO>();
+            CreateMap<TaskAnswerOptionDTO, TaskAnswerOption>();
+
+            CreateMap<TaskAnswer, TaskAnswerDTO>()
+                .ForMember(m => m.Content, m => m.ResolveUsing(a => SerializeControler.DeserializeJSON(a.Content)));
+            CreateMap<TaskAnswerDTO, TaskAnswer>()
+                .ForMember(m => m.Content, m => m.ResolveUsing(a => SerializeControler.SerializeToJSON(a.Content)));
 
             CreateMap<LevelTaskType, TaskTypeDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<TaskType, TaskTypeDTO>(entity.TaskType));
@@ -64,6 +74,65 @@ namespace LMS.Bootstrap.Mapping
                       .Select(c => c.Category.Title)
                       .ToList()))
                 .ForMember(m => m.Levels, m => m.Ignore());
+
+            CreateMap<TestLevelTask, TaskDTO>()
+                .ConstructUsing((entity, context) => context.Mapper.Map<Task, TaskDTO>(entity.Task));
+
+            CreateMap<TestLevel, TestLevelDTO>()
+                .ForMember(m => m.AvailableTasks, m => m.Ignore())
+                .ForMember(m => m.TaskIds, m => m.Ignore());
+            CreateMap<TestLevelDTO, TestLevel>()
+                .ForMember(m => m.Tasks, m => m.ResolveUsing(dto =>
+                    dto.Tasks.Select(t => new TestLevelTask
+                    {
+                        LevelId = dto.Id,
+                        TaskId = t.Id
+                    })));
+
+            CreateMap<Test, TestDTO>();
+            CreateMap<TestDTO, Test>();
+
+            CreateMap<TestSessionTest, TestDTO>()
+                .ConstructUsing((entity, context) => context.Mapper.Map<Test, TestDTO>(entity.Test));
+
+            CreateMap<TestSession, TestSessionDTO>()
+                .ForMember(m => m.TestTemplateId, m => m.ResolveUsing(entity =>
+                    entity.Tests.FirstOrDefault()?.Test?.TestTemplateId ?? 0))
+                .ForMember(m => m.TestIds, m => m.ResolveUsing(entity =>
+                    entity.Tests.Select(t => t.TestId).ToList()))
+                .ForMember(m => m.MemberIds, m => m.ResolveUsing(entity =>
+                    entity.Members.Select(t => t.UserId).ToList()));
+            CreateMap<TestSessionDTO, TestSession>()
+                .ForMember(m => m.Tests, m => m.ResolveUsing(dto =>
+                    dto.TestIds.Select(id => new TestSessionTest
+                    {
+                        SessionId = dto.Id,
+                        TestId = id
+                    })))
+                .ForMember(m => m.Members, m => m.ResolveUsing(dto =>
+                    dto.MemberIds.Select(id => new TestSessionUser
+                    {
+                        SessionId = dto.Id,
+                        UserId = id
+                    })));
+
+
+            CreateMap<UserDTO, User>();
+            CreateMap<User, UserDTO>()
+                .ForMember(m => m.Roles, m => m.Ignore())
+                .ForMember(m=> m.Examinee, m => m.Ignore());
+
+            CreateMap<ExamineeDTO, Examinee>();
+            CreateMap<Examinee, ExamineeDTO>();
+
+            CreateMap<TestSessionUser, ExameneeResultDTO>()
+                .ForMember(m => m.TestTitle, m => m.MapFrom(u => u.Test.Title))
+                .ForMember(m => m.UserName, m => m.MapFrom(u => u.User.Name))
+                .ForMember(m => m.TotalScore, m => m.ResolveUsing(u => u.Answers.Sum(a => a.Score)));
+
+            CreateMap<TestSession, TestSessionResultsDTO>()
+                .ForMember(m => m.ExameneeResults, m => m.MapFrom(u => u.Members))
+                .ForMember(m => m.EndTime, m => m.ResolveUsing(u => u.StartTime + u.Duration));
         }
     }
 }

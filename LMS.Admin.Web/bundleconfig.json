@@ -1,15 +1,15 @@
-﻿// Configure bundling and minification for the project.
-// More info at https://go.microsoft.com/fwlink/?LinkId=808241
-[
+﻿[
   {
     "outputFileName": "wwwroot/js/vendor.js",
     "inputFiles": [
       "node_modules/jquery/dist/jquery.min.js",
+      "node_modules/moment/min/moment.min.js",
       "node_modules/jquery.easing/jquery.easing.min.js",
       "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
       "node_modules/bootstrap-slider/dist/bootstrap-slider.min.js",
       "node_modules/bootstrap-select/dist/js/bootstrap-select.min.js",
-      "node_modules/bootstrap-timepicker/js/bootstrap-timepicker.min.js",
+      "node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js",
+      "node_modules/fullcalendar/dist/fullcalendar.min.js",
       "node_modules/startbootstrap-sb-admin/js/sb-admin.min.js",
       "node_modules/jquery-validation/dist/jquery.validate.min.js",
       "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"
@@ -24,7 +24,8 @@
       "node_modules/bootstrap/dist/css/bootstrap.min.css",
       "node_modules/bootstrap-slider/dist/css/bootstrap-slider.min.css",
       "node_modules/bootstrap-select/dist/css/bootstrap-select.min.css",
-      "node_modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css",
+      "node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.min.css",
+      "node_modules/fullcalendar/dist/fullcalendar.min.css",
       "node_modules/startbootstrap-sb-admin/css/sb-admin.min.css"
     ],
     "minify": {
@@ -43,7 +44,11 @@
   {
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
-      "wwwroot/js/testTemplate.js"
+      "wwwroot/js/helpers.js",
+      "wwwroot/js/validationConfig.js",
+      "wwwroot/js/testTemplate.js",
+      "wwwroot/js/testSession.js",
+      "wwwroot/js/test.js"
     ],
     "minify": {
       "enabled": true,

@@ -8,10 +8,10 @@ namespace LMS.Identity
 {
     public static class RoleInitializer
     {
+        public const string adminUserName = "admin";
+        private const string password = "apriorit";
         public static async Task CreateUsersRoles(IServiceProvider serviceProvider)
         {
-            string adminUserName = "admin";
-            string password = "apriorit";
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
 

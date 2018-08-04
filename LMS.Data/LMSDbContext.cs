@@ -15,12 +15,13 @@ namespace LMS.Data
 
         public DbSet<Category> Categories { get; }
         public DbSet<Task> Tasks { get; }
-        public DbSet<TaskType> TaskTypes { get; }
-        
-        public DbSet<TestTemplate> TestTemplates { get; }
+        public DbSet<TaskType> TaskType { get; }
 
-        public DbSet<AnswerSheet> AnswerSheets { get; }
-        
+        public DbSet<TestTemplate> TestTemplates { get; }
+        public DbSet<Test> Tests { get; }
+        public DbSet<TestSession> TestSessions { get; }
+        public DbSet<TaskAnswer> Answers { get; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString);
@@ -33,6 +34,11 @@ namespace LMS.Data
             modelBuilder.Entity<Category>()
                 .Property(c => c.Title)
                 .IsRequired();
+            modelBuilder.Entity<Category>()
+             .HasOne(t => t.ParentCategory)
+              .WithMany()
+             .HasForeignKey(t => t.ParentCategoryId)
+             .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Task>()
                 .HasKey(t => t.Id);
@@ -40,6 +46,7 @@ namespace LMS.Data
                 .HasOne(t => t.Category)
                 .WithMany()
                 .HasForeignKey(t => t.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .IsRequired();
             modelBuilder.Entity<Task>()
                 .HasOne(t => t.PreviousVersion)
@@ -54,6 +61,12 @@ namespace LMS.Data
                 .HasKey(t => t.Id);
             modelBuilder.Entity<TaskType>()
                 .Property(t => t.Title).IsRequired();
+            modelBuilder.Entity<TaskType>()
+                .HasData(
+                new TaskType() { Title = "open-ended question", Id = (int)TaskTypes.OpenQuestion },
+                new TaskType() { Title = "question with options", Id = (int)TaskTypes.OptionQuestion },
+                new TaskType() { Title = "coding task", Id = (int)TaskTypes.CodingTask },
+                new TaskType() { Title = "modelling task", Id = (int)TaskTypes.ModellingTask });
 
             modelBuilder.Entity<TestTemplate>()
                 .HasKey(t => t.Id);
@@ -64,7 +77,7 @@ namespace LMS.Data
                 .HasMany(t => t.Levels)
                 .WithOne()
                 .HasForeignKey(l => l.TestTemplateId);
-            
+
             modelBuilder.Entity<TestTemplateLevel>()
                 .HasKey(l => l.Id);
             modelBuilder.Entity<TestTemplateLevel>()
@@ -75,16 +88,6 @@ namespace LMS.Data
                 .HasMany(f => f.TaskTypes)
                 .WithOne(t => t.TestTemplateLevel)
                 .HasForeignKey(t => t.TestTemplateLevelId);
-
-            modelBuilder.Entity<AnswerSheet>()
-                .HasKey(t=>t.Id);
-            modelBuilder.Entity<AnswerSheet>()
-                .HasMany(t => t.Answers)
-                .WithOne()
-                .HasForeignKey(t => t.AnswerSheetId);
-
-            modelBuilder.Entity<Answers>()
-                .HasKey(t => t.Id);
 
             modelBuilder.Entity<LevelCategory>()
                 .HasKey(c => new
@@ -106,7 +109,97 @@ namespace LMS.Data
                 .HasOne(c => c.TaskType)
                 .WithMany();
 
-            modelBuilder.Entity<User>();
+            modelBuilder.Entity<Test>()
+                .HasKey(v => v.Id);
+            modelBuilder.Entity<Test>()
+                .Property(v => v.Title)
+                .IsRequired();
+            modelBuilder.Entity<Test>()
+                .HasOne(v => v.TestTemplate)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Test>()
+                .HasMany(v => v.Levels)
+                .WithOne()
+                .HasForeignKey(l => l.TestId);
+
+            modelBuilder.Entity<TestLevel>()
+                .HasKey(l => l.Id);
+            modelBuilder.Entity<TestLevel>()
+                .HasMany(l => l.Tasks)
+                .WithOne(t => t.Level);
+            modelBuilder.Entity<TestLevel>()
+                .HasOne<TestTemplateLevel>()
+                .WithMany()
+                .HasForeignKey(l => l.TestTemplateLevelId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<TestLevelTask>()
+                .HasKey(t => new
+                {
+                    t.LevelId,
+                    t.TaskId
+                });
+            modelBuilder.Entity<TestLevelTask>()
+                .HasOne(t => t.Task)
+                .WithMany();
+
+            modelBuilder.Entity<TestSession>()
+                .HasKey(s => s.Id);
+
+            modelBuilder.Entity<TestSession>()
+                .HasMany(s => s.Members)
+                .WithOne(e => e.Session);
+
+            modelBuilder.Entity<TestSession>()
+                .HasMany(s => s.Tests)
+                .WithOne(e => e.Session);
+
+            modelBuilder.Entity<TestSessionTest>()
+                .HasKey(t => new
+                {
+                    t.SessionId,
+                    t.TestId
+                });
+            modelBuilder.Entity<TestSessionTest>()
+                .HasOne(t => t.Test)
+                .WithMany();
+
+            modelBuilder.Entity<TestSessionUser>()
+                .HasKey(u => new
+                {
+                    u.SessionId,
+                    u.UserId
+                });
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne(u => u.User)
+                .WithMany();
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne(t => t.Test)
+                .WithMany()
+                .HasForeignKey(t => t.TestId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
+            modelBuilder.Entity<User>()
+                .HasOne<Examinee>()
+               .WithOne(e => e.User);
+
+            modelBuilder.Entity<Examinee>()
+                .HasKey(k => k.Id);
+
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasKey(c => c.Id);
+            modelBuilder.Entity<TaskAnswerOption>()
+                .HasOne<Task>()
+                .WithMany(t => t.AnswerOptions)
+                .HasForeignKey(k => k.TaskId);
+
+            modelBuilder.Entity<TaskAnswer>()
+                .HasKey(t => t.Id);
+            modelBuilder.Entity<TaskAnswer>()
+                .HasOne(t => t.TestSessionUser)
+                .WithMany(t => t.Answers);
 
             base.OnModelCreating(modelBuilder);
         }

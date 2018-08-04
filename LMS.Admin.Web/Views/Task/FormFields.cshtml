@@ -1,9 +1,11 @@
 ﻿@using LMS.Dto
-@model AnswerDTO
+@using LMS.Entities
+@model TaskDTO
 
 @{
     var types = ((IEnumerable<SelectListItem>)ViewData["AvailableTypes"]);
     var categories = ((IEnumerable<SelectListItem>)ViewData["AvailableCategories"]);
+    var ASCIICode = 97;
 }
 
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -11,12 +13,12 @@
 <div class="row">
     <div class="form-group col-12 col-md-6">
         <label asp-for="Complexity" class="control-label"></label>
-        <input asp-for="Complexity" class="form-control form-control-range" type="range" min="@AnswerDTO.MinComplexity" max="@AnswerDTO.MaxComplexity" />
+        <input asp-for="Complexity" class="form-control form-control-range" type="range" min="@TaskDTO.MinComplexity" max="@TaskDTO.MaxComplexity" />
         <span asp-validation-for="Complexity" class="text-danger"></span>
     </div>
     <div class="form-group col-12 col-md-6">
         <label asp-for="TypeId" class="control-label"></label>
-        <select asp-for="TypeId" asp-items="@types" class="form-control custom-select"></select>
+        <select onchange="optionCheck(this)" asp-for="TypeId" asp-items="@types" class="form-control custom-select"></select>
         <span asp-validation-for="TypeId" class="text-danger"></span>
     </div>
 </div>
@@ -30,6 +32,80 @@
     <textarea asp-for="Content" class="form-control"></textarea>
     <span asp-validation-for="Content" class="text-danger"></span>
 </div>
+<div id="OptionCount" class="form-group @(Model?.Type?.Id == (int)TaskTypes.OptionQuestion ? "" : "collapse")">
+    <label class="control-label">Options Count</label>
+    <input type="number" min="0" class="form-control" onchange="displayTable(this)" value="@(Model?.AnswerOptions?.Count ?? 0)" />
+</div>
+
 <div class="form-group">
     <input type="submit" value="Save" class="btn btn-default" />
 </div>
+<div id="tableThead" class="form-group @(Model?.Type?.Id == (int)TaskTypes.OptionQuestion ? "" : "collapse")">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Answer</th>
+                <th>Text</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    function optionCheck(select) {
+        var selected = $(select).find("option:selected").val();
+        if (selected ==(@((int)TaskTypes.OptionQuestion))) {
+            $('#OptionCount').collapse('show');
+            $('#tableThead').collapse('show');
+        }
+        else {
+            $('#OptionCount').collapse('hide');
+            $('#tableThead').collapse('hide');
+        }
+    }
+    function displayTable(countinput) {
+        var count = $(countinput).val();
+
+        $("#tableBody").html("");
+        for (var i = 0; i < count; i++) {
+            var tr = $("<tr class='answer'>");
+
+            if (i != 0)
+                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(@(ASCIICode) + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='AnswerOptions[" + i + "].State' id = '" + i + "'>").appendTo(tr);
+            else
+                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(@(ASCIICode) + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='AnswerOptions[" + i + "].State' checked=true id = '" + i + "'>").appendTo(tr);
+            $("<td><textarea required name='AnswerOptions[" + i + "].Content' type='text' class='form-control' ></textarea>").appendTo(tr);
+
+            tr.appendTo("#tableBody");
+        }
+    }
+    function check(select) {
+        var selectedId = $(select).attr("id");
+        $(".answer input[type=radio]").each(function () {
+            var item = $(this);
+            if (item.attr("id") !== selectedId) {
+                item.prop('checked', false);
+            }
+        });
+    }
+</script>
+
+@if (Model?.Type?.Id == (int)TaskTypes.OptionQuestion)
+{
+    <script>
+        var arr = @Html.Raw(Json.Serialize(Model.AnswerOptions));
+
+        window.addEventListener("load", function () {
+            for (var i = 0; i < arr.length; i++) {
+                var tr = $("<tr class='answer'>");
+
+                $("<td align='center' valign='bottom'><label> " + String.fromCharCode(@(ASCIICode) + i) + ")</label>" + "<input type='radio' onchange='check(this)' name='AnswerOptions[" + i + "].State' id = '" + i +  "'" + (arr[i]["isCorrect"] ? "checked" : "") + ">").appendTo(tr);
+                $("<td><textarea required name='AnswerOptions[" + i + "].Content' type='text' class='form-control'>" + arr[i]["content"] + "</textarea>").appendTo(tr);
+
+                tr.appendTo("#tableBody");
+            }
+        });
+        alert(Array[0]["id"]);
+    </script>
+}

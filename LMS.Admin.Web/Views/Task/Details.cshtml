@@ -1,4 +1,5 @@
 ﻿@using LMS.Dto
+@using LMS.Entities
 @model TaskDTO
 
 @{
@@ -27,6 +28,34 @@
             <label class="details-header" asp-for="Content"></label>
             <p>@Model.Content</p>
         </div>
+        @if (Model?.Type?.Id == (int)TaskTypes.OptionQuestion)
+        {
+            <div id="tableThead" class="form-group">
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Answer</th>
+                            <th>Text</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.AnswerOptions.Count; i++)
+                        {
+                            <tr>
+                                <td align='center'>
+                                    <label>@(Convert.ToChar(97 + i)))</label>
+                                    <input disabled type="radio" name=@(Model.AnswerOptions[i].State) id="i" @(Model.AnswerOptions[i].IsCorrect ? "checked" : "") />
+                                </td>
+                                <td>
+                                    <textarea readonly name="@(Model.AnswerOptions[i].Content)" type="text" class="form-control">@(Model.AnswerOptions[i].Content)</textarea>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>
 <br />

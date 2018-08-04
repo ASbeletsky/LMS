@@ -6,9 +6,20 @@
     "bootstrap": "^4.1.1",
     "bootstrap-select": "^1.13.1",
     "bootstrap-slider": "^10.0.2",
+    "del": "^3.0.0",
+    "fullcalendar": "^3.9.0",
+    "gulp": "^3.9.1",
     "jquery": "^3.3.1",
     "jquery-validation": "^1.17.0",
     "jquery-validation-unobtrusive": "^3.2.10",
-    "startbootstrap-sb-admin": "^4.0.0"
+    "startbootstrap-sb-admin": "^4.0.0",
+    "tempusdominus-bootstrap-4": "^5.0.1"
+  },
+  "devDependencies": {
+    "gulp-concat": "^2.6.1",
+    "gulp-cssmin": "^0.2.0",
+    "gulp-htmlmin": "^4.0.0",
+    "gulp-uglify": "^3.0.0",
+    "merge-stream": "^1.0.1"
   }
 }

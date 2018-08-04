@@ -1,14 +1,15 @@
 ﻿var testTemplate = (function () {
-    this.refreshByIdTimers = [];
+    testTemplate = {};
+    testTemplate.refreshByIdTimers = [];
 
-    this.maxScoreChanged = function () {
+    testTemplate.maxScoreChanged = function () {
         var inputs = $(".level input[name$='.MaxScore']");
         var totalMaxScore = inputs
             .map(function () { return parseInt($(this).val()) })
             .toArray()
             .reduce(function (a, b) { return a + b; }, 0);
 
-        var requiredValue =  inputs.data("slider-max");
+        var requiredValue = inputs.data("slider-max");
 
         if (totalMaxScore !== requiredValue) {
             var overflow = totalMaxScore - requiredValue;
@@ -25,27 +26,33 @@
         }
     }
 
-    this.updateScorePerTask = function (index) {
-        this.maxScoreChanged();
+    testTemplate.updateScorePerTask = function (level) {
+        testTemplate.maxScoreChanged();
+
+        var index = level.attr("data-index");
 
         var maxScore = $("input[name='Levels[" + index + "].MaxScore']").val();
-        var count = $("input[name='Levels[" + index + "].Count']").val();
-        $("#levelMaxScoreLabel" + index).text(maxScore);
-        $("#levelCountLabel" + index).text(count);
+        var count = $("input[name='Levels[" + index + "].TasksCount']").val();
+        level.find("label.level-max-score").text(maxScore);
+        level.find("label.level-tasks-count").text(count);
         var scorePerTask = (maxScore / count).toFixed(2);
         $("input[name='Levels[" + index + "].ScorePerTask']").val(scorePerTask);
     }
 
-    this.complexityChanged = function (index) {
-        this.refreshLevel(index);
+    testTemplate.complexityChanged = function (level) {
+        testTemplate.refreshLevel(level);
+
+        var index = level.attr("data-index");
 
         var complexity = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").val().replace(',', '-');
-        $("#levelComplexityLabel" + index).text(complexity);
+        level.find("label.level-complexity").text(complexity);
     }
 
-    this.refreshLevel = function (index) {
-        if (this.refreshByIdTimers[index]) {
-            clearTimeout(this.refreshByIdTimers[index]);
+    testTemplate.refreshLevel = function (level) {
+        var index = level.attr("data-index");
+
+        if (testTemplate.refreshByIdTimers[index]) {
+            clearTimeout(testTemplate.refreshByIdTimers[index]);
         }
         this.refreshByIdTimers[index] = setTimeout(function () {
             var complexityRange = $("input[name='Levels[" + index + "].Filter.ComplexityRange']").attr("value");
@@ -71,11 +78,11 @@
                 }
             });
         },
-            500);
+        500);
     }
 
-    this.removeLevel = function (level) {
-        var index = $(level).attr("data-index");
+    testTemplate.removeLevel = function (level) {
+        var index = level.attr("data-index");
         level.remove();
         while (true) {
             var nextLevel = $(".level[data-index=" + (++index) + "]");
@@ -97,7 +104,20 @@
         }
     }
 
-    this.maxScoreChanged();
+    testTemplate.configureDurationPicker = function (duration) {
+        var date = moment(duration, "HH:mm:ss").toDate();
+        $('#durationPicker').datetimepicker({
+            date: date,
+            format: 'HH:mm'
+        });
+        $("#templateDuration").val(date.getHours() + ":" + date.getMinutes() + ":00");
+        $('#durationPicker').on("change.datetimepicker", function (e) {
+            var date = e.date.toDate();
+            $("#templateDuration").val(date.getHours() + ":" + date.getMinutes() + ":00");
+        });
+    }
 
-    return this;
+    testTemplate.maxScoreChanged();
+
+    return testTemplate;
 })();
