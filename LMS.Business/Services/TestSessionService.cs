@@ -52,6 +52,10 @@ namespace LMS.Business.Services
             }
 
             var exameneeResult = mapper.Map<TestSessionUser, ExameneeResultDTO>(user);
+            if (!exameneeResult.TestId.HasValue)
+            {
+                return exameneeResult;
+            }
 
             var test = unitOfWork.Tests.Get(exameneeResult.TestId.Value);
             var levels = test.Levels;
