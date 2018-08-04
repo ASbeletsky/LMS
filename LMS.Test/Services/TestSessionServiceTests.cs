@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Collections.Generic;
 using Task = System.Threading.Tasks.Task;
 using LMS.Dto;
 using LMS.Entities;
@@ -6,9 +9,6 @@ using LMS.Interfaces;
 using LMS.Business.Services;
 using Moq;
 using Xunit;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System;
 
 namespace LMS.Test.Services
 {
@@ -174,13 +174,15 @@ namespace LMS.Test.Services
                 {
                     Id = 1,
                     Score = 5,
-                    Content = "#5"
+                    Content = "#5",
+                    TestSessionUser = new TestSessionUser()
                 },
                 new TaskAnswer
                 {
                     Id = 3,
                     Score = 9,
-                    Content = "#7"
+                    Content = "#7",
+                    TestSessionUser = new TestSessionUser()
                 }
             };
 
