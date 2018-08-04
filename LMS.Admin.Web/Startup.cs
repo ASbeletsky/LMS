@@ -6,38 +6,49 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using LMS.Socket;
 using LMS.Identity;
 
 namespace LMS.Admin.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            Environment = env;
         }
 
         public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment Environment { get; }
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             services.AddIdentity();
+            if (Environment.IsDevelopment())
+            {
+                services.AddSocket();
+            }
+            else
+            {
+                var origin = Configuration.GetValue<string>("ClientAppOrigin");
+                services.AddSocket(origin);
+            }
 
-          
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
             var container = builder.Build();
-          
+
             return new AutofacServiceProvider(container);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IServiceProvider serviceProvider)
         {
-            if (env.IsDevelopment())
+            if (Environment.IsDevelopment())
             {
-                app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -45,8 +56,10 @@ namespace LMS.Admin.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseSocket();
+
+            app.UseStaticFiles();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

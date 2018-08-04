@@ -6,7 +6,8 @@ var gulp = require("gulp"),
     uglify = require("gulp-uglify"),
     merge = require("merge-stream"),
     del = require("del"),
-    bundleconfig = require("./bundleconfig.json");
+    bundleconfig = require("./bundleconfig.json"),
+    errorHandler = require('gulp-error-handle');
 
 var regex = {
     css: /\.css$/,
@@ -18,6 +19,7 @@ gulp.task("min", ["min:js", "min:css"]);
 gulp.task("min:js", function () {
     var tasks = getBundles(regex.js).map(function (bundle) {
         return gulp.src(bundle.inputFiles, { base: "." })
+            .pipe(errorHandler())
             .pipe(concat(bundle.outputFileName))
             .pipe(uglify())
             .pipe(gulp.dest("."));
@@ -28,6 +30,7 @@ gulp.task("min:js", function () {
 gulp.task("min:css", function () {
     var tasks = getBundles(regex.css).map(function (bundle) {
         return gulp.src(bundle.inputFiles, { base: "." })
+            .pipe(errorHandler())
             .pipe(concat(bundle.outputFileName))
             .pipe(cssmin())
             .pipe(gulp.dest("."));

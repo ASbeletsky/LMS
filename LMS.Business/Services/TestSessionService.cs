@@ -52,6 +52,10 @@ namespace LMS.Business.Services
             }
 
             var exameneeResult = mapper.Map<TestSessionUser, ExameneeResultDTO>(user);
+            if (!exameneeResult.TestId.HasValue)
+            {
+                return exameneeResult;
+            }
 
             var test = unitOfWork.Tests.Get(exameneeResult.TestId.Value);
             var levels = test.Levels;
@@ -138,6 +142,12 @@ namespace LMS.Business.Services
                 unitOfWork.Answers.Update(answer);
             }
             return unitOfWork.SaveAsync();
+        }
+
+        public TestSessionDTO FindByUserId(string userId)
+        {
+            return mapper.Map<TestSession, TestSessionDTO>(unitOfWork
+                .TestSessions.Find(s => s.Members.Any(m => m.UserId == userId)));
         }
     }
 }
