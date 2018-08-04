@@ -123,7 +123,5 @@
 
 @if (Model.LastReviewDate != default(DateTimeOffset))
 {
-    <div class="card-footer small text-muted" style="margin:-1.25rem;margin-top:2rem;">
-        Reviewed by @Model.LastReviewerName at @Model.LastReviewDate.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-    </div>
+    ViewData["CardFooter"] = $"Reviewed by {Model.LastReviewerName} at {Model.LastReviewDate.ToLocalTime():dd.MM.yyyy HH\\:mm}";
 }
