@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using LMS.Dto;
 using LMS.Interfaces;
 using LMS.Business.Services;
@@ -77,17 +78,87 @@ namespace LMS.Test.Services
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
             repositoryMock.Setup(u => u.Get(1)).Returns(taskForDelete);
 
+            var answersRepositoryMock = new Mock<IRepository<Entities.TaskAnswer>>();
+            answersRepositoryMock.Setup(u => u.Find(It.IsAny<Expression<Func<Entities.TaskAnswer, bool>>>()))
+                .Returns(new Entities.TaskAnswer());
+
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => answersRepositoryMock.Object);
 
             var service = new TaskService(unitOfWorkMock.Object, null);
 
-            await service.MarkAsDeletedByIdAsync(1);
+            await service.DeleteByIdAsync(1);
 
             unitOfWorkMock.Verify(m => m.SaveAsync());
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
             Assert.False(taskForDelete.IsActive);
+        }
+
+        [Fact]
+        public async Task Should_Delete_From_Repository_On_Delete()
+        {
+            var taskForDelete = new Entities.Task
+            {
+                Id = 1
+            };
+
+            var repositoryMock = new Mock<IRepository<Entities.Task>>();
+
+            var answersRepositoryMock = new Mock<IRepository<Entities.TaskAnswer>>();
+            answersRepositoryMock.Setup(u => u.Find(It.IsAny<Expression<Func<Entities.TaskAnswer, bool>>>()))
+                .Returns((Entities.TaskAnswer)null);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => answersRepositoryMock.Object);
+
+            var service = new TaskService(unitOfWorkMock.Object, null);
+
+            await service.DeleteByIdAsync(1);
+
+            unitOfWorkMock.Verify(m => m.SaveAsync());
+            repositoryMock.Verify(u => u.Delete(1));
+            repositoryMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task Should_Update_If_Not_Used()
+        {
+            var newTask = new TaskDTO
+            {
+                Id = 1,
+                IsActive = true,
+                CategoryId = 1,
+                TypeId = 1,
+                Complexity = 1,
+                Content = "Sample"
+            };
+
+            var repositoryMock = new Mock<IRepository<Entities.Task>>();
+
+            var answersRepositoryMock = new Mock<IRepository<Entities.TaskAnswer>>();
+            answersRepositoryMock.Setup(u => u.Find(It.IsAny<Expression<Func<Entities.TaskAnswer, bool>>>()))
+                .Returns((Entities.TaskAnswer)null);
+
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => answersRepositoryMock.Object);
+
+            var service = new TaskService(unitOfWorkMock.Object, mapper);
+
+            await service.UpdateAsync(newTask);
+
+            repositoryMock.Verify(m => m.Update(It.Is<Entities.Task>(dto =>
+                dto.IsActive
+                && dto.Content == newTask.Content
+                && dto.Complexity == newTask.Complexity
+                && dto.CategoryId == newTask.CategoryId
+                && dto.TypeId == newTask.TypeId
+                && dto.PreviousVersion == null)));
+            repositoryMock.VerifyNoOtherCalls();
+            unitOfWorkMock.Verify(m => m.SaveAsync());
         }
 
         [Fact]
@@ -106,8 +177,13 @@ namespace LMS.Test.Services
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
             repositoryMock.Setup(u => u.Get(1)).Returns((Entities.Task)null);
 
+            var answersRepositoryMock = new Mock<IRepository<Entities.TaskAnswer>>();
+            answersRepositoryMock.Setup(u => u.Find(It.IsAny<Expression<Func<Entities.TaskAnswer, bool>>>()))
+                .Returns(new Entities.TaskAnswer());
+
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => answersRepositoryMock.Object);
 
             var service = new TaskService(unitOfWorkMock.Object, mapper);
 
@@ -142,8 +218,13 @@ namespace LMS.Test.Services
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
             repositoryMock.Setup(u => u.Get(1)).Returns(oldTask);
 
+            var answersRepositoryMock = new Mock<IRepository<Entities.TaskAnswer>>();
+            answersRepositoryMock.Setup(u => u.Find(It.IsAny<Expression<Func<Entities.TaskAnswer, bool>>>()))
+                .Returns(new Entities.TaskAnswer());
+
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => answersRepositoryMock.Object);
 
             var service = new TaskService(unitOfWorkMock.Object, mapper);
 
@@ -152,6 +233,7 @@ namespace LMS.Test.Services
             repositoryMock.Verify(m => m.Get(1));
             repositoryMock.VerifyNoOtherCalls();
             unitOfWorkMock.VerifyGet(m => m.Tasks);
+            unitOfWorkMock.VerifyGet(m => m.Answers);
             unitOfWorkMock.VerifyNoOtherCalls();
             Assert.True(oldTask.IsActive);
         }
@@ -174,8 +256,13 @@ namespace LMS.Test.Services
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
             repositoryMock.Setup(u => u.Get(1)).Returns(oldTask);
 
+            var answersRepositoryMock = new Mock<IRepository<Entities.TaskAnswer>>();
+            answersRepositoryMock.Setup(u => u.Find(It.IsAny<Expression<Func<Entities.TaskAnswer, bool>>>()))
+                .Returns(new Entities.TaskAnswer());
+
             var unitOfWorkMock = new Mock<IUnitOfWork>();
             unitOfWorkMock.Setup(u => u.Tasks).Returns(() => repositoryMock.Object);
+            unitOfWorkMock.Setup(u => u.Answers).Returns(() => answersRepositoryMock.Object);
 
             var service = new TaskService(unitOfWorkMock.Object, mapper);
 
