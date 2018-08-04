@@ -2,13 +2,14 @@
 @model IEnumerable<TestSessionDTO>
 
 @{
-    ViewData["Title"] = "List";
-}
+    ViewData["Title"] = "Test session";
+    ViewData["Action"] = "Calendar";
+    ViewData["Icon"] = "fa-calendar";}
 
+<div id='calendar' class="col-lg-8"></div>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div id='calendar' class="col-md-8"></div>
 
 @section scripts
     {

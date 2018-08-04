@@ -1,7 +1,9 @@
 ﻿@using LMS.Dto
 @model IEnumerable<TestDTO>
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "Test";
+    ViewData["Action"] = "List";
+    ViewData["Icon"] = "fa-table";
 
     string GetItemClass(TestDTO item)
     {
@@ -13,13 +15,13 @@
     }
 }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 @if (Model.Any())
 {
     <div class="table-responsive">
-        <table class="table table-bordered">
+        <table id="dataTable" class="table table-bordered" cellspacing="0" data-paging="@(Model.Count() > 10 ? "true" : "false")" data-column-defs='[{"searchable":false,"orderable":false,"targets":3}]'>
+            <caption>
+                <a asp-action="Create">Create New</a>
+            </caption>
             <thead>
                 <tr>
                     <th>

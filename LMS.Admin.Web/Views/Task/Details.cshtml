@@ -3,60 +3,58 @@
 @model TaskDTO
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Task";
+    ViewData["Action"] = "Details";
+    ViewData["Icon"] = "fa-info";
 }
 
-<div>
-    <h4>Task</h4>
-    <hr />
-    <div class="col-md-6">
-        <div class="row">
-            <div class="details-block col-12 col-md-6">
-                <label class="details-header" asp-for="Complexity"></label>
-                <label>@Model.Complexity/@TaskDTO.MaxComplexity</label>
-            </div>
-            <div class="details-block col-12 col-md-6">
-                <label class="details-header" asp-for="Type"></label>
-                <label>@Model.Type.Title</label>
-            </div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="details-block col-12 col-md-6">
+            <label class="details-header" asp-for="Complexity"></label>
+            <label>@Model.Complexity/@TaskDTO.MaxComplexity</label>
         </div>
-        <div class="details-block">
-            <label class="details-header" asp-for="Category"></label>
-            <label>@Model.Category.Title</label>
+        <div class="details-block col-12 col-md-6">
+            <label class="details-header" asp-for="Type"></label>
+            <label>@Model.Type.Title</label>
         </div>
-        <div class="details-block">
-            <label class="details-header" asp-for="Content"></label>
-            <p>@Model.Content</p>
-        </div>
-        @if (Model?.Type?.Id == (int)TaskTypes.OptionQuestion)
-        {
-            <div id="tableThead" class="form-group">
-
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Answer</th>
-                            <th>Text</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.AnswerOptions.Count; i++)
-                        {
-                            <tr>
-                                <td align='center'>
-                                    <label>@(Convert.ToChar(97 + i)))</label>
-                                    <input disabled type="radio" name=@(Model.AnswerOptions[i].State) id="i" @(Model.AnswerOptions[i].IsCorrect ? "checked" : "") />
-                                </td>
-                                <td>
-                                    <textarea readonly name="@(Model.AnswerOptions[i].Content)" type="text" class="form-control">@(Model.AnswerOptions[i].Content)</textarea>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        }
     </div>
+    <div class="details-block">
+        <label class="details-header" asp-for="Category"></label>
+        <label>@Model.Category.Title</label>
+    </div>
+    <div class="details-block">
+        <label class="details-header" asp-for="Content"></label>
+        <p>@Model.Content</p>
+    </div>
+    @if (Model?.Type?.Id == (int)TaskTypes.OptionQuestion)
+    {
+        <div id="tableThead" class="form-group">
+
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Answer</th>
+                        <th>Text</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.AnswerOptions.Count; i++)
+                    {
+                        <tr>
+                            <td align='center'>
+                                <label>@(Convert.ToChar(97 + i)))</label>
+                                <input disabled type="radio" name=@(Model.AnswerOptions[i].State) id="i" @(Model.AnswerOptions[i].IsCorrect ? "checked" : "") />
+                            </td>
+                            <td>
+                                <textarea readonly name="@(Model.AnswerOptions[i].Content)" type="text" class="form-control">@(Model.AnswerOptions[i].Content)</textarea>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
 <br />
 <div>
