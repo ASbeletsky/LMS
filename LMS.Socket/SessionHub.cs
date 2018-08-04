@@ -148,7 +148,7 @@ namespace LMS.Socket
             }
             if (!users.TryGetValue(userId, out var user))
             {
-                throw new InvalidOperationException("Attempt to update not started user");
+                throw new InvalidOperationException("Attempt to update not connected user");
             }
             user.TasksState = state;
 
