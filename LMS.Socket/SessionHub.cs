@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +18,9 @@ namespace LMS.Socket
 
         private static readonly ConcurrentDictionary<string, SessionUserDTO> users =
             new ConcurrentDictionary<string, SessionUserDTO>();
+
+        private static readonly ConcurrentDictionary<int, Timer> sessionClearTimers =
+            new ConcurrentDictionary<int, Timer>();
 
         private readonly TestSessionService testSessionService;
 
@@ -56,8 +61,11 @@ namespace LMS.Socket
                 throw new UnauthorizedAccessException();
             }
 
-            var sessionId = testSessionService.FindByUserId(userId)?.Id;
-            if (!sessionId.HasValue)
+            var session = testSessionService.FindByUserId(userId);
+            var dueEndTime = session.EndTime - DateTimeOffset.Now;
+            var sessionId = session?.Id;
+            if (!sessionId.HasValue
+                || dueEndTime <= TimeSpan.Zero)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -76,6 +84,9 @@ namespace LMS.Socket
                     u.SessionId = sessionId.Value;
                     return u;
                 });
+
+            sessionClearTimers.GetOrAdd(user.SessionId, sessId =>
+                new Timer(ClearSessionCallback, sessId, (long)dueEndTime.TotalMilliseconds, Timeout.Infinite));
 
             return Clients.Groups(AdminGroup).SendAsync(nameof(Start), user);
         }
@@ -155,6 +166,33 @@ namespace LMS.Socket
             users.TryUpdate(userId, user, user);
 
             return user;
+        }
+
+        private async void ClearSessionCallback(object state)
+        {
+            var sessionId = (int)state;
+            var removedUsers = new List<SessionUserDTO>(users.Count);
+
+            foreach (var user in users.Values)
+            {
+                if (user.SessionId == sessionId
+                    && users.TryRemove(user.Id, out var removeUser))
+                {
+                    removedUsers.Add(removeUser);
+                }
+            }
+            if (sessionClearTimers.TryRemove(sessionId, out var timer))
+            {
+                timer.Dispose();
+            }
+
+            await Task.WhenAll(removedUsers.Select(user =>
+            {
+                user.StartTime = user.StartTime ?? DateTimeOffset.Now;
+                user.Duration = DateTimeOffset.Now - user.StartTime.Value;
+
+                return Clients.Groups(AdminGroup).SendAsync(nameof(Complete), user);
+            }));
         }
     }
 }
