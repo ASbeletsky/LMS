@@ -57,10 +57,10 @@ namespace LMS.Identity
 
         public async Task LogInUser(string code)
         {
+            
             //Поиск по коду
             //Если код существует, возвращаем User
             //Если нет то выдаём ошибку
-            
         }
 
         public async System.Threading.Tasks.Task<IEnumerable<User>> GetAllAsync(string roleName)

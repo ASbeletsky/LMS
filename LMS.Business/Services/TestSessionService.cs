@@ -72,8 +72,21 @@ namespace LMS.Business.Services
             var testSession = mapper.Map<TestSessionDTO, TestSession>(testSessionDTO);
             foreach(var user in testSession.Members)
             {
-                user.Code = GenerateCode();
-                //Тут ещё нужна проверка на уникальность ключа, точнее скорее всего лучше это делать прям в методе генерацуии
+                var helpCode= GenerateCode();
+                while (true)
+                {
+                    if (testSession.FindCode(helpCode))
+                    {
+                        user.Code = helpCode;
+                        break;
+                    }
+                    else
+                    {
+                        helpCode = GenerateCode();
+                    }
+                } 
+                //Тут ещё нужна проверка на уникальность ключа, точнее скорее всего лучше это делать прям в методе генерации
+                //Делаем поиск по всем ключам и если не находим, значит добавляем новый ключ.
             }
             unitOfWork.TestSessions.Create(testSession);
 
