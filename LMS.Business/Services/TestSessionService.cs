@@ -5,6 +5,7 @@ using Task = System.Threading.Tasks.Task;
 using LMS.Dto;
 using LMS.Entities;
 using LMS.Interfaces;
+using LMS.AnswerModels;
 
 namespace LMS.Business.Services
 {
@@ -61,15 +62,22 @@ namespace LMS.Business.Services
             var levels = test.Levels;
             var templateLevels = unitOfWork.TestTemplates.Get(test.Id).Levels;
 
-            foreach (var task in exameneeResult.Answers.Select(a => a.Task))
+            foreach (var answer in exameneeResult.Answers)
             {
                 var templateLevelId = levels
-                    .FirstOrDefault(l => l.Tasks.Select(t => t.TaskId).Contains(task.Id))?
+                    .FirstOrDefault(l => l.Tasks.Select(t => t.TaskId).Contains(answer.Task.Id))?
                     .TestTemplateLevelId;
                 var templateLevel = templateLevels.FirstOrDefault(l => l.Id == templateLevelId);
                 if (templateLevel != null)
                 {
-                    task.MaxScore = templateLevel.MaxScore / templateLevel.TasksCount;
+                    answer.Task.MaxScore = templateLevel.MaxScore / templateLevel.TasksCount;
+
+                    if (user.LastReviewer == null
+                        && answer.Content is SingleAnswer singleAnswer)
+                    {
+                        var isCorrect = answer.Task.AnswerOptions.FirstOrDefault(opt => opt.Id == singleAnswer.AnswerOptionId)?.IsCorrect ?? false;
+                        answer.Score = isCorrect ? answer.Task.MaxScore : 0;
+                    }
                 }
             }
 
@@ -133,14 +141,18 @@ namespace LMS.Business.Services
                     unitOfWork.TestSessions.GetAll());
         }
 
-        public Task SaveAnswerScoresAsync(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
+        public Task SaveAnswerScoresAsync(ICollection<TaskAnswerScoreDTO> taskAnswerScores, string reviewerId)
         {
             var answers = unitOfWork.Answers.Filter(a => taskAnswerScores.Any(s => s.Id == a.Id));
             foreach (var answer in answers)
             {
                 answer.Score = taskAnswerScores.First(a => a.Id == answer.Id).Score;
                 unitOfWork.Answers.Update(answer);
+
+                answer.TestSessionUser.LastReviewDate = DateTimeOffset.Now;
+                answer.TestSessionUser.LastReviewerId = reviewerId;
             }
+
             return unitOfWork.SaveAsync();
         }
 

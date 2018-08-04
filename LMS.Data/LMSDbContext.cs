@@ -173,13 +173,16 @@ namespace LMS.Data
                 });
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne(u => u.User)
+                .WithMany()
+                .HasForeignKey(u => u.UserId);
+            modelBuilder.Entity<TestSessionUser>()
+                .HasOne(u => u.LastReviewer)
                 .WithMany();
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne(t => t.Test)
                 .WithMany()
                 .HasForeignKey(t => t.TestId)
                 .OnDelete(DeleteBehavior.SetNull);
-
 
             modelBuilder.Entity<User>()
                 .HasOne<Examinee>()

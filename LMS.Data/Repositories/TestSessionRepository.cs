@@ -96,6 +96,8 @@ namespace LMS.Data.Repositories
                 .Include(v => v.Members)
                 .ThenInclude(m => m.User)
                 .Include(v => v.Members)
+                .ThenInclude(m => m.LastReviewer)
+                .Include(v => v.Members)
                 .ThenInclude(m => m.Answers)
                 .ThenInclude(a => a.Task)
                 .ThenInclude(t => t.AnswerOptions)

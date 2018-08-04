@@ -126,6 +126,8 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<Examinee, ExamineeDTO>();
 
             CreateMap<TestSessionUser, ExameneeResultDTO>()
+                .ForMember(m => m.SessionId, m => m.MapFrom(u => u.SessionId))
+                .ForMember(m => m.LastReviewerName, m => m.MapFrom(u => u.LastReviewer.Name))
                 .ForMember(m => m.TestTitle, m => m.MapFrom(u => u.Test.Title))
                 .ForMember(m => m.UserName, m => m.MapFrom(u => u.User.Name))
                 .ForMember(m => m.TotalScore, m => m.ResolveUsing(u => u.Answers.Sum(a => a.Score)));

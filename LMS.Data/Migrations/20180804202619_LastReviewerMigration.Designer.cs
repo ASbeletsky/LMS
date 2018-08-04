@@ -3,14 +3,16 @@ using System;
 using LMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LMS.Data.Migrations
 {
     [DbContext(typeof(LMSDbContext))]
-    partial class LMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180804202619_LastReviewerMigration")]
+    partial class LastReviewerMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

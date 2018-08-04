@@ -200,7 +200,7 @@ namespace LMS.Test.Services
 
             var service = new TestSessionService(unitOfWorkMock.Object, mapper);
 
-            await service.SaveAnswerScoresAsync(updatedScores);
+            await service.SaveAnswerScoresAsync(updatedScores, null);
 
             repositoryMock.Verify(m => m.Update(It.Is<TaskAnswer>(a =>
                 (a.Id == 1 && a.Score == updatedScores[0].Score && a.Content == testList[0].Content)
