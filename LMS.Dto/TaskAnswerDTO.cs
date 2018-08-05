@@ -1,5 +1,4 @@
-﻿using LMS.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Dto
 {
@@ -16,9 +15,6 @@ namespace LMS.Dto
         public object Content { get; set; }
 
         public double Score { get; set; }
-
-        [Display(Name = "User's test session")]
-        public TestSessionUser TestSessionUser { get; set; }
 
         public int TestSessionUserId { get; set; }
     }
