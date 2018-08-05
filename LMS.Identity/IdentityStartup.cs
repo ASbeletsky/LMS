@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using LMS.Entities;
-using LMS.Data;
 
 namespace LMS.Identity
 {
@@ -16,7 +16,7 @@ namespace LMS.Identity
                 opts.Password.RequireUppercase = false;
                 opts.Password.RequiredLength = 3;
             })
-            .AddEntityFrameworkStores<LMSDbContext>()
+            .AddEntityFrameworkStores<DbContext>()
             .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options =>

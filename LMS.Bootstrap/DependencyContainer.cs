@@ -7,6 +7,7 @@ using LMS.Interfaces;
 using LMS.Business.Services;
 using LMS.Identity.Repositories;
 using LMS.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Bootstrap
 {
@@ -24,6 +25,7 @@ namespace LMS.Bootstrap
 
             builder.RegisterType<LMSDbContext>()
                 .AsSelf()
+                .As<DbContext>()
                 .WithParameter(new ResolvedParameter(
                     (pi, ctx) => pi.ParameterType == typeof(string) && pi.Name == "connection",
                     (pi, ctx) => ctx.Resolve<IConfigReader>().GetConnectionString("DefaultConnection")))
