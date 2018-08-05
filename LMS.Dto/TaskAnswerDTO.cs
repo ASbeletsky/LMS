@@ -20,6 +20,7 @@ namespace LMS.Dto
         [Display(Name = "User's test session")]
         public TestSessionUser TestSessionUser { get; set; }
 
-        public int TestSessionUserId { get; set; }
+        public int TestSessionUserSessionId { get; set; }
+        public string TestSessionUserUserId { get; set; }
     }
 }

@@ -11,8 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LMS.Bootstrap\LMS.Bootstrap.csproj" />
     <ProjectReference Include="..\LMS.Business\LMS.Business.csproj" />
     <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
+    <ProjectReference Include="..\LMS.Serialization\LMS.Serialization.csproj" />
   </ItemGroup>
 
 </Project>

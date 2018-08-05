@@ -10,6 +10,8 @@
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/js/UserHub.js"></script>
     <script>
         $(function () {
             var stringArray = @Html.Raw(Json.Serialize(Model.Result));
@@ -22,6 +24,7 @@
         @Html.Hidden("mode", "")
         @Html.Hidden("number", number);
         @Html.Hidden("got", 1);
+        @Html.Hidden("sessionId",0);
         <h3>
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
@@ -42,6 +45,7 @@
         }
     }
     <script>
-        $("textarea").bind('input propertychange',showValues());
+        $("textarea").bind('input propertychange', showValues());
+        document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
 </div>

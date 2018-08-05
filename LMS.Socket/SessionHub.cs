@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using LMS.Dto;
 using LMS.Identity;
+using LMS.Business.Services;
 
 namespace LMS.Socket
 {
@@ -15,11 +16,31 @@ namespace LMS.Socket
 
         private static readonly ConcurrentDictionary<string, SessionUserDTO> users =
             new ConcurrentDictionary<string, SessionUserDTO>();
+        private readonly AnswerService answerService;
+        private readonly TestSessionUserService testSessionUserService;
+
+        public SessionHub(AnswerService _answerService,TestSessionUserService _testSessionUserService)
+        {
+            answerService = _answerService;
+            testSessionUserService = _testSessionUserService;
+        }
 
         [Authorize(Roles = "admin, moderator")]
         public Task Ban(int sessionId, string userId)
         {
             return Clients.User(userId).SendAsync(nameof(Ban), sessionId);
+        }
+
+        public void SendAnswer(int sessionId, int number, string answer)
+        {
+            var answerDto = new TaskAnswerDTO()
+            {
+                TaskId = number,
+                Content = answer,
+                TestSessionUserSessionId = sessionId,
+                TestSessionUserUserId = "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a"
+            };
+            answerService.UpdateAsync(answerDto);
         }
 
         [Authorize]

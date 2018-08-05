@@ -33,7 +33,7 @@ namespace LMS.Admin.Web
             }
             else
             {
-                services.AddSocket("http://localhost:49241");
+                services.AddSocket();
             }
 
             var builder = new ContainerBuilder();

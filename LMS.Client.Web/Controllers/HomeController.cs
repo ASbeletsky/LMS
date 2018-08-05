@@ -109,7 +109,7 @@ namespace LMS.Client.Web.Controllers
             var number = 0;
             return RedirectToAction("ShowProblem", new { number, sessionId });
         }
-        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got,int testId)
+        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got,int testId,int sessionId)
         {
             switch (mode)
             {
@@ -126,7 +126,7 @@ namespace LMS.Client.Web.Controllers
                     number = got;
                     break;
             }
-            return RedirectToAction("ShowProblem", new { number });
+            return RedirectToAction("ShowProblem", new { number,sessionId });
         }
         public List<int> ConvertToIdList(List<string>result)
         {
