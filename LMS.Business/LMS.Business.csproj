@@ -7,7 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
-    <ProjectReference Include="..\LMS.Serialization\LMS.Serialization.csproj" />
   </ItemGroup>
 
   <ItemGroup>

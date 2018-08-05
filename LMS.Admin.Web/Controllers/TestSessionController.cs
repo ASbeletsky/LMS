@@ -73,7 +73,7 @@ namespace LMS.Admin.Web.Controllers
             if (testSession.StartTime < DateTimeOffset.Now
                 && !HttpContext.User.IsInRole(Roles.Admin))
             {
-                return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
+                return RedirectToAction(nameof(AccountController.AccessDenied), "Account");
             }
 
             ViewData["Templates"] = testTemplateService
@@ -102,7 +102,7 @@ namespace LMS.Admin.Web.Controllers
             if (testSession.StartTime < DateTimeOffset.Now
                 && !HttpContext.User.IsInRole(Roles.Admin))
             {
-                return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
+                return RedirectToAction(nameof(AccountController.AccessDenied), "Account");
             }
 
             await testSessionService.UpdateAsync(testSession);
