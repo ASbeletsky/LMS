@@ -85,7 +85,6 @@ namespace LMS.Business.Services
                         helpCode = GenerateCode();
                     }
                 } 
-                //Тут ещё нужна проверка на уникальность ключа, точнее скорее всего лучше это делать прям в методе генерации
                 //Делаем поиск по всем ключам и если не находим, значит добавляем новый ключ.
             }
             unitOfWork.TestSessions.Create(testSession);
