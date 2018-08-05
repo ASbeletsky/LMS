@@ -18,20 +18,18 @@ namespace LMS.Client.Web.Controllers
         private readonly TestSessionService testSessionService;
         private readonly TestService testService;
         private readonly IMapper dtoMapper;
-        private static IDictionary<int, TestClientDTO> TestDictionary;
-        private static Timer timerTestChecker;
+        private static IDictionary<int, TestClientDTO> TestDictionary = new Dictionary<int, TestClientDTO>();
+        private static Timer timerTestChecker = new Timer(new TimerCallback(TestChecker), null, 0, 1000 * 60 * 30);
 
         //private static TestClientDTO DBTest;
         TaskInfo info = new TaskInfo();
 
         public HomeController(TestSessionUserService _testSessionUserService,TestSessionService _testSessionService,TestService _testService, IMapper mapper)
         {
-            TestDictionary = new Dictionary<int, TestClientDTO>();
             testSessionUserService = _testSessionUserService;
             testSessionService = _testSessionService;
             testService = _testService;
             dtoMapper = mapper;
-            timerTestChecker = new Timer(new TimerCallback(TestChecker), null, 0, 1000 * 60 * 30);
         }
 
         public IActionResult Index()
@@ -58,14 +56,19 @@ namespace LMS.Client.Web.Controllers
         //}
         public IActionResult Greetings()
         {
-            var UserSession = testSessionUserService.GetByUserId("65546306-32a5-48ee-8a0a-a384d9ad2063");
+            var UserSession = testSessionUserService.GetByUserId("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
             if (UserSession == null)
             {
                 return View("Baned");
             };
             TestToStore(UserSession);
             var DBTest = dtoMapper.Map<Entities.TestSessionUser, TestSessionUserDTO>(UserSession);
-            
+            var test = TestDictionary[DBTest.TestId.Value];
+            for (int i = 0; i < test.Tasks.Count -1; i++)
+            {
+                DBTest.Categories += test.Tasks[i].Category.Title + ", ";
+            }
+            DBTest.Categories += test.Tasks[test.Tasks.Count - 1].Category.Title+".";
             return View(DBTest);
         }
 
@@ -80,7 +83,7 @@ namespace LMS.Client.Web.Controllers
         //}
         public ActionResult ShowProblem(int number,int sessionId)
         {
-            var UserSession = testSessionUserService.GetById(sessionId, "65546306-32a5-48ee-8a0a-a384d9ad2063");
+            var UserSession = testSessionUserService.GetById(sessionId, "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
             TestToStore(UserSession);
             var test = TestDictionary[UserSession.TestId.Value];
             info.OurTask = test.Tasks[number];
@@ -104,7 +107,7 @@ namespace LMS.Client.Web.Controllers
         public RedirectToActionResult Start(int sessionId)
         {
             var number = 0;
-            return RedirectToAction("ShowProblem", new { number});
+            return RedirectToAction("ShowProblem", new { number, sessionId });
         }
         public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got,int testId)
         {

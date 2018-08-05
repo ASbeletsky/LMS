@@ -15,7 +15,7 @@ namespace LMS.Business.Services
         }
         public TestSessionUser GetById(int sessionId, string userId)
         {
-            var template = unitOfWork.TestSessionUsers.Find(t =>
+            var template = unitOfWork.TestSessionUser.Find(t =>
             t.SessionId == sessionId
             && t.UserId == userId);
             if (template == null)
@@ -39,8 +39,9 @@ namespace LMS.Business.Services
 
         public TestSessionUser GetByUserId(string user)
         {
-            var template = unitOfWork.TestSessionUsers.Filter(t =>
-            (t.UserId == user && t.Session.StartTime.Add(new TimeSpan(0, 15, 0)) >= DateTimeOffset.Now)
+            var template = unitOfWork.TestSessionUser.Filter(t =>
+            (t.UserId == user && t.Session.StartTime.Subtract(new TimeSpan(0, 15, 0)) <= DateTimeOffset.Now
+            && t.Session.StartTime.Add(t.Session.Duration) > DateTimeOffset.Now)
             || (t.UserId == user && t.TestId != null));
             //&& t.Ended == false && t.EndTime > DateTimeOffset.Now
             if (template.Count() == 0)
@@ -81,7 +82,7 @@ namespace LMS.Business.Services
 
         public Task DeleteByIdAsync(int id)
         {
-            unitOfWork.TestSessionUsers.Delete(id);
+            unitOfWork.TestSessionUser.Delete(id);
             return unitOfWork.SaveAsync();
         }
 
@@ -91,7 +92,7 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(testSession));
             }
-            unitOfWork.TestSessionUsers.Update(testSession);
+            unitOfWork.TestSessionUser.Update(testSession);
             return unitOfWork.SaveAsync();
         }
 
@@ -101,13 +102,13 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(testSession));
             }
-            unitOfWork.TestSessionUsers.Create(testSession);
+            unitOfWork.TestSessionUser.Create(testSession);
             return unitOfWork.SaveAsync();
         }
 
         public IEnumerable<TestSessionUser> GetAll()
         {
-            return unitOfWork.TestSessionUsers.GetAll();
+            return unitOfWork.TestSessionUser.GetAll();
         }
 
     }

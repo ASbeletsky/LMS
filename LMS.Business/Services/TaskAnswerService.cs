@@ -16,7 +16,7 @@ namespace LMS.Business.Services
 
         public TaskAnswerDTO GetById(int answerId)
         {
-            var answer = unitOfWork.TaskAnswers.Get(answerId);
+            var answer = unitOfWork.Answers.Get(answerId);
             if (answer == null)
             {
                 throw new EntityNotFoundException<Entities.TaskAnswer>(answerId);
@@ -38,7 +38,7 @@ namespace LMS.Business.Services
 
             var entry = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answer);
 
-            unitOfWork.TaskAnswers.Create(entry);
+            unitOfWork.Answers.Create(entry);
 
             return unitOfWork.SaveAsync();
         }
@@ -52,7 +52,7 @@ namespace LMS.Business.Services
 
             var newAnswer = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answerDto);
 
-            if (unitOfWork.TaskAnswers.Get(newAnswer.Id) is Entities.TaskAnswer oldAnswer)
+            if (unitOfWork.Answers.Get(newAnswer.Id) is Entities.TaskAnswer oldAnswer)
             {
                 if (oldAnswer.TaskId == newAnswer.TaskId
                     && oldAnswer.Score == newAnswer.Score
@@ -63,23 +63,23 @@ namespace LMS.Business.Services
                 if (oldAnswer.TaskId != newAnswer.TaskId
                     || !oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser))
                 {
-                    unitOfWork.TaskAnswers.Create(newAnswer);
+                    unitOfWork.Answers.Create(newAnswer);
                 }
                 else
                 {
-                    unitOfWork.TaskAnswers.Update(oldAnswer);
+                    unitOfWork.Answers.Update(oldAnswer);
                 }
             }
             else
             {
-                unitOfWork.TaskAnswers.Create(newAnswer);
+                unitOfWork.Answers.Create(newAnswer);
             }
             return unitOfWork.SaveAsync();
         }
 
         public IEnumerable<TaskAnswerDTO> GetAll()
         {
-            var answers = unitOfWork.TaskAnswers
+            var answers = unitOfWork.Answers
                 .GetAll();
 
             return mapper.Map<IEnumerable<Entities.TaskAnswer>, IEnumerable<TaskAnswerDTO>>(answers);
