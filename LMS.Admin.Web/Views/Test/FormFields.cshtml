@@ -89,9 +89,9 @@
                             }
                             else
                             {
-                                <p class="text-danger">No available tasks found</p>
+                                <span class="text-danger">No available tasks found</span>
                             }
-                            <select hidden required id="tasks_@index" asp-for="Levels[index].TaskIds">
+                            <select hidden required id="tasks_@index" asp-for="Levels[index].TaskIds" data-required-count="@Model.Levels[index].RequiredTasksCount">
                                 <option value="0">blank</option>
                                 @foreach (var taskId in Model.Levels[index].TaskIds)
                                 {
@@ -101,6 +101,7 @@
                                     }
                                 }
                             </select>
+                            <span id="taskCountDanger_@index" class="text-danger"></span>
                             <span asp-validation-for="Levels[index].TaskIds" class="text-danger"></span>
                         </div>
                     </div>
