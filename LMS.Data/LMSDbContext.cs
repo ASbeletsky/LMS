@@ -21,6 +21,7 @@ namespace LMS.Data
         public DbSet<Test> Tests { get; }
         public DbSet<TestSession> TestSessions { get; }
         public DbSet<TaskAnswer> Answers { get; }
+        public DbSet<TestSessionUser> TestSessionUsers { get; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -171,6 +172,8 @@ namespace LMS.Data
                     u.SessionId,
                     u.UserId
                 });
+            //modelBuilder.Entity<TestSessionUser>()
+            //    .HasAlternateKey(t=>t.Code);
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne(u => u.User)
                 .WithMany()

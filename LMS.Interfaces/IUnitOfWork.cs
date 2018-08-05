@@ -13,6 +13,7 @@ namespace LMS.Interfaces
         IRepository<TestSession> TestSessions { get; }
         IRepository<TaskAnswer> Answers { get; }
         IRepository<Examinee> Examinee { get; }
+        IRepository<TestSessionUser> TestSessionUsers { get; }
 
         System.Threading.Tasks.Task SaveAsync();
     }

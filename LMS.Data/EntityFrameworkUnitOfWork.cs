@@ -19,6 +19,7 @@ namespace LMS.Data
             TestSessions = new TestSessionRepository(context);
             Examinee = new ExamineeRepositoty(context);
             Answers = new AnswerRepository(context);
+            TestSessionUsers = new TestSessionUserRepository(context);
             UserRepository = usersRepo;
         }
 
@@ -30,7 +31,7 @@ namespace LMS.Data
         public IRepository<TestSession> TestSessions { get; }
         public IRepositoryAsync<User> UserRepository { get; }
         public IRepository<Examinee> Examinee { get; }
-
+        public IRepository<TestSessionUser> TestSessionUsers { get; }
         public IRepository<TaskAnswer> Answers { get; }
 
         public System.Threading.Tasks.Task SaveAsync()

@@ -1,7 +1,11 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
-
-<p>Use this area to provide additional information.</p>
+<input type="text" value="setTimer" id="comand">
+<input type="text" value="30000" id="message">
+<input type="button" onclick="send()">
+<input type="button" onclick="send2()" value="AdminCheck">
+    <div id="report"></div>
+<script src="~/lib/signalr/signalr.js"></script>
+<script src="~/js/ReportModel.js"></script>
+<script src="~/js/AdminHub.js"></script>

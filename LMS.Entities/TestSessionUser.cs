@@ -20,6 +20,10 @@ namespace LMS.Entities
         public int? TestId { get; set; }
 
         public TimeSpan Duration { get; set; }
+        public DateTimeOffset StartTime { get; set; }
+        public DateTimeOffset EndTime { get; set; }
+        public bool Baned { get; set; }
+        public string Code { get; set; }
 
         public DateTimeOffset LastReviewDate { get; set; }
         public User LastReviewer { get; set; }

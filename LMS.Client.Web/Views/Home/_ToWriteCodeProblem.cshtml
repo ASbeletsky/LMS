@@ -1,0 +1,84 @@
+﻿@using LMS.Dto;
+@using System.Collections.Generic;
+@model TaskInfo
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<string> result = new List<string>();
+    int number = Model.CurrentQuestionNumber;
+    int kolvo = Model.TaskCount;
+}
+<head>
+    <title>Ace Editor Demo</title>
+    <style type="text/css">
+        #editor {
+            position: absolute;
+            width: 80%;
+            height: 410px;
+        }
+
+        #buttons {
+            top: 510px;
+            width: 80%;
+            height: 80%;
+        }
+    </style>
+</head>
+<body>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/Functions.js"></script>
+    <div class="well" id="well">
+        <div style="height:500px;width:60%">
+            <h3>
+                <strong>Вопрос№ @(number + 1)</strong><br />
+                <strong>@Model.OurTask.Content</strong>
+            </h3>
+            <div id="editor">
+                <script src="~/lib/ace-builds-master/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+                <script>
+                    var editor = ace.edit("editor"); // теперь обращаться к редактору будем через editor
+                    // Далее весь экшон будет проходить тут!
+                    var category = "@Model.Category";
+                    var code = "@Model.Result[0]";
+                    setType(category);
+                    editor.on('change', function () { update() });
+                    //editor.getSession().setMode("ace/mode/csharp");
+                    editor.setValue(code); // задаем
+                    function setType(category) {
+                        if (category == "C#" || category == ".Net") {
+                            editor.getSession().setMode("ace/mode/csharp");
+                        }
+                        else if (category == "JS" || category == "JavaScript") {
+                            editor.getSession().setMode("ace/mode/javascript");
+                        }
+                        else if (category == "Html") {
+                            editor.getSession().setMode("ace/mode/html");
+                        }
+                        else if (category == "C++") {
+                            editor.getSession().setMode("ace/mode/c_cpp");
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+        <div id="buttons">
+            @using (@Html.BeginForm("Navigate", "Home"))
+            {
+                @Html.Hidden("number", number);
+                @Html.Hidden("mode", "");
+                @Html.Hidden("got", 0);
+                <input id="result" name="result" type="hidden" />
+                if (number > 0)
+                {
+                    <button class="btn btn-primary" onclick="changeMode('prev')">Previous</button> }
+                <button class="btn btn-primary" onclick="getResults()"> OK</button>
+                if (number < kolvo - 1)
+                {<button class="btn btn-primary" onclick="changeMode('next')"> Next</button>}
+                <br />
+                for (int i = 0; i < kolvo; i++)
+                {
+                    <button onclick="changeGot('@i')"> @(i + 1)</button>
+                }
+            }
+        </div>
+    </div>
+</body>
