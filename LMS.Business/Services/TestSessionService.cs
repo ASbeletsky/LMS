@@ -116,7 +116,26 @@ namespace LMS.Business.Services
             }
 
             var testSession = mapper.Map<TestSessionDTO, TestSession>(testSessionDTO);
-
+            foreach (var user in testSession.Members)
+            {
+                user.Code = GenerateCode();
+                //Тут ещё нужна проверка на уникальность ключа, точнее скорее всего лучше это делать прям в методе генерацуии
+                var helpCode = GenerateCode();
+                while (true)
+                {
+                    if (testSession.FindCode(helpCode))
+                    {
+                        user.Code = helpCode;
+                        break;
+                    }
+                    else
+                    {
+                        helpCode = GenerateCode();
+                    }
+                }
+                //Тут ещё нужна проверка на уникальность ключа, точнее скорее всего лучше это делать прям в методе генерации
+                //Делаем поиск по всем ключам и если не находим, значит добавляем новый ключ.
+            }
             unitOfWork.TestSessions.Create(testSession);
 
             return unitOfWork.SaveAsync();
@@ -144,6 +163,17 @@ namespace LMS.Business.Services
         {
             return mapper.Map<TestSession, TestSessionDTO>(unitOfWork
                 .TestSessions.Find(s => s.Members.Any(m => m.UserId == userId)));
+        }
+        public string GenerateCode()
+        {
+            string possibleChars = "QWERTYUIOPLKJHGFDSAZXCVBNM0123456789";
+            string output = "";
+            var rnd = new Random();
+            for (int i = 0; i < 8; i++)
+            {
+                output += possibleChars[rnd.Next(0, possibleChars.Length - 1)];
+            }
+            return output;
         }
     }
 }
