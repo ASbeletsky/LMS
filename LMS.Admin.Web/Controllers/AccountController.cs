@@ -75,7 +75,7 @@ namespace LMS.Admin.Web.Controllers
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
-                        return RedirectToAction("TestSession", "List");
+                        return RedirectToAction(nameof(TestSessionController.List), "TestSession");
                 }
                 catch (Exception e)
                 {
