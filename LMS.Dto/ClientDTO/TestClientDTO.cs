@@ -7,7 +7,7 @@ namespace LMS.Dto
     {
         public TestClientDTO()
         {
-            Levels = new List<TestLevelClientDTO>();
+            Tasks = new List<TaskDTO>();
         }
 
         public int Id { get; set; }
@@ -15,8 +15,8 @@ namespace LMS.Dto
         [Required(ErrorMessage = "Title must be defined")]
         public string Title { get; set; }
 
-        public CategoryDTO Category { get; set; }
+        public System.DateTimeOffset EndTime { get; set; }
 
-        public IList<TestLevelClientDTO> Levels { get; set; }
+        public IList<TaskDTO> Tasks { get; set; }
     }
 }

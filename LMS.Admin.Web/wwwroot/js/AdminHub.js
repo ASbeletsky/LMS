@@ -1,5 +1,5 @@
-﻿const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/testHub")
+﻿var adminConnection = new signalR.HubConnectionBuilder()
+    .withUrl("/sessionHub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
 connection.on("Report", (report) => {

@@ -13,8 +13,6 @@ namespace LMS.Dto
 
         public int Id { get; set; }
 
-        public int Complexity { get; set; }
-
         public string Content { get; set; }
 
         public TaskTypeDTO Type { get; set; }

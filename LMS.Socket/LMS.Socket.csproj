@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.CookiePolicy" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LMS.Bootstrap\LMS.Bootstrap.csproj" />
+    <ProjectReference Include="..\LMS.Business\LMS.Business.csproj" />
+    <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
+    <ProjectReference Include="..\LMS.Serialization\LMS.Serialization.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -10,7 +10,7 @@ namespace LMS.Data
 
         public LMSDbContext(string connection)
         {
-            connectionString = connection;            
+            connectionString = connection;
         }
 
         public DbSet<Category> Categories { get; }
@@ -20,8 +20,9 @@ namespace LMS.Data
         public DbSet<TestTemplate> TestTemplates { get; }
         public DbSet<Test> Tests { get; }
         public DbSet<TestSession> TestSessions { get; }
-        public DbSet<TaskAnswer> Answers { get; }
-
+        public DbSet<TestSessionUser> TestSessionUsers { get; }
+        public DbSet<TaskAnswer> TaskAnswers { get; }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseMySql(connectionString);
@@ -88,7 +89,7 @@ namespace LMS.Data
                 .HasMany(f => f.TaskTypes)
                 .WithOne(t => t.TestTemplateLevel)
                 .HasForeignKey(t => t.TestTemplateLevelId);
-
+            
             modelBuilder.Entity<LevelCategory>()
                 .HasKey(c => new
                 {
@@ -169,21 +170,24 @@ namespace LMS.Data
                 .HasKey(u => new
                 {
                     u.SessionId,
-                    u.UserId,
-                    u.Code
+                    u.UserId
                 });
             modelBuilder.Entity<TestSessionUser>()
-                .HasOne<User>()
-                .WithMany()
-                .HasForeignKey(u => u.UserId);
+                .HasOne(u => u.User)
+                .WithMany();
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne(t => t.Test)
                 .WithMany()
-                .HasForeignKey(t=>t.TestId)
+                .HasForeignKey(t => t.TestId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            modelBuilder.Entity<User>();
-         
+
+            modelBuilder.Entity<User>()
+                .HasOne<Examinee>()
+               .WithOne(e => e.User);
+
+            modelBuilder.Entity<Examinee>()
+                .HasKey(k => k.Id);
 
             modelBuilder.Entity<TaskAnswerOption>()
                 .HasKey(c => c.Id);

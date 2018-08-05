@@ -5,18 +5,23 @@ namespace LMS.Entities
 {
     public class TestSessionUser
     {
-        public TestSessionUser() {
+        public TestSessionUser()
+        {
             Answers = new List<TaskAnswer>();
         }
+
         public TestSession Session { get; set; }
         public int SessionId { get; set; }
 
+        public User User { get; set; }
         public string UserId { get; set; }
 
         public Test Test { get; set; }
         public int? TestId { get; set; }
 
-        public TimeSpan Duration { get; set; }
+        //public bool Ended { get; set; }
+        //public DateTimeOffset StartTime { get; set; }
+        //public DateTimeOffset EndTime { get; set; }
 
         public string Code { get; set; }
 

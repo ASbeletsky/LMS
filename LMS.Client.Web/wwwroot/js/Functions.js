@@ -1,5 +1,11 @@
 ﻿function changeMode(mode) {
-    document.querySelector('input[name=mode]').value = mode;
+    var answer = document.getElementById("result").value;
+    var answerSer = OpenAnswerSerializer(answer);
+    var sessionId = sessionStorage.getItem("sessionId");
+    var number = getElementById.getElementById("number").value;
+    SendAnswer(sessionId, number, answer);
+
+    //document.querySelector('input[name=mode]').value = mode;
 }
 function changeGot(got) {
     document.querySelector('input[name=got]').value = got;

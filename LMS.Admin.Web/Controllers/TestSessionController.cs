@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using LMS.Business.Services;
-using LMS.Dto;
-using LMS.Identity;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using LMS.Dto;
+using LMS.Identity;
+using LMS.Business.Services;
 
 namespace LMS.Admin.Web.Controllers
 {
@@ -68,6 +69,12 @@ namespace LMS.Admin.Web.Controllers
         {
             var testSession = testSessionService.GetById(id);
 
+            if (testSession.StartTime < DateTimeOffset.Now
+                && !HttpContext.User.IsInRole(Roles.Admin))
+            {
+                return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
+            }
+
             ViewData["Templates"] = testTemplateService
                 .GetAll()
                 .Select(template => new SelectListItem
@@ -91,6 +98,12 @@ namespace LMS.Admin.Web.Controllers
         [Authorize(Roles = "admin, moderator")]
         public async Task<IActionResult> Edit([FromForm] TestSessionDTO testSession)
         {
+            if (testSession.StartTime < DateTimeOffset.Now
+                && !HttpContext.User.IsInRole(Roles.Admin))
+            {
+                return RedirectToAction(nameof(AccountController.AccessDenied), nameof(AccountController));
+            }
+
             await testSessionService.UpdateAsync(testSession);
 
             return RedirectToAction(nameof(List));
@@ -111,6 +124,28 @@ namespace LMS.Admin.Web.Controllers
         {
             var testSessions = testSessionService.GetAll();
             return View(testSessions);
+        }
+
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var testSessionResult = testSessionService.GetResults(id);
+            return View(testSessionResult);
+        }
+
+        [HttpGet]
+        public IActionResult ResultDetails(int sessionId, string id)
+        {
+            var testSessionResult = testSessionService.GetExameneeResult(sessionId, id);
+            return View(testSessionResult);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveResultDetails(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
+        {
+            await testSessionService.SaveAnswerScoresAsync(taskAnswerScores);
+
+            return RedirectToAction(nameof(List));
         }
     }
 }

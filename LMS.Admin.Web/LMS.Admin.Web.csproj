@@ -23,11 +23,15 @@
     <ProjectReference Include="..\LMS.Identity\LMS.Identity.csproj" />
     <ProjectReference Include="..\LMS.Dto\LMS.Dto.csproj" />
     <ProjectReference Include="..\LMS.Interfaces\LMS.Interfaces.csproj" />
-    <ProjectReference Include="..\LMS.Socet\LMS.Socet.csproj" />
+    <ProjectReference Include="..\LMS.Serialization\LMS.Serialization.csproj" />
+    <ProjectReference Include="..\LMS.Socket\LMS.Socket.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Home\About.cshtml">
+    <Content Update="Views\TestSession\ResultDetails.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\TestSession\Details.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

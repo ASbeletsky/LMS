@@ -28,9 +28,9 @@ namespace LMS.Business.Services
             {
                 throw new ArgumentNullException(nameof(answer));
             }
-            if (string.IsNullOrEmpty(answer.Content))
+            if (answer.Content == null)
             {
-                throw new ArgumentException($"{nameof(Entities.TaskAnswer)}.{nameof(Entities.TaskAnswer.Content)} cannot be null or empty");
+                throw new ArgumentException($"{nameof(Entities.TaskAnswer)}.{nameof(Entities.TaskAnswer.Content)} cannot be null");
             }
 
             var entry = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answer);
@@ -61,7 +61,8 @@ namespace LMS.Business.Services
                 {
                     unitOfWork.Answers.Create(newAnswer);
                 }
-                else {
+                else
+                {
                     unitOfWork.Answers.Update(oldAnswer);
                 }
             }

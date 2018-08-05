@@ -1,9 +1,9 @@
-﻿const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:49244/testHub")
+﻿var adminConnection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:49244/sessionHub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-connection.on("Task", (comand, message) => {
+adminConnection.on("Task", (comand, message) => {
     switch (comand) {
         case "setTimer":
             var time = TimeToArray(message);
@@ -22,23 +22,23 @@ connection.on("Task", (comand, message) => {
     }
 });
 
-connection.on("RestoreAnswer", () => {
+adminConnection.on("RestoreAnswer", () => {
     //code
 });
 
-connection.start().catch(err => console.error(err.toString()));
+adminConnection.start().catch(err => console.error(err.toString()));
 
-if (sessionStorage.getItem("Baned") == "true") {
+if (sessionStorage.getItem("Baned") === "true") {
     document.location.href = "/Home/Baned";
 }
 
 function SendReport() {
     var report = Report(TimerM.StartTime, TimeToString(TimerM.EndTime.diff(moment())));
-    connection.invoke("SendReportToGroups", report)
+    adminConnection.invoke("SendReportToGroups", report)
         .catch(err => console.error(err.toString()));
 }
 
-function SendAnswer(number,answer) {
-    connection.invoke("SendAnswer",number, answer)
+function SendAnswer(sessionId, number, answer) {
+    adminConnection.invoke("SendAnswer", sessionId, number, answer)
         .catch(err => console.error(err.toString()));
 }

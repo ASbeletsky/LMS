@@ -10,11 +10,13 @@
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
-    <script src="~/js/SerializeControler.js"></script>
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script src="~/js/UserHub.js"></script>
     <script>
         $(function () {
             var stringArray = @Html.Raw(Json.Serialize(Model.Result));
-            DeserializeFormFromSession("text", "@number");
+            alert(stringArray);
+            DeserializeForm("text", stringArray);
         });
     </script>
     @using (@Html.BeginForm("Navigate", "Home"))
@@ -22,11 +24,12 @@
         @Html.Hidden("mode", "")
         @Html.Hidden("number", number);
         @Html.Hidden("got", 1);
+        @Html.Hidden("sessionId",0);
         <h3>
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
-        </h3>//
-        <textarea name="result" rows="10" cols="80" onchange="changeText()"></textarea>
+        </h3>
+            @Html.TextArea("result", null, 10, 80, null);
         <br />
 
         if (number > 0)
@@ -38,20 +41,11 @@
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            if (i == @number)
-            {
-                <button disabled onclick="changeGot('@i')"> @(i + 1)</button>
-            }
-            else
-            {
-                <button onclick="changeGot('@i')"> @(i + 1)</button>
-            }
+            <button onclick="changeGot('@i')"> @(i + 1)</button>
         }
     }
     <script>
-        function changeText(){
-            var text = document.querySelector('textarea[name=result]').value;
-            StoreToSession("text","@number", text);
-        }
+        $("textarea").bind('input propertychange', showValues());
+        document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
 </div>

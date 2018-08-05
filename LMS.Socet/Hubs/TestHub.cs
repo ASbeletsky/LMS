@@ -4,11 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LMS.Business.Services;
 
 namespace LMS.Socet
 {
     public class TestHub : Hub
     {
+        public readonly TaskAnswerService taskAnswerService;
+
+        public TestHub(TaskAnswerService _taskAnswerService)
+        {
+            taskAnswerService = _taskAnswerService;
+        }
+
         [Authorize(Roles = "admin, moderator, reviewer")]
         public async Task SendComand(string user, string comand, string message)
         {
@@ -41,7 +49,6 @@ namespace LMS.Socet
 
         public void SendAnswer(int number,string answer)
         {
-            //отправка результата в бд с ид вопроса number
         }
 
         protected void RestoreAnswer()

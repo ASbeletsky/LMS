@@ -1,202 +1,42 @@
-﻿//using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Client.Web.Models;
 using LMS.Entities;
+using System.Threading;
 using System;
 using LMS.Dto;
+using LMS.Business.Services;
+using LMS.Interfaces;
+using LMS.Identity;
 
 namespace LMS.Client.Web.Controllers
 {
     public class HomeController : Controller
     {
-        TestClientDTO test = new TestClientDTO
-        {
-            Id = 1,
-            Title = "Тест для принятия на работу",
-            Category = new CategoryDTO
-            {
-                Id = 1,
-                Title = "Some title",
-                TasksCount = 1
-            },
-            Levels = new List<TestLevelClientDTO>
-            {
-                new TestLevelClientDTO
-                {
-                    Id=1,
-                    TestId=1,
-                    Description="Some description about test",
-                    Tasks = new List<TaskClientDTO>
-                    {
-                        new TaskClientDTO
-                        {
-                            Id=1,
-                            Complexity = 2,
-                            Content = "Будет true or false?",
-                            Type = new TaskTypeDTO { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                            Category = new CategoryDTO
-                            {
-                                Id=1,
-                                Title="Random test",
-                                TasksCount=1
-                            },
-                            AnswerOptions= new List<TaskAnswerOptionDTO>
-                            {
-                                new TaskAnswerOptionDTO
-                                {
-                                    Id=0,
-                                    Content="True",
-                                    IsCorrect = true
-                                },
-                                new TaskAnswerOptionDTO
-                                {
-                                    Id=1,
-                                    Content="False",
-                                    IsCorrect = false
-                                }
-                            }
-                        },
-                        //new TaskClientDTO
-                        //{
-                        //    Id=2,
-                        //    Complexity = 2,
-                        //    Content = "Как дела?",
-                        //    Type = new TaskTypeDTO { Id = 1, Title = "Тест на выбор одного правильного ответа" },
-                        //    Category = new CategoryDTO
-                        //    {
-                        //        Id=1,
-                        //        Title="Random test",
-                        //        TasksCount=1
-                        //    },
-                        //    AnswerOptions= new List<TaskAnswerOptionDTO>
-                        //    {
-                        //        new TaskAnswerOptionDTO
-                        //        {
-                        //            Id=2,
-                        //            Content="Хорошо",
-                        //            IsCorrect = true
-                        //        },
-                        //        new TaskAnswerOptionDTO
-                        //        {
-                        //            Id=3,
-                        //            Content="Плохо",
-                        //            IsCorrect = false
-                        //        },
-                        //        new TaskAnswerOptionDTO
-                        //        {
-                        //            Id=4,
-                        //            Content="ХЗ",
-                        //            IsCorrect = false
-                        //        }
-                        //    }
-                        //},
-                        new TaskClientDTO
-                        {
-                            Id=1,
-                            Complexity = 2,
-                            Content = "Объясните что такое полиморфизм",
-                            Type = new TaskTypeDTO { Id = 2, Title = "Тест на написание открытого ответа" },
-                            Category = new CategoryDTO
-                            {
-                                Id=1,
-                                Title="Random test",
-                                TasksCount=1
-                            }
-                        },
-                        new TaskClientDTO
-                        {
-                            Id=1,
-                            Complexity = 2,
-                            Content = "Напишите Hello World!",
-                            Type = new TaskTypeDTO { Id = 3, Title = "Тест на написание кода" },
-                            Category = new CategoryDTO
-                            {
-                                Id=1,
-                                Title=".Net",
-                                TasksCount=1
-                            }
-                        },
-                        new TaskClientDTO
-                        {
-                            Id=1,
-                            Complexity = 2,
-                            Content = "Схема считывания QR-кода",
-                            Type = new TaskTypeDTO { Id = 4, Title = "Тест на диаграмму" },
-                            Category = new CategoryDTO
-                            {
-                                Id=1,
-                                Title="Random test",
-                                TasksCount=1
-                            }
-                        },
-                    }
-                }
-            }
-        /*{
-                Task = new List<Task>
-                {
-                    new Task
-                    {
-                        Id = 1,
-                        Complexity = 2,
-                        Content = "Будет true or false?",
-                        Type = new TaskType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                        Choices = new List<Task> { new Task { Id = 1, Answer = "True", IsRight = true, Problem = new Task() }, new Task { Id = 2, Answer = "False", IsRight = false, Problem = new Task() } }
-                    },
-                    new Task
-                    {
-                        Id = 3,
-                        Complexity = 2,
-                        Content = "Доброе утро?",
-                        Type = new TaskType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                        Choices = new List<Task> { new Task { Id = 1, Answer = "Да", IsRight = true, Problem = new Task() }, new Task { Id = 2, Answer = "Нет", IsRight = false, Problem = new Task() }, new Task { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Task() } }
-                    },
-                    new Task
-                    {
-                        Id = 2,
-                        Complexity = 2,
-                        Content = "Как дела?",
-                        Type = new TaskType { Id = 1, Title = "Тест на выбор нескольких ответов" },
-                        Choices = new List<Task> { new Task { Id = 1, Answer = "Хорошо", IsRight = true, Problem = new Task() }, new Task { Id = 2, Answer = "Плохо", IsRight = false, Problem = new Task() }, new Task { Id = 3, Answer = "Норм", IsRight = true, Problem = new Task() } }
-                    },
-                    new Task
-                    {
-                        Id = 4,
-                        Complexity = 2,
-                        Content = "Франция чемпион?",
-                        Type = new TaskType { Id = 0, Title = "Тест на выбор одного правильного ответа" },
-                        Choices = new List<Task> { new Task { Id = 1, Answer = "Да", IsRight = true, Problem = new Task() }, new Task { Id = 2, Answer = "Нет", IsRight = false, Problem = new Task() }, new Task { Id = 3, Answer = "ХЗ", IsRight = true, Problem = new Task() } }
-                    },
-                    new Task
-                    {
-                        Id = 5,
-                        Complexity = 2,
-                        Content = "Объясните что такое полиморфизм",
-                        Type = new TaskType { Id = 2, Title = "Тест на написание развёрнутого ответа" },
-                        Choices = new List<Task>()
-                    },
-                    new Task
-                    {
-                        Id = 6,
-                        Complexity = 2,
-                        Content = "Напишите Hello World",
-                        Type = new TaskType { Id = 3, Title = "Тест на написание кода" },
-                        Choices = new List<Task>()
-                    },
-                    new Task
-                    {
-                        Id = 7,
-                        Complexity = 2,
-                        Content = "Покажите схему заказа в Маке",
-                        Type = new TaskType { Id = 4, Title = "Тест на диаграмму" },
-                        Choices = new List<Task>()
-                    }
-                }*/
-            };
+        private readonly TestSessionUserService testSessionUserService;
+        private readonly TestSessionService testSessionService;
+        private readonly TestService testService;
+        private readonly IdentityService identityService;
+        private readonly IMapper dtoMapper;
+        private static IDictionary<int, TestClientDTO> TestDictionary = new Dictionary<int, TestClientDTO>();
+        private static Timer timerTestChecker = new Timer(new TimerCallback(TestChecker), null, 0, 1000 * 60 * 30);
+
+        //private static TestClientDTO DBTest;
         TaskInfo info = new TaskInfo();
+
+        public HomeController(TestSessionUserService _testSessionUserService,
+            TestSessionService _testSessionService,TestService _testService, IMapper mapper,
+            IdentityService _identityService)
+        {
+            testSessionUserService = _testSessionUserService;
+            testSessionService = _testSessionService;
+            testService = _testService;
+            dtoMapper = mapper;
+            identityService = _identityService;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -221,7 +61,21 @@ namespace LMS.Client.Web.Controllers
         //}
         public IActionResult Greetings()
         {
-            return View(test);
+            var UserSession = testSessionUserService.GetByUserId("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
+            identityService.LogInClient("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
+            if (UserSession == null)
+            {
+                return View("Baned");
+            };
+            TestToStore(UserSession);
+            var DBTest = dtoMapper.Map<Entities.TestSessionUser, TestSessionUserDTO>(UserSession);
+            var test = TestDictionary[DBTest.TestId.Value];
+            for (int i = 0; i < test.Tasks.Count -1; i++)
+            {
+                DBTest.Categories += test.Tasks[i].Category.Title + ", ";
+            }
+            DBTest.Categories += test.Tasks[test.Tasks.Count - 1].Category.Title+".";
+            return View(DBTest);
         }
 
         public IActionResult TimerTest()
@@ -229,33 +83,26 @@ namespace LMS.Client.Web.Controllers
             return View();
         }
 
-        public IActionResult TestAjax()
+        //public IActionResult TestAjax()
+        //{
+        //    return View(test);
+        //}
+        public ActionResult ShowProblem(int number,int sessionId)
         {
-            return View(test);
-        }
-        public ActionResult ShowProblem(int number)
-        {
-            var tasks = new List<TaskClientDTO>();
-            foreach (var item in test.Levels)
-            {
-                foreach (var item2 in item.Tasks)
-                {
-                    tasks.Add(item2);
-                }
-            }
-            info.OurTask = tasks[number];
+            var UserSession = testSessionUserService.GetById(sessionId, "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
+            TestToStore(UserSession);
+            var test = TestDictionary[UserSession.TestId.Value];
+            info.OurTask = test.Tasks[number];
             info.CurrentQuestionNumber = number;
-            info.TaskCount = tasks.Count;
-            info.Category = tasks[number].Category.Title;
+            info.TaskCount = test.Tasks.Count;
+            info.Category = test.Tasks[number].Category.Title;
             info.Result = new string[]{""};
             switch (info.OurTask.Type.Id)
             {
-                case 0:
-                    return PartialView("_OneAnswerProblem",info);
                 case 1:
-                    return PartialView("_MultipleAnswerProblem", info);
-                case 2:
                     return PartialView("_ToWriteTextProblem", info);
+                case 2:
+                    return PartialView("_OneAnswerProblem", info);
                 case 3:
                     return PartialView("_ToWriteCodeProblem", info);
                 case 4:
@@ -263,12 +110,12 @@ namespace LMS.Client.Web.Controllers
             }
             return PartialView("_OneAnswerProblem");
         }
-        public RedirectToActionResult Start()
+        public RedirectToActionResult Start(int sessionId)
         {
             var number = 0;
-            return RedirectToAction("ShowProblem", new { number});
+            return RedirectToAction("ShowProblem", new { number, sessionId });
         }
-        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got)
+        public RedirectToActionResult Navigate(int number,string mode, List<string> result,int got,int testId,int sessionId)
         {
             switch (mode)
             {
@@ -285,7 +132,7 @@ namespace LMS.Client.Web.Controllers
                     number = got;
                     break;
             }
-            return RedirectToAction("ShowProblem", new { number });
+            return RedirectToAction("ShowProblem", new { number,sessionId });
         }
         public List<int> ConvertToIdList(List<string>result)
         {
@@ -295,6 +142,40 @@ namespace LMS.Client.Web.Controllers
                 IdList.Add(Convert.ToInt32(s));
             }
             return IdList;
+        }
+
+        public void TestToStore(TestSessionUser UserSession)
+        {
+            if (!TestDictionary.ContainsKey(UserSession.TestId.Value))
+            {
+                var testDto = testService.GetByIdClient(UserSession.TestId.Value);
+                testDto.EndTime = testSessionService.GetById(UserSession.SessionId).EndTime.AddMinutes(15);
+                TestDictionary.Add(UserSession.TestId.Value, testDto);
+            }
+            else
+            {
+                var newTime = testSessionService.GetById(UserSession.SessionId).EndTime.AddMinutes(15);
+                var testId = UserSession.TestId.Value;
+                TestDictionary[testId].EndTime = newTime.AddMinutes(15) > TestDictionary[testId].EndTime ?
+                    newTime : TestDictionary[testId].EndTime;
+            }
+        }
+
+        public static void TestChecker(object obj)
+        {
+            lock (TestDictionary)
+            {
+                if (TestDictionary.Count > 0)
+                {
+                    foreach (var item in TestDictionary)
+                    {
+                        if (item.Value.EndTime <= DateTimeOffset.Now)
+                        {
+                            TestDictionary.Remove(item.Key);
+                        }
+                    }
+                }
+            }
         }
 
     }

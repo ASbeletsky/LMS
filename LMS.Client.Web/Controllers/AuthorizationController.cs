@@ -35,7 +35,7 @@ namespace LMS.Client.Web.Controllers
             {
                 try
                 {
-                    await _identityService.LogInUser(model.Code);
+                    await _identityService.LogInClient(model.Code);
 
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);

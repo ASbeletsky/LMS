@@ -2,7 +2,6 @@
 using Autofac.Core;
 using LMS.Identity;
 using LMS.Data;
-using LMS.Data.Migrations;
 using LMS.Interfaces;
 using LMS.Business.Services;
 using LMS.Identity.Repositories;
@@ -46,6 +45,9 @@ namespace LMS.Bootstrap
             builder.RegisterType<IdentityService>()
                 .AsSelf()
                 .InstancePerLifetimeScope();
+            builder.RegisterType<ExamineeService>()
+              .AsSelf()
+              .InstancePerLifetimeScope();
 
             //builder.RegisterBuildCallback(container =>
             //    DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));

@@ -8,7 +8,7 @@ namespace LMS.Dto
 {
     public class TaskInfo
     {
-        public TaskClientDTO OurTask { get; set; }
+        public TaskDTO OurTask { get; set; }
         public int CurrentQuestionNumber { get; set; }
         public int TaskCount { get; set; }
         public string Category { get; set; }

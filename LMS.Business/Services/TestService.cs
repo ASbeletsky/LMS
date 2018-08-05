@@ -29,6 +29,16 @@ namespace LMS.Business.Services
             return mapper.Map<Test, TestDTO>(test);
         }
 
+        public TestClientDTO GetByIdClient(int id)
+        {
+            var test = unitOfWork.Tests.Get(id);
+            if (test == null)
+            {
+                throw new EntityNotFoundException<Test>(id);
+            }
+            return mapper.Map<Test, TestClientDTO>(test);
+        }
+
         public Task DeleteByIdAsync(int id)
         {
             unitOfWork.Tests.Delete(id);
