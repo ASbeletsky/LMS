@@ -27,9 +27,9 @@ namespace LMS.Business.Services
 
         //public TestSessionUser GetByCode(string Code)
         //{
-        //    var template = unitOfWork.TestSessionUsers.Filter(t => 
-        //(t.CodeId == Code && t.Session.StartTime.Add(new TimeSpan(0, 15, 0)) >= DateTimeOffset.Now)
-        //    || (t.CodeId == Code && t.TestId != null && t.Ended == false && t.EndTime > DateTimeOffset.Now));
+        //    var template = unitOfWork.TestSessionUser.Filter(t =>
+        //(t.Code == Code && t.Session.StartTime.Add(new TimeSpan(0, 15, 0)) >= DateTimeOffset.Now)
+        //    || (t.Code == Code && t.TestId != null && t.Ended == false && t.EndTime > DateTimeOffset.Now));
         //    if (template.Count() == 0)
         //    {
         //        return null;

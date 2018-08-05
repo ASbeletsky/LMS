@@ -9,6 +9,7 @@ using System;
 using LMS.Dto;
 using LMS.Business.Services;
 using LMS.Interfaces;
+using LMS.Identity;
 
 namespace LMS.Client.Web.Controllers
 {
@@ -17,6 +18,7 @@ namespace LMS.Client.Web.Controllers
         private readonly TestSessionUserService testSessionUserService;
         private readonly TestSessionService testSessionService;
         private readonly TestService testService;
+        private readonly IdentityService identityService;
         private readonly IMapper dtoMapper;
         private static IDictionary<int, TestClientDTO> TestDictionary = new Dictionary<int, TestClientDTO>();
         private static Timer timerTestChecker = new Timer(new TimerCallback(TestChecker), null, 0, 1000 * 60 * 30);
@@ -24,12 +26,15 @@ namespace LMS.Client.Web.Controllers
         //private static TestClientDTO DBTest;
         TaskInfo info = new TaskInfo();
 
-        public HomeController(TestSessionUserService _testSessionUserService,TestSessionService _testSessionService,TestService _testService, IMapper mapper)
+        public HomeController(TestSessionUserService _testSessionUserService,
+            TestSessionService _testSessionService,TestService _testService, IMapper mapper,
+            IdentityService _identityService)
         {
             testSessionUserService = _testSessionUserService;
             testSessionService = _testSessionService;
             testService = _testService;
             dtoMapper = mapper;
+            identityService = _identityService;
         }
 
         public IActionResult Index()
@@ -57,6 +62,7 @@ namespace LMS.Client.Web.Controllers
         public IActionResult Greetings()
         {
             var UserSession = testSessionUserService.GetByUserId("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
+            identityService.LogInClient("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
             if (UserSession == null)
             {
                 return View("Baned");
