@@ -11,6 +11,8 @@ namespace LMS.Dto
             Answers = new List<TaskAnswerDTO>();
         }
 
+        public int SessionId { get; set; }
+
         [Display(Name = "Test title")]
         public string TestTitle { get; set; }
 
@@ -24,6 +26,9 @@ namespace LMS.Dto
         public double TotalScore { get; set; }
 
         public int? TestId { get; set; }
+
+        public DateTimeOffset LastReviewDate { get; set; }
+        public string LastReviewerName { get; set; }
 
         public IList<TaskAnswerDTO> Answers { get; set; }
     }

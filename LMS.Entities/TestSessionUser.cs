@@ -21,15 +21,15 @@ namespace LMS.Entities
 
         public TimeSpan Duration { get; set; }
 
+        public DateTimeOffset LastReviewDate { get; set; }
+        public User LastReviewer { get; set; }
+        public string LastReviewerId { get; set; }
+
         public ICollection<TaskAnswer> Answers { get; set; }
 
         public bool Equals(TestSessionUser other)
         {
-            if (this.SessionId == other.SessionId && this.UserId == other.UserId)
-            {
-                return true;
-            }
-            return false;
+            return SessionId == other.SessionId && UserId == other.UserId;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -143,7 +144,8 @@ namespace LMS.Admin.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveResultDetails(ICollection<TaskAnswerScoreDTO> taskAnswerScores)
         {
-            await testSessionService.SaveAnswerScoresAsync(taskAnswerScores);
+            var reviewerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await testSessionService.SaveAnswerScoresAsync(taskAnswerScores, reviewerId);
 
             return RedirectToAction(nameof(List));
         }

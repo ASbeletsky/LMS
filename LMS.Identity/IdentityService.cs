@@ -35,7 +35,7 @@ namespace LMS.Identity
 
         public async Task<IEnumerable<UserSummary>> GetAllUsers()
         {
-            var result = _userManager.Users.Select(u => new UserSummary { UserName = u.UserName, Id = u.Id, Name = $"{u.FirstName} {u.LastName}" }).ToArray();
+            var result = _userManager.Users.Select(u => new UserSummary { UserName = u.UserName, Id = u.Id, Name = u.Name }).ToArray();
             var roles = await Task.WhenAll(result.Select(u => GetUserRoles(u.Id)));
           
             for(int i =0;i < result.Length;i++)   

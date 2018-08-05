@@ -120,3 +120,8 @@
 <div>
     <a asp-action="List">Back to List</a>
 </div>
+
+@if (Model.LastReviewDate != default(DateTimeOffset))
+{
+    ViewData["CardFooter"] = $"Reviewed by {Model.LastReviewerName} at {Model.LastReviewDate.ToLocalTime():dd.MM.yyyy HH\\:mm}";
+}

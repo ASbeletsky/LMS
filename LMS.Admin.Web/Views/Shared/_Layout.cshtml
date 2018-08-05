@@ -82,6 +82,12 @@
                 <div class="card-body">
                     @RenderBody()
                 </div>
+                @if (ViewData.TryGetValue("CardFooter", out var footer))
+                {
+                    <div class="card-footer small text-muted">
+                        @footer
+                    </div>
+                }
             </div>
         </div>
         <!-- /.container-fluid-->
