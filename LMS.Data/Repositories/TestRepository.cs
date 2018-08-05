@@ -90,7 +90,18 @@ namespace LMS.Data.Repositories
                 .Include(v => v.TestTemplate)
                 .Include(v => v.Levels)
                 .ThenInclude(l => l.Tasks)
-                .ThenInclude(t => t.Task);
+                .ThenInclude(t => t.Task)
+                .ThenInclude(t=>t.Type)
+                .Include(v => v.TestTemplate)
+                .Include(v => v.Levels)
+                .ThenInclude(l => l.Tasks)
+                .ThenInclude(t => t.Task)
+                .ThenInclude(t => t.Category)
+                .Include(v => v.TestTemplate)
+                .Include(v => v.Levels)
+                .ThenInclude(l => l.Tasks)
+                .ThenInclude(t => t.Task)
+                .ThenInclude(t => t.AnswerOptions);
         }
     }
 }

@@ -37,6 +37,18 @@ namespace LMS.Business.Services
         //    return ChoseTest(template.First());
         //}
 
+        public TestSessionUser GetByCode(string Code)
+        {
+            var template = unitOfWork.TestSessionUsers.Filter(t =>
+        (t.Code == Code));
+            if (template.Count() == 0)
+            {
+                return null;
+            }
+            return ChoseTest(template.First());
+        }
+
+
         public TestSessionUser GetByUserId(string user)
         {
             var template = unitOfWork.TestSessionUsers.Filter(t =>

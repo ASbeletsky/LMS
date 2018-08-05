@@ -19,5 +19,21 @@ namespace LMS.Entities
 
         public ICollection<TestSessionTest> Tests { get; set; }
         public ICollection<TestSessionUser> Members { get; set; }
+        public string UserByCode(string code)
+        {
+            foreach(var user in Members)
+            {
+                if (user.Code == code) return user.UserId;
+            }
+            return null;
+        }
+        public bool FindCode(string code)
+        {
+            foreach (var user in Members)
+            {
+                if (user.Code == code) return true;
+            }
+            return false;
+        }
     }
 }

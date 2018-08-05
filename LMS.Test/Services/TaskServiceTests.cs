@@ -164,7 +164,7 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Create_If_New_On_Update()
         {
-            var newTask = new TaskDTO
+            var newTask = new TaskClientDTO
             {
                 Id = 1,
                 IsActive = true,
@@ -213,7 +213,7 @@ namespace LMS.Test.Services
                 Complexity = 1,
                 Content = "Sample"
             };
-            var notUpdatedDtoItem = mapper.Map<Entities.Task, TaskDTO>(oldTask);
+            var notUpdatedDtoItem = mapper.Map<Entities.Task, TaskClientDTO>(oldTask);
 
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
             repositoryMock.Setup(u => u.Get(1)).Returns(oldTask);
@@ -250,7 +250,7 @@ namespace LMS.Test.Services
                 Complexity = 1,
                 Content = "Sample"
             };
-            var updatedDtoItem = mapper.Map<Entities.Task, TaskDTO>(oldTask);
+            var updatedDtoItem = mapper.Map<Entities.Task, TaskClientDTO>(oldTask);
             updatedDtoItem.Content = "Sample 2";
 
             var repositoryMock = new Mock<IRepository<Entities.Task>>();
@@ -286,7 +286,7 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Create_New_Item()
         {
-            var newTask = new TaskDTO
+            var newTask = new TaskClientDTO
             {
                 Id = 1,
                 IsActive = true,
@@ -317,7 +317,7 @@ namespace LMS.Test.Services
         [Fact]
         public async Task Should_Create_New_And_Get_Item()
         {
-            var newTask = new TaskDTO
+            var newTask = new TaskClientDTO
             {
                 Id = 1,
                 IsActive = true,

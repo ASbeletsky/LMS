@@ -23,10 +23,26 @@ namespace LMS.Socket
             new ConcurrentDictionary<int, Timer>();
 
         private readonly TestSessionService testSessionService;
+        private readonly AnswerService answerService;
+        private readonly TestSessionUserService testSessionUserService;
 
-        public SessionHub(TestSessionService sessionService)
+        public SessionHub(TestSessionService sessionService, AnswerService _answerService, TestSessionUserService _testSessionUserService)
         {
             testSessionService = sessionService;
+            answerService = _answerService;
+            testSessionUserService = _testSessionUserService;
+        }
+
+        public void SendAnswer(int sessionId, int number, string answer)
+        {
+            var answerDto = new TaskAnswerDTO()
+            {
+                TaskId = number,
+                Content = answer,
+                TestSessionUserSessionId = sessionId,
+                TestSessionUserUserId = "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a"
+            };
+            answerService.UpdateAsync(answerDto);
         }
 
         [Authorize(Roles = "admin, moderator")]

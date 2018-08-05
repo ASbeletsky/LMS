@@ -93,6 +93,14 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<Test, TestDTO>();
             CreateMap<TestDTO, Test>();
 
+            CreateMap<Test, TestClientDTO>()
+                .ForMember(m => m.Tasks, m => m.ResolveUsing(l => l.Levels
+                     .SelectMany(t => t.Tasks)
+                     .Select(n => n.Task)
+                     .ToList()))
+                .ForMember(m=>m.EndTime,m=>m.Ignore());
+            CreateMap<TestClientDTO, Test>();
+
             CreateMap<TestSessionTest, TestDTO>()
                 .ConstructUsing((entity, context) => context.Mapper.Map<Test, TestDTO>(entity.Test));
 

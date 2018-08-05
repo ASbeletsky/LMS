@@ -1,0 +1,66 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using LMS.Identity;
+using LMS.Client.Web.Models;
+using LMS.Business.Services;
+
+namespace LMS.Client.Web.Controllers
+{
+    public class AuthorizationController : Controller
+    {
+        private readonly IdentityService _identityService;
+        private readonly TestSessionUserService _testSessionUserService;
+
+        public AuthorizationController(IdentityService identityService, TestSessionUserService testSessionUserService)
+        {
+            _identityService = identityService;
+            _testSessionUserService = testSessionUserService;
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied(Uri ReturnUrl)
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult Login(string returnUrl = null)
+        {
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var UserSession = _testSessionUserService.GetByCode(model.Code);
+                    await _identityService.LogInClient(UserSession.UserId);
+
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                        return Redirect(model.ReturnUrl);
+                    else
+                        return RedirectToAction("Greetings", "Home", new {UserSession.UserId});
+                }
+                catch (Exception e)
+                {
+                    ModelState.AddModelError(string.Empty, e.Message);
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _identityService.Logout();
+            return RedirectToAction("Login", "Authorization");
+        }
+    }
+}

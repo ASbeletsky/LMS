@@ -5,13 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
     <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="Models\**" />
+    <None Remove="Migrations\**" />
     <None Remove="Models\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20180731084345_AddTaskAnswer.cs" />
   </ItemGroup>
 
   <ItemGroup>

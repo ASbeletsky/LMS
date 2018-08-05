@@ -104,5 +104,10 @@ namespace LMS.Data.Repositories
                 .Include(v => v.Tests)
                 .ThenInclude(l => l.Test);
         }
+
+        public void FindByCode(string code)
+        {
+            var ite2 = dbContext.Set<TestSessionUser>().Find(code);
+        }
     }
 }

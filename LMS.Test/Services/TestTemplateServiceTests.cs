@@ -42,7 +42,7 @@ namespace LMS.Test.Services
             unitOfWorkMock.Setup(u => u.TestTemplates).Returns(() => repositoryMock.Object);
 
             var taskServiceMock = new Mock<ITaskSource>();
-            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskDTO[3]);
+            taskServiceMock.Setup(m => m.Filter(It.IsAny<TaskFilterDTO>())).Returns(new TaskClientDTO[3]);
 
             var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
 
@@ -230,9 +230,9 @@ namespace LMS.Test.Services
 
             var taskServiceMock = new Mock<ITaskSource>();
             taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MinComplexity == 5 && l.TaskTypeIds.Any())))
-                .Returns(new TaskDTO[3]);
+                .Returns(new TaskClientDTO[3]);
             taskServiceMock.Setup(m => m.Filter(It.Is<TaskFilterDTO>(l => l.MaxComplexity == 3 && l.TaskTypeIds.Any())))
-                .Returns(new TaskDTO[2]);
+                .Returns(new TaskClientDTO[2]);
 
             var service = new TestTemplateService(taskServiceMock.Object, unitOfWorkMock.Object, mapper);
             var testTemplateListItems = service.GetTemplatesSummary().ToArray();

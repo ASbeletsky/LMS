@@ -21,7 +21,7 @@ namespace LMS.Identity
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.AccessDeniedPath = "/Account/Login";
+                options.AccessDeniedPath = "/Authorization/Login";
             });
         }
     }
