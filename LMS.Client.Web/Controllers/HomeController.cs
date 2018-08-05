@@ -59,10 +59,9 @@ namespace LMS.Client.Web.Controllers
         //{
         //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         //}
-        public IActionResult Greetings()
+        public IActionResult Greetings(string userId)
         {
-            var UserSession = testSessionUserService.GetByUserId("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
-            identityService.LogInClient("2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
+            var UserSession = testSessionUserService.GetByUserId(userId);
             if (UserSession == null)
             {
                 return View("Baned");

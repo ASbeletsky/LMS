@@ -25,17 +25,16 @@ namespace LMS.Business.Services
             return template;
         }
 
-        //public TestSessionUser GetByCode(string Code)
-        //{
-        //    var template = unitOfWork.TestSessionUser.Filter(t =>
-        //(t.Code == Code && t.Session.StartTime.Add(new TimeSpan(0, 15, 0)) >= DateTimeOffset.Now)
-        //    || (t.Code == Code && t.TestId != null && t.Ended == false && t.EndTime > DateTimeOffset.Now));
-        //    if (template.Count() == 0)
-        //    {
-        //        return null;
-        //    }
-        //    return ChoseTest(template.First());
-        //}
+        public TestSessionUser GetByCode(string Code)
+        {
+            var template = unitOfWork.TestSessionUser.Filter(t =>
+        (t.Code == Code));
+            if (template.Count() == 0)
+            {
+                return null;
+            }
+            return ChoseTest(template.First());
+        }
 
         public TestSessionUser GetByUserId(string user)
         {

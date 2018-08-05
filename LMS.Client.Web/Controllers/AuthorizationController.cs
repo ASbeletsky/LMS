@@ -5,15 +5,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LMS.Identity;
 using LMS.Client.Web.Models;
+using LMS.Business.Services;
+
 namespace LMS.Client.Web.Controllers
 {
     public class AuthorizationController : Controller
     {
-        private IdentityService _identityService;
+        private readonly IdentityService _identityService;
+        private readonly TestSessionUserService _testSessionUserService;
 
-        public AuthorizationController(IdentityService identityService)
+        public AuthorizationController(IdentityService identityService, TestSessionUserService testSessionUserService)
         {
             _identityService = identityService;
+            _testSessionUserService = testSessionUserService;
         }
 
         [HttpGet]
@@ -35,12 +39,13 @@ namespace LMS.Client.Web.Controllers
             {
                 try
                 {
-                    await _identityService.LogInClient(model.Code);
+                    var UserSession = _testSessionUserService.GetByCode(model.Code);
+                    await _identityService.LogInClient(UserSession.UserId);
 
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                         return Redirect(model.ReturnUrl);
                     else
-                        return RedirectToAction("Greetings", "Home");
+                        return RedirectToAction("Greetings", "Home", new {UserSession.UserId});
                 }
                 catch (Exception e)
                 {
