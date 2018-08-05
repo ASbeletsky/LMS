@@ -1,7 +1,7 @@
 ﻿using LMS.Dto;
 using System.Collections.Generic;
 
-namespace LMS.Interfaces
+namespace LMS.Business.Services
 {
     public interface ITaskSource
     {
