@@ -172,8 +172,8 @@ namespace LMS.Data
                     u.SessionId,
                     u.UserId
                 });
-            //modelBuilder.Entity<TestSessionUser>()
-            //    .HasAlternateKey(t=>t.Code);
+            modelBuilder.Entity<TestSessionUser>()
+                .HasAlternateKey(t => t.Code);
             modelBuilder.Entity<TestSessionUser>()
                 .HasOne(u => u.User)
                 .WithMany()

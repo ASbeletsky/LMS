@@ -13,6 +13,8 @@ namespace LMS.Dto
 
         public int SessionId { get; set; }
 
+        public string Code { get; set; }
+
         [Display(Name = "Test title")]
         public string TestTitle { get; set; }
 
