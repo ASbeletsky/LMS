@@ -16,10 +16,9 @@
         $(function () {
 
             var stringArray = @Html.Raw(Json.Serialize(Model.Result));
-            alert(stringArray);
             DeserializeForm("check", stringArray);
         });
-        
+
     </script>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
@@ -36,6 +35,7 @@
             <span>@Task.Content</span>
             <br />
         }
+        <br />
         if (number > 0)
         {
             <button class="btn btn-primary" onclick="changeMode('prev')">Previous</button> }
@@ -45,7 +45,14 @@
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="changeGot('@i')"> @(i + 1)</button>
+            if (i == @number)
+            {
+                <button disabled onclick="changeGot('@i')"> @(i + 1)</button>
+            }
+            else
+            {
+                <button onclick="changeGot('@i')"> @(i + 1)</button>
+            }
         }
     }
     <script>

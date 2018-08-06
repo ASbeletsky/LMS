@@ -35,7 +35,7 @@ namespace LMS.Client.Web.Controllers
                         {
                             Id=1,
                             Complexity = 2,
-                            Content = "Будет true or false?",
+                            Content = "Поддерживает ли C# множественное наследование классов",
                             Type = new TaskTypeDTO { Id = 0, Title = "Тест на выбор одного правильного ответа" },
                             Category = new CategoryDTO
                             {
@@ -49,50 +49,56 @@ namespace LMS.Client.Web.Controllers
                                 {
                                     Id=0,
                                     Content="True",
-                                    IsCorrect = true
+                                    IsCorrect = false
                                 },
                                 new TaskAnswerOptionDTO
                                 {
                                     Id=1,
                                     Content="False",
-                                    IsCorrect = false
+                                    IsCorrect = true
                                 }
                             }
                         },
-                        //new TaskClientDTO
-                        //{
-                        //    Id=2,
-                        //    Complexity = 2,
-                        //    Content = "Как дела?",
-                        //    Type = new TaskTypeDTO { Id = 1, Title = "Тест на выбор одного правильного ответа" },
-                        //    Category = new CategoryDTO
-                        //    {
-                        //        Id=1,
-                        //        Title="Random test",
-                        //        TasksCount=1
-                        //    },
-                        //    AnswerOptions= new List<TaskAnswerOptionDTO>
-                        //    {
-                        //        new TaskAnswerOptionDTO
-                        //        {
-                        //            Id=2,
-                        //            Content="Хорошо",
-                        //            IsCorrect = true
-                        //        },
-                        //        new TaskAnswerOptionDTO
-                        //        {
-                        //            Id=3,
-                        //            Content="Плохо",
-                        //            IsCorrect = false
-                        //        },
-                        //        new TaskAnswerOptionDTO
-                        //        {
-                        //            Id=4,
-                        //            Content="ХЗ",
-                        //            IsCorrect = false
-                        //        }
-                        //    }
-                        //},
+                        new TaskClientDTO
+                        {
+                            Id=2,
+                            Complexity = 2,
+                            Content = "Правильное определение массива",
+                            Type = new TaskTypeDTO { Id = 1, Title = "Тест на выбор нескольких правильных ответов" },
+                            Category = new CategoryDTO
+                            {
+                                Id=1,
+                                Title="Random test",
+                                TasksCount=1
+                            },
+                            AnswerOptions= new List<TaskAnswerOptionDTO>
+                            {
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=2,
+                                    Content="int[] nums = new int[4];",
+                                    IsCorrect = true
+                                },
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=3,
+                                    Content="int array[] = new int[];",
+                                    IsCorrect = false
+                                },
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=4,
+                                    Content="int[] array={3,4,5}",
+                                    IsCorrect = false
+                                },
+                                new TaskAnswerOptionDTO
+                                {
+                                    Id=4,
+                                    Content="int[] nums = new[] { 1, 2, 3, 5 }",
+                                    IsCorrect = false
+                                },                               
+                            }
+                        },
                         new TaskClientDTO
                         {
                             Id=1,
@@ -115,7 +121,7 @@ namespace LMS.Client.Web.Controllers
                             Category = new CategoryDTO
                             {
                                 Id=1,
-                                Title=".Net",
+                                Title="Html",
                                 TasksCount=1
                             }
                         },
@@ -123,7 +129,7 @@ namespace LMS.Client.Web.Controllers
                         {
                             Id=1,
                             Complexity = 2,
-                            Content = "Схема считывания QR-кода",
+                            Content = "Схема получения информации о продукте используя QR-код",
                             Type = new TaskTypeDTO { Id = 4, Title = "Тест на диаграмму" },
                             Category = new CategoryDTO
                             {
