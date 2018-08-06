@@ -81,7 +81,7 @@ namespace LMS.Identity
 
         public async Task LogInClient(string userId)
         {
-            User user = await _userManager.FindByNameAsync(userId);
+            User user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 throw new Exception("The username provided is incorrect.");
             await _signInManager.SignInAsync(user,false,null);

@@ -144,6 +144,10 @@ namespace LMS.Bootstrap.Mapping
             CreateMap<TestSession, TestSessionResultsDTO>()
                 .ForMember(m => m.ExameneeResults, m => m.MapFrom(u => u.Members))
                 .ForMember(m => m.EndTime, m => m.ResolveUsing(u => u.StartTime + u.Duration));
+
+            CreateMap<TestSessionUser, TestSessionUserDTO>()
+                .ForMember(m => m.Categories, m => m.Ignore());
+            CreateMap<TestSessionUserDTO, TestSessionUser>();
         }
     }
 }

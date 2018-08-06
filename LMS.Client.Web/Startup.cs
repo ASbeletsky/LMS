@@ -24,6 +24,11 @@ namespace LMS.Client.Web
         {
             services.AddMvc();
             services.AddIdentity();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Authorization/Login";
+                //options.AccessDeniedPath = "/Account/AccessDenied";
+            });
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterAssemblyModules(Assembly.Load("LMS.Bootstrap"));
@@ -51,7 +56,7 @@ namespace LMS.Client.Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Greetings}/{id?}");
             });
         }
     }

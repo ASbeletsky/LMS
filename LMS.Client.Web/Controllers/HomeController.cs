@@ -10,11 +10,15 @@ using LMS.Dto;
 using LMS.Business.Services;
 using LMS.Interfaces;
 using LMS.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace LMS.Client.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        private readonly IdentityService _identityService;
         private readonly TestSessionUserService testSessionUserService;
         private readonly TestSessionService testSessionService;
         private readonly TestService testService;
@@ -28,13 +32,13 @@ namespace LMS.Client.Web.Controllers
 
         public HomeController(TestSessionUserService _testSessionUserService,
             TestSessionService _testSessionService,TestService _testService, IMapper mapper,
-            IdentityService _identityService)
+            IdentityService _identityService,IdentityService identityService)
         {
             testSessionUserService = _testSessionUserService;
             testSessionService = _testSessionService;
             testService = _testService;
             dtoMapper = mapper;
-            identityService = _identityService;
+            _identityService = identityService;
         }
 
         public IActionResult Index()
@@ -59,9 +63,10 @@ namespace LMS.Client.Web.Controllers
         //{
         //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         //}
-        public IActionResult Greetings(string userId)
+        public IActionResult Greetings()
         {
-            var UserSession = testSessionUserService.GetByUserId(userId);
+            var user = HttpContext.User.Claims.First().Value;
+            var UserSession = testSessionUserService.GetByUserId(user);
             if (UserSession == null)
             {
                 return View("Baned");
