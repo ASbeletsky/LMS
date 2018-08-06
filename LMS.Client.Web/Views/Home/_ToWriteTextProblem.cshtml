@@ -19,7 +19,7 @@
             DeserializeFormFromSession("text", "@number");
         });
     </script>
-    <button onclick="changeMode('res')">New Ok </button>
+    <button onclick="SendAnsw()">New Ok </button>
     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")

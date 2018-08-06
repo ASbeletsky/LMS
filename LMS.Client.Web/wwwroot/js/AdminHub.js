@@ -1,9 +1,9 @@
 ﻿const connection = new signalR.HubConnectionBuilder()
-    .withUrl('http://localhost:49244/testHub')
+    .withUrl('http://localhost:50839/testHub')
     .configureLogging(signalR.LogLevel.Information)
     .build();
 
-//var connection = $.conection("http://localhost:49244/testHub");
+//var connection = $.conection("http://localhost:50839/testHub");
 //conection.start("{ withCredentials: false }");
 connection.on("Report", (report) => {
     document.getElementById("report").innerHTML = UnserReport(report);

@@ -1,5 +1,5 @@
 ﻿var adminConnection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:49244/sessionHub")
+    .withUrl("http://localhost:50839/sessionHub")
     .configureLogging(signalR.LogLevel.Information)
     .build();
 

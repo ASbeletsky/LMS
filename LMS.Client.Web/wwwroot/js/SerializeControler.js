@@ -26,5 +26,7 @@ function isInteger(number) {
 
 function Deserializer(str) {
     var answer = JSON.parse(str);
-    return answer;
+    for (var key in answer) {
+        return answer[key];
+    }
 }
