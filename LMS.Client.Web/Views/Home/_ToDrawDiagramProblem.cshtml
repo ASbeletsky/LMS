@@ -54,6 +54,8 @@
             @Html.Hidden("number", number);
             @Html.Hidden("mode", "");
             @Html.Hidden("got", 0);
+            @Html.Hidden("sessionId", 0);
+            <script>document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");</script>
             <input id="result" name="result" type="hidden" />
             if (number > 0)
             {

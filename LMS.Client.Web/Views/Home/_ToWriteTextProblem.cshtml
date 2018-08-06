@@ -26,6 +26,7 @@
         @Html.Hidden("number", number);
         @Html.Hidden("got", 1);
         @Html.Hidden("sessionId", 0);
+        <script>document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");</script>
         <h3>
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
@@ -57,6 +58,5 @@
             var text = document.querySelector('textarea[name=result]').value;
             StoreToSession("text","@number", text);
         }
-        document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
 </div>

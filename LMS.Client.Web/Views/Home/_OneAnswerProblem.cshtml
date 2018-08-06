@@ -10,17 +10,18 @@
 }
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/Functions.js"></script>
     <script src="~/js/SerializeControler.js"></script>
+    <script src="~/js/Functions.js"></script>
     <script>
         document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
-     @using (@Html.BeginForm("Navigate", "Home"))
+    @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
         @Html.Hidden("number", number);
         @Html.Hidden("got", 1);
-        <input type="hidden" id="sessionId" value="">
+        @Html.Hidden("sessionId", 0);
+        <script>document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");</script>
         <h3>
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
