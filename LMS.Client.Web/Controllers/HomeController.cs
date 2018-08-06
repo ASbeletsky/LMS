@@ -93,7 +93,7 @@ namespace LMS.Client.Web.Controllers
         //}
         public ActionResult ShowProblem(int number,int sessionId)
         {
-            var UserSession = testSessionUserService.GetById(sessionId, "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a");
+            var UserSession = testSessionUserService.GetById(sessionId, HttpContext.User.Claims.First().Value);
             TestToStore(UserSession);
             var test = TestDictionary[UserSession.TestId.Value];
             info.OurTask = test.Tasks[number];
