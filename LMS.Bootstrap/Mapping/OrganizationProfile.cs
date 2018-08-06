@@ -146,7 +146,8 @@ namespace LMS.Bootstrap.Mapping
                 .ForMember(m => m.EndTime, m => m.ResolveUsing(u => u.StartTime + u.Duration));
 
             CreateMap<TestSessionUser, TestSessionUserDTO>()
-                .ForMember(m => m.Categories, m => m.Ignore());
+                .ForMember(m => m.Categories, m => m.ResolveUsing(t=>t.Test.Levels.SelectMany(s=>s.Tasks).Select(n=>n.Task).Select(c=>c.Category).Distinct()))
+                .ForMember(m=>m.Category,t=>t.Ignore());
             CreateMap<TestSessionUserDTO, TestSessionUser>();
         }
     }

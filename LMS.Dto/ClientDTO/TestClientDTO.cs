@@ -18,5 +18,7 @@ namespace LMS.Dto
         public System.DateTimeOffset EndTime { get; set; }
 
         public IList<TaskDTO> Tasks { get; set; }
+
+        public IList<CategoryDTO> Categories { get; set; }
     }
 }

@@ -74,11 +74,11 @@ namespace LMS.Client.Web.Controllers
             TestToStore(UserSession);
             var DBTest = dtoMapper.Map<Entities.TestSessionUser, TestSessionUserDTO>(UserSession);
             var test = TestDictionary[DBTest.TestId.Value];
-            for (int i = 0; i < test.Tasks.Count -1; i++)
+            for (int i = 0; i < DBTest.Categories.Count - 1; i++)
             {
-                DBTest.Categories += test.Tasks[i].Category.Title + ", ";
+                DBTest.Category += DBTest.Categories.ToList()[i].Title + ", ";
             }
-            DBTest.Categories += test.Tasks[test.Tasks.Count - 1].Category.Title+".";
+            DBTest.Category += test.Tasks[test.Tasks.Count - 1].Category.Title + ".";
             return View(DBTest);
         }
 

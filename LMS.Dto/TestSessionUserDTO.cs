@@ -17,7 +17,8 @@ namespace LMS.Dto
 
         public TestDTO Test { get; set; }
         public int? TestId { get; set; }
-        public string Categories {get;set;}
+        public string Category { get; set; }
+        public IList<CategoryDTO> Categories {get;set;}
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
         public bool Baned { get; set; }
