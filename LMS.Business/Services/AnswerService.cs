@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using LMS.Dto;
 using LMS.Interfaces;
+using LMS.Entities;
 
 namespace LMS.Business.Services
 {
@@ -12,7 +12,7 @@ namespace LMS.Business.Services
         public AnswerService(IUnitOfWork unitOfWork, IMapper mapper) : base(unitOfWork, mapper)
         {
         }
-        public TaskAnswerDTO GetById(int answerId)
+        public TaskAnswer GetById(int answerId)
         {
             var answer = unitOfWork.Answers.Get(answerId);
             if (answer == null)
@@ -20,9 +20,9 @@ namespace LMS.Business.Services
                 throw new EntityNotFoundException<Entities.TaskAnswer>(answerId);
             }
 
-            return mapper.Map<Entities.TaskAnswer, TaskAnswerDTO>(answer);
+            return answer;
         }
-        public Task CreateAsync(TaskAnswerDTO answer)
+        public System.Threading.Tasks.Task CreateAsync(TaskAnswer answer)
         {
             if (answer == null)
             {
@@ -33,20 +33,20 @@ namespace LMS.Business.Services
                 throw new ArgumentException($"{nameof(Entities.TaskAnswer)}.{nameof(Entities.TaskAnswer.Content)} cannot be null");
             }
 
-            var entry = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answer);
+            var entry = answer;
 
             unitOfWork.Answers.Create(entry);
 
             return unitOfWork.SaveAsync();
         }
-        public Task UpdateAsync(TaskAnswerDTO answerDto)
+        public System.Threading.Tasks.Task UpdateAsync(TaskAnswer answerDto)
         {
             if (answerDto == null)
             {
                 throw new ArgumentNullException(nameof(answerDto));
             }
 
-            var newAnswer = mapper.Map<TaskAnswerDTO, Entities.TaskAnswer>(answerDto);
+            var newAnswer = answerDto;
 
             if (unitOfWork.Answers.Get(newAnswer.Id) is Entities.TaskAnswer oldAnswer)
             {
@@ -54,7 +54,7 @@ namespace LMS.Business.Services
                     && oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser)
                     && oldAnswer.Content == newAnswer.Content)
                 {
-                    return Task.CompletedTask;
+                    return System.Threading.Tasks.Task.CompletedTask;
                 }
                 if (oldAnswer.TaskId != newAnswer.TaskId
                     || !oldAnswer.TestSessionUser.Equals(newAnswer.TestSessionUser))
@@ -73,11 +73,11 @@ namespace LMS.Business.Services
             return unitOfWork.SaveAsync();
         }
 
-        public IEnumerable<TaskAnswerDTO> GetAll()
+        public IEnumerable<TaskAnswer> GetAll()
         {
             var answers = unitOfWork.Answers
                 .GetAll();
-            return mapper.Map<IEnumerable<Entities.TaskAnswer>, IEnumerable<TaskAnswerDTO>>(answers);
+            return answers;
         }
     }
 }

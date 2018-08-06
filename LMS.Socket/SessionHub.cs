@@ -35,12 +35,11 @@ namespace LMS.Socket
 
         public void SendAnswer(int sessionId, int number, string answer)
         {
-            var answerDto = new TaskAnswerDTO()
+            var answerDto = new LMS.Entities.TaskAnswer()
             {
                 TaskId = number,
                 Content = answer,
-                TestSessionUserSessionId = sessionId,
-                TestSessionUserUserId = "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a"
+                TestSessionUser = testSessionUserService.GetById(sessionId, "2524e8bf-67a7-4693-ba3b-8c1a7d60fb2a")
             };
             answerService.UpdateAsync(answerDto);
         }
