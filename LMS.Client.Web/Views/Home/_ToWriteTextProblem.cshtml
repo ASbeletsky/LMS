@@ -16,8 +16,7 @@
     <script>
         $(function () {
             var stringArray = @Html.Raw(Json.Serialize(Model.Result));
-            alert(stringArray);
-            DeserializeForm("text", stringArray);
+            DeserializeFormFromSession("text", "@number");
         });
     </script>
     <button onclick="changeMode('res')">New Ok </button>
@@ -31,7 +30,7 @@
             <strong>Вопрос№ @(number + 1)</strong><br />
             <strong>@Model.OurTask.Content</strong>
         </h3>
-        @Html.TextArea("result", null, 10, 80, null);
+        <textarea name="result" rows="10" cols="80" onchange="changeText()"></textarea>
         <br />
 
         if (number > 0)
@@ -43,11 +42,21 @@
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="changeGot('@i')"> @(i + 1)</button>
+            if (i == @number)
+            {
+                <button disabled onclick="changeGot('@i')"> @(i + 1)</button>
+            }
+            else
+            {
+                <button onclick="changeGot('@i')"> @(i + 1)</button>
+            }
         }
     }
     <script>
-        $("textarea").bind('input propertychange', showValues());
+        function changeText(){
+            var text = document.querySelector('textarea[name=result]').value;
+            StoreToSession("text","@number", text);
+        }
         document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
 </div>

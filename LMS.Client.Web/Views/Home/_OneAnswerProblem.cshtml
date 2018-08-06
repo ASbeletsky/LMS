@@ -11,11 +11,11 @@
 <div class="well">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/Functions.js"></script>
+    <script src="~/js/SerializeControler.js"></script>
     <script>
-        DeserializeForm("radio", @res);
         document.getElementById("sessionId").value = sessionStorage.getItem("sessionId");
     </script>
-    @using (@Html.BeginForm("Navigate", "Home"))
+     @using (@Html.BeginForm("Navigate", "Home"))
     {
         @Html.Hidden("mode", "")
         @Html.Hidden("number", number);
@@ -27,7 +27,7 @@
         </h3>
         @foreach (var Task in Model.OurTask.AnswerOptions)
         {
-            @Html.RadioButton("result", @Task.Id)
+            <input type="radio" name="result" value="@Task.Id" id="@Task.Id" onchange="changeRadio()">
             <span>@Task.Content</span>
             <br />
         }
@@ -40,11 +40,24 @@
         <br />
         for (int i = 0; i < kolvo; i++)
         {
-            <button onclick="changeGot('@i')"> @(i + 1)</button>
+            if (i == @number)
+            {
+                <button disabled onclick="changeGot('@i')"> @(i + 1)</button>
+            }
+            else
+            {
+                <button onclick="changeGot('@i')"> @(i + 1)</button>
+            }
         }
     }
     <script>
-        $(":radio").click(showValues);
-        showValues();
+        var res = DeserializeFormFromSession("radio", "@number");
+        function changeRadio() {
+            var rad = document.querySelectorAll('input[type=radio][name=result]');
+            for (var i = 0, len = rad.length; i < len; i++) {
+                if(rad[i].checked) StoreToSession("radio","@number",rad[i].value);
+            }
+        }
+        StoreToSession("radio","@number",res);
     </script>
 </div>
