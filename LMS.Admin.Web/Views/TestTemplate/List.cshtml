@@ -1,0 +1,93 @@
+﻿@using LMS.Dto
+@model IEnumerable<TestTemplateSummary>
+
+@{
+    ViewData["Title"] = "Test template";
+    ViewData["Action"] = "List";
+    ViewData["Icon"] = "fa-table";
+}
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table id="dataTable" class="table table-bordered" cellspacing="0" data-paging="@(Model.Count() > 10 ? "true" : "false")" data-column-defs='[{"searchable":false,"orderable":false,"targets":4}]'>
+            <caption>
+                <a asp-action="Create">Create New</a>
+            </caption>
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Categories)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.AvgComplexity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Levels)
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <label>@item.Title</label>
+                        </td>
+                        <td>
+                            <label>@string.Join(",", item.Categories)</label>
+                        </td>
+                        <td>
+                            <label>@($"{item.AvgComplexity:#.##}/{@TaskDTO.MaxComplexity}")</label>
+                        </td>
+                        <td>
+                            <ol>
+                                @foreach (var taskTemplate in item.Levels)
+                                {
+                                    <li>
+                                        @if (taskTemplate.CountPerTypes.Count == 1
+                                   && taskTemplate.CountPerTypes.First() is var singleTask)
+                                        {
+                                            @(singleTask.Type + " - " + singleTask.Count)
+                                        }
+                                        else
+                                        {
+                                            <ul>
+                                                @foreach (var task in taskTemplate.CountPerTypes)
+                                                {
+                                                    <li>
+                                                        @(task.Type + " - " + task.Count)
+                                                    </li>
+                                                }
+                                            </ul>
+                                        }
+                                    </li>
+                                }
+                            </ol>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteModal" data-arg-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <center>No items found</center>
+}
+@Html.Partial("Dialog", new DialogViewModel("deleteModal")
+{
+    Content = "Are you sure that you want to delete this template?",
+    SubmitAction = "Delete",
+    SubmitController = "TestTemplate"
+})

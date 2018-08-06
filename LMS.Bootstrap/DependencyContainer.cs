@@ -1,8 +1,13 @@
 ﻿using Autofac;
 using Autofac.Core;
+using LMS.Identity;
 using LMS.Data;
 using LMS.Data.Migrations;
 using LMS.Interfaces;
+using LMS.Business.Services;
+using LMS.Identity.Repositories;
+using LMS.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Bootstrap
 {
@@ -10,18 +15,42 @@ namespace LMS.Bootstrap
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AspNetConfigReader>().As<IConfigReader>()
+            builder.RegisterType<Mapping.AutoMapper>()
+                .As<IMapper>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<AspNetConfigReader>()
+                .As<IConfigReader>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<LMSDbContext>()
                 .AsSelf()
+                .As<DbContext>()
                 .WithParameter(new ResolvedParameter(
                     (pi, ctx) => pi.ParameterType == typeof(string) && pi.Name == "connection",
                     (pi, ctx) => ctx.Resolve<IConfigReader>().GetConnectionString("DefaultConnection")))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<EntityFrameworkUnitOfWork>().As<IUnitOfWork>()
+            builder.RegisterType<UserRepository>()
+                .As<IRepositoryAsync<User>>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<EntityFrameworkUnitOfWork>()
+                .As<IUnitOfWork>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(typeof(BaseService).Assembly)
+                .Where(type => type.Name.EndsWith("Service"))
+                .AsSelf()
+                .AsImplementedInterfaces()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<IdentityService>()
+                .AsSelf()
+                .InstancePerLifetimeScope();
+            builder.RegisterType<ExamineeService>()
+              .AsSelf()
+              .InstancePerLifetimeScope();
 
             builder.RegisterBuildCallback(container =>
                 DbContextDesignFactory.RegisterDbContextFactory(() => container.Resolve<LMSDbContext>()));

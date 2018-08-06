@@ -1,0 +1,116 @@
+﻿@using LMS.Dto;
+@model TestDTO
+@{
+    var templates = ((IEnumerable<SelectListItem>)ViewData["Templates"]);
+}
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input asp-for="Id" type="hidden" />
+<div class="form-group">
+    <label asp-for="Title" class="control-label"></label>
+    <input asp-for="Title" class="form-control" type="text" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="TestTemplateId" class="control-label"></label>
+    <br />
+    <select onchange="test.selectTemplate(this)" required asp-for="TestTemplateId" asp-items="templates" data-live-search="true" class="form-control selectpicker"></select>
+    <span asp-validation-for="TestTemplateId" class="text-danger"></span>
+</div>
+<br />
+<div id="levels">
+    <h5>
+        Levels
+    </h5>
+    <hr />
+    <div id="levelsAccordion">
+        @for (var index = 0; index < Model.Levels.Count; index++)
+        {
+            <input asp-for="Levels[index].Id" type="hidden" />
+            <input asp-for="Levels[index].TestTemplateLevelId" type="hidden" />
+            <input asp-for="Levels[index].TemplateDeleted" type="hidden" />
+            <div class="level card" data-index="@index">
+                <div class="card-header" id="@("levelHeader" + index)">
+                    <h5 class="mb-0">
+                        <a class="btn" data-toggle="collapse" href="@("#collapsableLevel" + index)" aria-expanded="true" aria-controls="@("levelHeader" + index)">
+                            Level #@(index + 1)
+                        </a>
+                        @if (Model.Levels[index].TemplateDeleted)
+                        {
+                            <span class="badge badge-dark pull-right">Deleted</span>
+                        }
+                        else if (Model.Levels[index].TemplateModified)
+                        {
+                            <span class="badge badge-warning pull-right">Modified</span>
+                        }
+                    </h5>
+                </div>
+                @if (!Model.Levels[index].TemplateDeleted)
+                {
+                    <div id="@("collapsableLevel" + index)" class="collapse @(index == 0 ? "show" : "")" aria-labelledby="@("levelHeader" + index)" data-parent="#levelsAccordion">
+                        <div class="p-3">
+                            <div class="form-group">
+                                <label asp-for="Levels[index].Description" class="control-label"></label>
+                                <br />
+                                <textarea required class="form-control" asp-for="Levels[index].Description"></textarea>
+                                <span asp-validation-for="Levels[index].Description" class="text-danger"></span>
+                            </div>
+                            @if (Model.Levels[index].AvailableTasks.Any())
+                            {
+                                <table class="table">
+                                    <tr>
+                                        <th>Included</th>
+                                        <th>Type</th>
+                                        <th>Category</th>
+                                        <th>Complexity</th>
+                                        <th>Content</th>
+                                    </tr>
+                                    @foreach (var task in Model.Levels[index].AvailableTasks)
+                                    {
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                <input onchange="test.toggleTask(@index, @task.Id)" type="checkbox" @(Model.Levels[index].TaskIds.Contains(task.Id) ? "checked" : "") />
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Type.Title
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Category.Title
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Complexity
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @task.Content
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            }
+                            else
+                            {
+                                <span class="text-danger">No available tasks found</span>
+                            }
+                            <select hidden required id="tasks_@index" asp-for="Levels[index].TaskIds" data-required-count="@Model.Levels[index].RequiredTasksCount">
+                                <option value="0">blank</option>
+                                @foreach (var taskId in Model.Levels[index].TaskIds)
+                                {
+                                    if (Model.Levels[index].AvailableTasks.Any(t => t.Id == taskId))
+                                    {
+                                        <option selected value="@taskId"></option>
+                                    }
+                                }
+                            </select>
+                            <span id="taskCountDanger_@index" class="text-danger"></span>
+                            <span asp-validation-for="Levels[index].TaskIds" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+<br />
+<div class="form-group">
+    <input type="submit" value="Save" class="btn btn-default" />
+</div>

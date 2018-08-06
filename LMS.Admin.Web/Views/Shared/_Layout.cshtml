@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - LMS Admin</title>
+    <title>@ViewData["Action"] - LMS Admin</title>
 
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <environment include="Development">
@@ -23,18 +23,43 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Home">
-                    <a class="nav-link" href="index.html">
-                        <i class="fa fa-fw fa-dashboard"></i>
-                        <span class="nav-link-text">Home</span>
-                    </a>
-                </li>
-            </ul>
+            @Html.Partial("Menu", new MenuViewModel()
+            {
+                new MenuItemViewModel("Test sessions", "fa-calendar", "List", "TestSession"),
+                new MenuItemViewModel("Tasks", "fa-question-circle")
+                {
+                    new MenuItemViewModel("Create new", "Create", "Task"),
+                    new MenuItemViewModel("List all", "List", "Task")
+                },
+                new MenuItemViewModel("Test templates", "fa-archive")
+                {
+                    new MenuItemViewModel("Create new", "Create", "TestTemplate"),
+                    new MenuItemViewModel("List all", "List", "TestTemplate")
+                },
+                new MenuItemViewModel("Categories", "fa-tasks")
+                {
+                    new MenuItemViewModel("Create new", "Create", "Category"),
+                    new MenuItemViewModel("List all", "List", "Category")
+                },
+                new MenuItemViewModel("Tests", "fa-graduation-cap")
+                {
+                    new MenuItemViewModel("Create new", "Create", "Test"),
+                    new MenuItemViewModel("List all", "List", "Test")
+                },
+                new MenuItemViewModel("Users", "fa fa-users", "List", "Account"),
+                new MenuItemViewModel("Register", "fa-user-plus", "Register", "Account")
+            })
             <ul class="navbar-nav sidenav-toggler">
                 <li class="nav-item">
                     <a class="nav-link text-center" id="sidenavToggler">
                         <i class="fa fa-fw fa-angle-left"></i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="modal" data-target="#logOutModal">
+                        <i class="fa fa-fw fa-sign-out"></i>Logout
                     </a>
                 </li>
             </ul>
@@ -45,12 +70,25 @@
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="#">Dashboard</a>
+                    <a href="/">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item active">@ViewData["Title"]</li>
             </ol>
-
-            @RenderBody()
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fa @ViewData["Icon"]"></i>
+                    <span class="pl-1">@ViewData["Action"]</span>
+                </div>
+                <div class="card-body">
+                    @RenderBody()
+                </div>
+                @if (ViewData.TryGetValue("CardFooter", out var footer))
+                {
+                    <div class="card-footer small text-muted">
+                        @footer
+                    </div>
+                }
+            </div>
         </div>
         <!-- /.container-fluid-->
         <!-- /.content-wrapper-->
@@ -65,16 +103,19 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fa fa-angle-up"></i>
         </a>
-
     </div>
 
+    @Html.Partial("Dialog", new DialogViewModel("logOutModal")
+    {
+        Title = "Ready to Leave?",
+        Content = "Select \"Logout\" below if you are ready to end your current session",
+        SubmitCaption = "Logout",
+        SubmitAction = "Logout",
+        SubmitController = "Account",
+    })
+
     <script src="~/js/vendor.js" asp-append-version="true"></script>
-    <environment include="Development">
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
 </body>

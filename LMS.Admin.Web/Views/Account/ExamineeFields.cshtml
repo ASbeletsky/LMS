@@ -1,0 +1,64 @@
+﻿@using LMS.Identity
+@model LMS.Dto.UserDTO
+
+<div class="form-group">
+    <div class="form-row">
+        <div class="col-md-6">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" id="InputEmail" type="email" placeholder="Email">
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PhoneNumber">Phone number</label>
+            <input asp-for="PhoneNumber" class="form-control" id="InputPhoneNumber" type="number" placeholder="Phone number">
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row">
+        <div class="col-md-6">
+            <label asp-for="Examinee.BirthYear">Year of birth</label>
+            <input asp-for="Examinee.BirthYear" class="form-control" id="InputYear" type="number" min="1900" placeholder="Year of birth">
+            <span asp-validation-for="Examinee.BirthYear"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Examinee.EnglishLevel" class="control-label">English level</label>
+            <select asp-for="Examinee.EnglishLevel" asp-items="Html.GetEnumSelectList<EnglishLevels>()" class="form-control custom-select" id="InputEnglishLevel" placeholder="English level"></select>
+            <span asp-validation-for="Examinee.EnglishLevel"></span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row">
+        <div class="col-md-6">
+            <label asp-for="Examinee.College">College</label>
+            <input asp-for="Examinee.College" class="form-control" id="InputCollage" type="text" placeholder="College">
+            <span asp-validation-for="Examinee.College"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Examinee.Faculty">Faculty</label>
+            <input asp-for="Examinee.Faculty" class="form-control" id="InputFaculty" type="text" placeholder="Faculty">
+            <span asp-validation-for="Examinee.Faculty"></span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-row">
+        <div class="col-md-6">
+            <label asp-for="Examinee.Specialty">Specialty</label>
+            <input asp-for="Examinee.Specialty" class="form-control" id="InputSpecialty" type="text" placeholder="Specialty">
+            <span asp-validation-for="Examinee.Specialty"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Examinee.Course">Course</label>
+            <input asp-for="Examinee.Course" class="form-control" id="InputCourse" type="number" min="1" placeholder="Course">
+            <span asp-validation-for="Examinee.Course"></span>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label asp-for="Examinee.Comment">Comment</label>
+    <input asp-for="Examinee.Comment" class="form-control" id="InputComment" type="text" placeholder="Comment">
+    <span asp-validation-for="Examinee.Comment"></span>
+</div>

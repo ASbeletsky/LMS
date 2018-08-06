@@ -1,0 +1,72 @@
+﻿@using LMS.Dto
+@model IEnumerable<TaskDTO>
+
+@{
+    ViewData["Title"] = "Task";
+    ViewData["Action"] = "List";
+    ViewData["Icon"] = "fa-table";
+}
+
+@if (Model.Any())
+{
+    <div class="table-responsive">
+        <table id="dataTable" class="table table-bordered" cellspacing="0" data-paging="@(Model.Count() > 10 ? "true" : "false")" data-column-defs='[{"searchable":false,"orderable":false,"targets":4}]'>
+            <caption>
+                <a asp-action="Create">Create New</a>
+            </caption>
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Complexity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Content)
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <label>@item.Category.Title</label>
+                        </td>
+                        <td>
+                            <label>@item.Type.Title</label>
+                        </td>
+                        <td>
+                            <label>@item.Complexity/@TaskDTO.MaxComplexity</label>
+                        </td>
+                        <td>
+                            <label>@item.Content</label>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a href="#" data-toggle="modal" data-target="#deleteModal" data-arg-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <center>No items found</center>
+}
+@Html.Partial("Dialog", new DialogViewModel("deleteModal")
+{
+    Content = "Are you sure that you want to delete this task?",
+    SubmitAction = "Delete",
+    SubmitController = "Task"
+})

@@ -1,0 +1,18 @@
+﻿@model LMS.Dto.TestDTO
+@{
+    ViewData["Title"] = "Test";
+    ViewData["Action"] = "Edit";
+    ViewData["Icon"] = "fa-edit";
+}
+
+<div class="row">
+    <div class="col-md-9 col-lg-8 col-xl-6">
+        <form asp-action="Edit">
+            @Html.Partial("FormFields", Model)
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="List">Back to List</a>
+</div>

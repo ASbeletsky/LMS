@@ -1,0 +1,19 @@
+﻿@model LMS.Dto.TaskDTO
+
+@{
+    ViewData["Title"] = "Task";
+    ViewData["Action"] = "Create";
+    ViewData["Icon"] = "fa-plus";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            @Html.Partial("FormFields", Model)
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="List">Back to List</a>
+</div>
